@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="false"
+        jar="/Users/yantrindade1/.android/build-cache/da37a05aabbbd9c224796ca77cca094e3875717d/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="d79c575e1d97b0298746a4c032a0c1dc201c2f82">
+        <dex dex="/Users/yantrindade1/Downloads/Igor/app/build/intermediates/pre-dexed/debug/classes_7cecb08994522cbef4b3691bb63260a97f9562c7.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/yantrindade1/.android/build-cache/4e3f793a77189a48d68cb220cb1edfadbcc957ac/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="da832806828ba407284c0c4b1d87b8f9ed9f2520">
+        <dex dex="/Users/yantrindade1/Downloads/Igor/app/build/intermediates/pre-dexed/debug/classes_d7229998f3cf56a442c9d5010630334c221c8c07.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/yantrindade1/.android/build-cache/c3853a566d3482c113a50177078a255a567b26bd/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="0a534044236cf81b002604643d23e7ca56bd1ee0">
+        <dex dex="/Users/yantrindade1/Downloads/Igor/app/build/intermediates/pre-dexed/debug/classes_3b566617239594b38afdebd031106f21aad43ca6.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/yantrindade1/.android/build-cache/2418460ca60c4c0700badd5891a527e7331f2f73/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="69e74a8b1cbf5b8ee0fc0cca6bab1ac6c45efef8">
+        <dex dex="/Users/yantrindade1/Downloads/Igor/app/build/intermediates/pre-dexed/debug/classes_b36365d58447d6fa0bc393c3c5c2c4c47a986adb.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/yantrindade1/.android/build-cache/6406fb7f436813949387a6be0d206f2fe781d39a/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="8f83a631abfdb790591a720e0cfb5f41329831c3">
+        <dex dex="/Users/yantrindade1/Downloads/Igor/app/build/intermediates/pre-dexed/debug/classes_5bedea97968c1fdee7c0ff533e829cb699b0a013.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/yantrindade1/.android/build-cache/e0bb681f4490cf77bb6978a6ec67f96152e1e9d0/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="900a290779cdb4eb2e63b6f7806fd9f30ce4f60d">
+        <dex dex="/Users/yantrindade1/Downloads/Igor/app/build/intermediates/pre-dexed/debug/classes_15a22a679b23fd4a22ce5b8d1b7a623b68863252.jar" />
+    </item>
+
+</items>

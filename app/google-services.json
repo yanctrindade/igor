@@ -1,0 +1,45 @@
+{
+  "project_info": {
+    "project_number": "965108311442",
+    "firebase_url": "https://igor-a8441.firebaseio.com",
+    "project_id": "igor-a8441",
+    "storage_bucket": "igor-a8441.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:965108311442:android:053ffd66161df431",
+        "android_client_info": {
+          "package_name": "br.com.yimobile.igor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "965108311442-ioe2k8ql4cpno10ij1gtp4sa9r40qt7c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjxjy6LNktFeUyrpfM0hJ78LUSQAEVM44"
+        },
+        {
+          "current_key": "AIzaSyDoejRKcTiWuyf7yukX-9pqSzVeIXpozUI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
