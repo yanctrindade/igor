@@ -27,7 +27,7 @@ public class HomeActivity extends AppCompatActivity{
         setContentView(R.layout.activity_home);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.drawable.loginatention);
+        toolbar.setNavigationIcon(R.drawable.slide_menu);
         setSupportActionBar(toolbar);
 
         recyclerView = (RecyclerView) findViewById(R.id.adventures_recyclerview);
