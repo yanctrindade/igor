@@ -12,7 +12,7 @@
     <ImageView
         android:layout_width="200dp"
         android:layout_height="120dp"
-        android:src="@drawable/igor_image"
+        android:src="@drawable/iconigor"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="10dp"/>
 
@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/fb_button"
+        android:src="@drawable/loginfacebook"
         android:background="@null"
         android:layout_marginTop="20dp"/>
 
