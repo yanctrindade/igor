@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "965108311442-ef00noo5740hdko0l3p05ah95ioqq50q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.yimobile.igor",
+            "certificate_hash": "f2e00a952632602faf0fb2285676780c8f9b5bd6"
+          }
+        },
+        {
           "client_id": "965108311442-ioe2k8ql4cpno10ij1gtp4sa9r40qt7c.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -32,8 +40,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "965108311442-ioe2k8ql4cpno10ij1gtp4sa9r40qt7c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
