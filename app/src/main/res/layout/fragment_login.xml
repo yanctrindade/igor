@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="br.com.yimobile.igor.LoginFragment">
+
+    <EditText
+        android:id="@+id/email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="12"
+        android:hint="@string/e_mail"
+        android:inputType="textEmailAddress"
+        android:textColor="#ffff"
+        android:backgroundTint="@android:color/white"
+        android:layout_marginTop="34dp"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <EditText
+        android:id="@+id/senha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="12"
+        android:backgroundTint="@android:color/white"
+        android:inputType="textPassword"
+        android:textColor="#ffff"
+        android:hint="@string/senha"
+        app:layout_constraintTop_toBottomOf="@+id/email"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <CheckBox
+        android:id="@+id/checkButton"
+        android:scaleType="fitCenter"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:layout_marginTop="15dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:button="@drawable/loginunchecked_24"
+        app:layout_constraintTop_toBottomOf="@+id/senha"
+        app:layout_constraintLeft_toLeftOf="@id/senha" />
+
+    <TextView
+        android:id="@+id/manterView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/manter_me_conectado"
+        android:textSize="5pt"
+        android:textColor="#ffffff"
+        android:layout_marginTop="20dp"
+        app:layout_constraintLeft_toRightOf="@+id/checkButton"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.030"
+        app:layout_constraintTop_toBottomOf="@+id/senha" />
+
+    <Button
+        android:id="@+id/enterButton"
+        android:scaleType="fitCenter"
+        android:background="?android:attr/selectableItemBackground"
+        android:layout_width="82dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:drawableTop="@drawable/loginbutton_30"
+        app:layout_constraintRight_toRightOf="@id/senha"
+        app:layout_constraintTop_toBottomOf="@id/checkButton"/>
+
+    <Button
+        android:id="@+id/criarconta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:text="@string/criar_conta"
+        android:textSize="6pt"
+        android:textColor="#00e2ba"
+        android:textAllCaps="false"
+        android:typeface="sans"
+        android:layout_marginTop="10dp"
+        android:onClick="onClickFragmentRegister"
+        app:layout_constraintLeft_toLeftOf="@id/senha"
+        app:layout_constraintTop_toBottomOf="@id/enterButton" />
+
+    <Button
+        android:id="@+id/esquecisenha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:text="@string/esqueci_minha_senha"
+        android:textSize="6pt"
+        android:textColor="#ffffff"
+        android:textAllCaps="false"
+        android:typeface="sans"
+        android:layout_marginTop="10dp"
+        app:layout_constraintRight_toRightOf="@id/senha"
+        app:layout_constraintTop_toBottomOf="@id/enterButton" />
+
+</android.support.constraint.ConstraintLayout>

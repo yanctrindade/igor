@@ -9,4 +9,8 @@
     <string name="manter_me_conectado">manter-me conectado</string>
     <string name="criar_conta">criar conta</string>
     <string name="esqueci_minha_senha">esqueci minha senha</string>
+    <string name="nome_de_usu_rio">Nome de usuário</string>
+    <string name="data_de_nascimento">Data de Nascimento</string>
+    <string name="sexo">Sexo</string>
+    <string name="entrar">Entrar</string>
 </resources>
