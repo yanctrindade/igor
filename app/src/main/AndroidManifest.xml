@@ -6,7 +6,7 @@
 
     <application
         android:allowBackup="true"
-        android:largeHeap="true"
+        android:windowSoftInputMode="stateHidden|adjustPan"
         android:icon="@drawable/igor"
         android:label="@string/app_name"
         android:roundIcon="@drawable/igor"
