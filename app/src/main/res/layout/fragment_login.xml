@@ -46,10 +46,10 @@
             android:id="@+id/checkButton"
             android:scaleType="fitCenter"
             android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:layout_marginTop="15dp"
+            android:layout_height="32dp"
+            android:layout_marginTop="10dp"
+            android:buttonTint="@color/md_white_1000"
             android:background="?android:attr/selectableItemBackground"
-            android:button="@drawable/loginunchecked_24"
             app:layout_constraintTop_toBottomOf="@+id/senha"
             app:layout_constraintLeft_toLeftOf="@id/senha" />
 
@@ -66,16 +66,17 @@
             app:layout_constraintHorizontal_bias="0.030"
             app:layout_constraintTop_toBottomOf="@+id/senha" />
 
-        <Button
+        <ImageButton
             android:id="@+id/enterButton"
             android:scaleType="fitCenter"
             android:background="?android:attr/selectableItemBackground"
             android:layout_width="82dp"
             android:layout_height="30dp"
             android:layout_marginTop="10dp"
-            android:drawableTop="@drawable/loginbutton_30"
+            android:src="@drawable/loginbutton_60"
+            android:contentDescription="@string/entrar"
             app:layout_constraintRight_toRightOf="@id/senha"
-            app:layout_constraintTop_toBottomOf="@id/checkButton"/>
+            app:layout_constraintTop_toBottomOf="@id/checkButton" />
 
         <Button
             android:id="@+id/criarconta"

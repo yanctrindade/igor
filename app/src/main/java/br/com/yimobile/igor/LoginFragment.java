@@ -7,8 +7,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
-import android.widget.ImageButton;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class LoginFragment extends Fragment {
     private OnLoginInteractionListener mCallback;
@@ -23,9 +26,23 @@ public class LoginFragment extends Fragment {
         view.findViewById(R.id.enterButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Animation wiggle = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.wiggle);
                 String email = emailText.getText().toString();
                 String senha = senhaText.getText().toString();
-                if (mCallback != null && !email.isEmpty() && !senha.isEmpty()) {
+
+                if(email.isEmpty() || email.equals("")) {
+                    emailText.startAnimation(wiggle);
+                    emailText.setError("Preencha seu email");
+                }
+                else if(!email.contains("@") || !email.contains(".")) {
+                    emailText.startAnimation(wiggle);
+                    emailText.setError("Email inválido");
+                }
+                else if(senha.isEmpty() || senha.equals("")) {
+                    senhaText.startAnimation(wiggle);
+                    senhaText.setError("Preencha sua senha");
+                }
+                else if(mCallback != null) {
                     mCallback.onLoginInteraction(email, senha);
                 }
             }
