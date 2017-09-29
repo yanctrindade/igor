@@ -10,6 +10,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.facebook.login.LoginManager;
+import com.google.firebase.auth.FirebaseAuth;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
@@ -98,6 +100,11 @@ public class ContainerActivity extends AppCompatActivity implements AdventuresFr
                 .withIcon(R.drawable.nav_drawer_settings)
                 .withTextColor(getResources().getColor(R.color.white))
                 .withSelectedIcon(R.drawable.nav_drawer_settings_selected);
+        PrimaryDrawerItem item6 = new PrimaryDrawerItem().withIdentifier(6)
+                .withName(R.string.nav_drawer_exit)
+                .withIcon(R.drawable.nav_drawer_settings)
+                .withTextColor(getResources().getColor(R.color.white))
+                .withSelectedIcon(R.drawable.nav_drawer_settings_selected);
 
         //create the drawer and remember the `Drawer` navDrawer object
         navDrawer = new DrawerBuilder()
@@ -109,7 +116,8 @@ public class ContainerActivity extends AppCompatActivity implements AdventuresFr
                         item2,
                         item3,
                         item4,
-                        item5
+                        item5,
+                        item6
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -143,6 +151,11 @@ public class ContainerActivity extends AppCompatActivity implements AdventuresFr
                 break;
             case 4:
                 ft.replace(R.id.container, new SettingsFragment()).commit();
+                break;
+            case 5:
+                FirebaseAuth.getInstance().signOut();
+                LoginManager.getInstance().logOut();
+                finish();
                 break;
             default:
                 break;

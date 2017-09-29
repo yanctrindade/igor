@@ -216,7 +216,6 @@ public class LoginActivity extends AppCompatActivity
             Log.d("SUCCESS", logTask + ":success");
             FirebaseUser user = mAuth.getCurrentUser();
             updateUI(user);
-            startActivity(new Intent(LoginActivity.this, ContainerActivity.class));
         } else {
             // If sign in fails, display a message to the user.
             Log.w("FAILURE", logTask + ":failure", task.getException());
