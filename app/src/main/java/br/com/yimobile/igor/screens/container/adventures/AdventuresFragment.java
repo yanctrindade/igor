@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import br.com.yimobile.igor.R;
+import br.com.yimobile.igor.screens.container.ContainerActivity;
 
 public class AdventuresFragment extends Fragment {
 
@@ -53,7 +54,12 @@ public class AdventuresFragment extends Fragment {
     View.OnClickListener floatingActionOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            //create new adventure
+            ((ContainerActivity) getActivity()).onNewAdventureClicked();
         }
+    };
+
+    public interface NewAdventureOnClickListener {
+        public void onNewAdventureClicked();
+        public void onAdventureItemClicked(int itemPosition);
     };
 }

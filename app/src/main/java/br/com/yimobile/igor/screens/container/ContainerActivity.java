@@ -22,7 +22,7 @@ import br.com.yimobile.igor.screens.container.books.BooksFragment;
 import br.com.yimobile.igor.screens.container.notifications.NotificationsFragment;
 import br.com.yimobile.igor.screens.container.settings.SettingsFragment;
 
-public class ContainerActivity extends AppCompatActivity{
+public class ContainerActivity extends AppCompatActivity implements AdventuresFragment.NewAdventureOnClickListener{
 
     private static final String TAG = ContainerActivity.class.getSimpleName();
     private Toolbar toolbar;
@@ -147,5 +147,16 @@ public class ContainerActivity extends AppCompatActivity{
             default:
                 break;
         }
+    }
+
+
+    @Override
+    public void onNewAdventureClicked() {
+        Log.d(TAG, "New Adventure Button Clicked");
+    }
+
+    @Override
+    public void onAdventureItemClicked(int itemPosition) {
+        Log.d(TAG, "Selected item " + itemPosition);
     }
 }

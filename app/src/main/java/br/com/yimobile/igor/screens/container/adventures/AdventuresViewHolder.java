@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import br.com.yimobile.igor.R;
+import br.com.yimobile.igor.screens.container.ContainerActivity;
 
 public class AdventuresViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -27,6 +28,6 @@ public class AdventuresViewHolder extends RecyclerView.ViewHolder implements Vie
 
     @Override
     public void onClick(View view) {
-
+        ((ContainerActivity) context).onAdventureItemClicked(getPosition());
     }
 }
