@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,12 +16,17 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import br.com.yimobile.igor.R;
+import br.com.yimobile.igor.screens.container.account.AccountFragment;
 import br.com.yimobile.igor.screens.container.adventures.AdventuresFragment;
+import br.com.yimobile.igor.screens.container.books.BooksFragment;
+import br.com.yimobile.igor.screens.container.notifications.NotificationsFragment;
+import br.com.yimobile.igor.screens.container.settings.SettingsFragment;
 
 public class ContainerActivity extends AppCompatActivity{
 
-    Toolbar toolbar;
-    Drawer navDrawer;
+    private static final String TAG = ContainerActivity.class.getSimpleName();
+    private Toolbar toolbar;
+    private Drawer navDrawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,10 +115,37 @@ public class ContainerActivity extends AppCompatActivity{
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         // do something with the clicked item :D
+                        switchFragment(position);
+                        Log.d(TAG, position + " Clicked");
                         navDrawer.closeDrawer();
                         return true;
                     }
                 })
                 .build();
+    }
+
+    private void switchFragment(int position) {
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+
+        switch (position) {
+            case 0:
+                ft.replace(R.id.container, new AdventuresFragment()).commit();
+                break;
+            case 1:
+                ft.replace(R.id.container, new BooksFragment()).commit();
+                break;
+            case 2:
+                ft.replace(R.id.container, new AccountFragment()).commit();
+                break;
+            case 3:
+                ft.replace(R.id.container, new NotificationsFragment()).commit();
+                break;
+            case 4:
+                ft.replace(R.id.container, new SettingsFragment()).commit();
+                break;
+            default:
+                break;
+        }
     }
 }
