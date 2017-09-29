@@ -3,17 +3,12 @@ package br.com.yimobile.igor;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -156,7 +151,7 @@ public class LoginActivity extends AppCompatActivity
                 firebaseAuthWithGoogle(account);
             }
         } else{
-            // Pass the activity result back to the Facebook SDK
+            // Pass the activity navDrawer back to the Facebook SDK
             mCallbackManager.onActivityResult(requestCode, resultCode, data);
         }
     }
@@ -218,7 +213,7 @@ public class LoginActivity extends AppCompatActivity
             Log.d("SUCCESS", logTask + ":success");
             FirebaseUser user = mAuth.getCurrentUser();
             updateUI(user);
-            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+            startActivity(new Intent(LoginActivity.this, ContainerActivity.class));
         } else {
             // If sign in fails, display a message to the user.
             Log.w("FAILURE", logTask + ":failure", task.getException());
@@ -230,7 +225,7 @@ public class LoginActivity extends AppCompatActivity
 
     private void updateUI(FirebaseUser user){
         if(user != null){
-            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+            startActivity(new Intent(LoginActivity.this, ContainerActivity.class));
         }
     }
 
