@@ -20,6 +20,7 @@
             android:configChanges=
                 "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
+
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">
@@ -31,20 +32,14 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".LoginActivity">
+        <activity android:name=".screens.auth.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".RegisterActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
-
-        <activity android:name=".ContainerActivity">
+        <activity android:name=".screens.container.ContainerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>

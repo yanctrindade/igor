@@ -1,21 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="126dp">
+
+    <ImageView
+        android:background="@drawable/adv_bg_3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <TextView
         android:id="@+id/adventures_title"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/white"
         android:text="Adventure Title"
-        android:textSize="22sp" />
+        android:textSize="24sp" />
+
+    <android.support.v7.widget.AppCompatSeekBar
+        android:id="@+id/adv_seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="8dp" />
 
     <TextView
         android:id="@+id/adventures_subtitle"
+        android:layout_above="@id/adv_seekbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:fontFamily="Roboto-Light"
         android:text="Adventures Subtitle"
-        android:textSize="16sp"/>
+        android:textSize="16sp" />
 
-</LinearLayout>
+
+</RelativeLayout>

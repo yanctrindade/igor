@@ -15,12 +15,11 @@
         android:background="?attr/colorPrimary">
     </android.support.v7.widget.Toolbar>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/adventures_recyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/accent"
+    <android.support.v7.widget.ContentFrameLayout
+        android:id="@+id/container"
         android:layout_marginTop="54dp"
-        tools:listitem="@layout/adventures_list_item"/>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </android.support.v7.widget.ContentFrameLayout>
 
 </RelativeLayout>

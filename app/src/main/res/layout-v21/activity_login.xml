@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/loginbackground_640"
     android:fitsSystemWindows="true"
-    tools:context="br.com.yimobile.igor.LoginActivity">
+    tools:context="br.com.yimobile.igor.screens.auth.LoginActivity">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
