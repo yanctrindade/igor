@@ -3,6 +3,7 @@ package br.com.yimobile.igor.screens.auth;
 import android.content.Context;
 import android.os.Bundle;
 
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,10 +22,15 @@ public class LoginFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = (View) inflater.inflate(R.layout.fragment_login, container, false);
+        return inflater.inflate(R.layout.fragment_login, container, false);
+    }
 
-        emailText = (EditText) view.findViewById(R.id.email);
-        senhaText = (EditText) view.findViewById(R.id.senha);
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        emailText = view.findViewById(R.id.email);
+        senhaText = view.findViewById(R.id.senha);
         view.findViewById(R.id.enterButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,7 +56,6 @@ public class LoginFragment extends Fragment {
             }
         });
 
-        return view;
     }
 
     @Override
@@ -73,7 +78,7 @@ public class LoginFragment extends Fragment {
         mCallback = null;
     }
 
-    public interface OnLoginInteractionListener {
+    interface OnLoginInteractionListener {
 
         public void onLoginInteraction(String email, String senha);
 

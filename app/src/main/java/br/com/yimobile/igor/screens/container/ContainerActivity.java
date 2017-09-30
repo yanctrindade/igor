@@ -20,11 +20,13 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import br.com.yimobile.igor.R;
 import br.com.yimobile.igor.screens.container.account.AccountFragment;
 import br.com.yimobile.igor.screens.container.adventures.AdventuresFragment;
+import br.com.yimobile.igor.screens.container.adventures.NewAdventureFragment;
 import br.com.yimobile.igor.screens.container.books.BooksFragment;
 import br.com.yimobile.igor.screens.container.notifications.NotificationsFragment;
 import br.com.yimobile.igor.screens.container.settings.SettingsFragment;
 
-public class ContainerActivity extends AppCompatActivity implements AdventuresFragment.NewAdventureOnClickListener{
+public class ContainerActivity extends AppCompatActivity
+        implements AdventuresFragment.NewAdventureOnClickListener, NewAdventureFragment.CreateAdventureOnClickListener {
 
     private static final String TAG = ContainerActivity.class.getSimpleName();
     private Toolbar toolbar;
@@ -102,9 +104,9 @@ public class ContainerActivity extends AppCompatActivity implements AdventuresFr
                 .withSelectedIcon(R.drawable.nav_drawer_settings_selected);
         PrimaryDrawerItem item6 = new PrimaryDrawerItem().withIdentifier(6)
                 .withName(R.string.nav_drawer_exit)
-                .withIcon(R.drawable.nav_drawer_settings)
+                .withIcon(R.drawable.newadv_fechar)
                 .withTextColor(getResources().getColor(R.color.white))
-                .withSelectedIcon(R.drawable.nav_drawer_settings_selected);
+                .withSelectedIcon(R.drawable.newadv_fechar);
 
         //create the drawer and remember the `Drawer` navDrawer object
         navDrawer = new DrawerBuilder()
@@ -166,10 +168,17 @@ public class ContainerActivity extends AppCompatActivity implements AdventuresFr
     @Override
     public void onNewAdventureClicked() {
         Log.d(TAG, "New Adventure Button Clicked");
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.container, new NewAdventureFragment()).commit();
     }
 
     @Override
     public void onAdventureItemClicked(int itemPosition) {
         Log.d(TAG, "Selected item " + itemPosition);
+    }
+
+    @Override
+    public void onAdventureCreatedClicked() {
+
     }
 }

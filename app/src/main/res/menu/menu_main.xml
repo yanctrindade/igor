@@ -3,8 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="br.com.yimobile.igor.screens.container.ContainerActivity">
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="opcoes"
+        android:id="@+id/action_editar"
+        android:orderInCategory="1"
+        android:title="@string/editar"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_ordenar"
+        android:orderInCategory="12"
+        android:title="@string/ordenar"
         app:showAsAction="never" />
 </menu>

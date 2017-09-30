@@ -13,6 +13,10 @@
     <string name="data_de_nascimento">Data de Nascimento</string>
     <string name="sexo">Sexo</string>
     <string name="entrar">Entrar</string>
+
+    //Toolbar
+    <string name="editar">Editar</string>
+    <string name="ordenar">Ordenar</string>
     
     //Navigation Drawer
     <string name="nav_drawer_adventures">Aventuras</string>
@@ -21,5 +25,10 @@
     <string name="nav_drawer_notifications">Notificações</string>
     <string name="nav_drawer_settings">Configurações</string>
     <string name="nav_drawer_exit">Sair</string>
+
+    //Nova aventura
+    <string name="criar_aventura">Criar Aventura</string>
+    <string name="d_um_nome_para_a_sua_aventura">Dê um nome para a sua aventura</string>
+    <string name="edit_nome_aventura">Nome da aventura, se tiver duas linhas ele ocupa esse espaço</string>
 
 </resources>
