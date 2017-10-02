@@ -40,12 +40,8 @@ public class ContainerActivity extends AppCompatActivity
         setupToolbar();
         setupNavDrawer();
 
-        // Begin the transaction
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        // Replace the contents of the container with the new fragment
         ft.replace(R.id.container, new AdventuresFragment());
-        // or ft.add(R.id.your_placeholder, new FooFragment());
-        // Complete the changes added above
         ft.commit();
     }
 
@@ -68,9 +64,8 @@ public class ContainerActivity extends AppCompatActivity
     }
 
     private void setupToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.nav_drawer_menu);
-        toolbar.setLogo(R.drawable.toolbar_logo);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
@@ -178,7 +173,15 @@ public class ContainerActivity extends AppCompatActivity
     }
 
     @Override
-    public void onAdventureCreatedClicked() {
+    public void onAdventureCreated(String name) {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.container, new AdventuresFragment(), "AdventuresFragment").commit();
+        getSupportFragmentManager().executePendingTransactions();
 
+        AdventuresFragment adventuresFragment = (AdventuresFragment)
+                getSupportFragmentManager().findFragmentByTag("AdventuresFragment");
+        if (adventuresFragment != null) {
+            adventuresFragment.addNewAdventure(name);
+        }
     }
 }

@@ -62,4 +62,8 @@ public class AdventuresFragment extends Fragment {
         public void onNewAdventureClicked();
         public void onAdventureItemClicked(int itemPosition);
     };
+
+    public void addNewAdventure(String name){
+        adventuresArrayList.add(name);
+    }
 }

@@ -1,5 +1,6 @@
 package br.com.yimobile.igor.screens.container.adventures;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,9 +11,11 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 
 import br.com.yimobile.igor.R;
+import br.com.yimobile.igor.screens.container.ContainerActivity;
 
 public class NewAdventureFragment extends Fragment {
 
@@ -36,16 +39,24 @@ public class NewAdventureFragment extends Fragment {
             }
         });
 
+        final EditText adventureName = view.findViewById(R.id.edit_avent);
         ImageButton create_button = view.findViewById(R.id.create_adv);
         create_button.setOnClickListener(new ImageButton.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().onBackPressed();
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+
+                String name;
+                if(adventureName.getText() != null && !adventureName.getText().toString().isEmpty())
+                    name = adventureName.getText().toString();
+                else name = "Aventura sem título";
+                ((ContainerActivity) getActivity()).onAdventureCreated(name);
             }
         });
     }
 
     public interface CreateAdventureOnClickListener {
-        public void onAdventureCreatedClicked();
+        public void onAdventureCreated(String name);
     };
 }
