@@ -24,6 +24,7 @@ public class PlayersFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setHasOptionsMenu(true);
 
         ImageButton andamento_button = view.findViewById(R.id.button_andamento);
         andamento_button.setOnClickListener(new Button.OnClickListener() {

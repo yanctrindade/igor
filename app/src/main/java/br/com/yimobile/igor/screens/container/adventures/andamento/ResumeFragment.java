@@ -22,6 +22,7 @@ public class ResumeFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setHasOptionsMenu(true);
 
         ImageButton players_button = view.findViewById(R.id.button_jogadores);
         players_button.setOnClickListener(new ImageButton.OnClickListener() {

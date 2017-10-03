@@ -206,7 +206,7 @@ public class ContainerActivity extends AppCompatActivity
     public void onEditAdventurePressed(){
         Log.d(TAG, "Edit Adventure Pressed");
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.container, new PlayersFragment()).commit();
+        ft.replace(R.id.container, new EditAdventureFragment()).commit();
     }
 
     @Override
