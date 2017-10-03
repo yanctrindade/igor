@@ -1,4 +1,4 @@
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
@@ -6,175 +6,138 @@
     android:layout_height="match_parent"
     android:background="@drawable/andamentobackground_640">
 
+    <TextView
+        android:id="@+id/Título"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="43dp"
+        android:textStyle="bold"
+        android:layout_marginBottom="50dp"
+        android:textColor="#ffff"
+        android:textSize="19sp"
+        android:text="Aventura sem título">
 
+    </TextView>
 
-
-    <LinearLayout
-        android:orientation="vertical"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:minHeight="?attr/actionBarSize"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:titleTextColor="@android:color/white"
-            android:background="?attr/colorPrimary">
-        </android.support.v7.widget.Toolbar>
+        <ImageButton
+            android:id="@+id/button_andamento"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:src="@drawable/buttonapagado2"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_marginEnd="151dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="@+id/button_jogadores" />
 
+        <ImageView
+            android:id="@+id/button_jogadores"
+            android:layout_width="170dp"
+            android:layout_height="35dp"
+            android:src="@drawable/buttonaceso2"
+            android:layout_marginTop="-1dp"
+            app:layout_constraintLeft_toLeftOf="@+id/caixa"
+            app:layout_constraintRight_toRightOf="@+id/caixa"
+            app:layout_constraintHorizontal_bias="0.976"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/caixa"
+            android:layout_width="300dp"
+            android:layout_height="340dp"
+            android:src="@drawable/caixa_andamento"
+            android:layout_marginTop="34dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/Título"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:layout_marginLeft="43dp"
+            android:id="@+id/jogadores"
+            android:layout_width="82dp"
+            android:layout_height="16dp"
+            android:text="JOGADORES"
             android:textStyle="bold"
-            android:layout_marginBottom="50dp"
-            android:textColor="#ffff"
-            android:textSize="19sp"
-            android:text="Aventura sem título">
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="8dp"
+            android:textSize="13sp"
+            app:layout_constraintTop_toTopOf="@+id/button_jogadores"
+            app:layout_constraintRight_toRightOf="@+id/button_jogadores"
+            app:layout_constraintLeft_toLeftOf="@+id/button_jogadores" />
 
-        </TextView>
+        <TextView
+            android:id="@+id/andamento"
+            android:layout_width="82dp"
+            android:layout_height="16dp"
+            android:text="ANDAMENTO"
+            android:textStyle="bold"
+            android:textSize="13sp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintTop_toTopOf="@+id/button_andamento"
+            app:layout_constraintRight_toRightOf="@+id/button_andamento"
+            app:layout_constraintLeft_toLeftOf="@+id/button_andamento" />
 
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/descricao"
+            android:layout_width="246dp"
+            android:layout_height="150dp"
+            android:text="Após um misterioso desaparecimento do príncipe conhecido como senhor dos espinhos, um grupo de embaixadores deve impedir que as tensões entre os reinos cause uma guerra. O futuro do mundo será decidido na corte do Rei"
+            android:textSize="13.7sp"
+            android:textColor="#000000"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toTopOf="@+id/caixa"
+            app:layout_constraintLeft_toLeftOf="@+id/caixa"
+            app:layout_constraintRight_toRightOf="@+id/caixa"
+            app:layout_constraintBottom_toBottomOf="@+id/caixa"
+            app:layout_constraintVertical_bias="0.011" />
 
-            <ImageButton
-                android:id="@+id/button_andamento"
-                android:layout_width="wrap_content"
-                android:layout_height="35dp"
-                android:src="@drawable/buttonapagado2"
-                android:background="?android:attr/selectableItemBackground"
-                android:layout_marginTop="0dp"
-                app:layout_constraintTop_toTopOf="parent"
+        <ImageButton
+            android:id="@+id/vermais"
+            android:layout_width="60dp"
+            android:layout_height="23dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/vermaisbutton_low"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_marginTop="127dp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintLeft_toLeftOf="@+id/descricao"
+            app:layout_constraintTop_toTopOf="@+id/descricao"
+            app:layout_constraintBottom_toBottomOf="@+id/descricao" />
 
+        <ImageView
+            android:id="@+id/linha"
+            android:layout_width="240dp"
+            android:layout_height="10dp"
+            android:src="@drawable/linha"
+            android:layout_marginTop="11dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/descricao"
+            app:layout_constraintLeft_toLeftOf="@+id/caixa"
+            app:layout_constraintRight_toRightOf="@+id/caixa" />
 
-                android:layout_marginRight="151dp"
-                app:layout_constraintRight_toRightOf="@+id/button_jogadores" />
+        <TextView
+            android:id="@+id/sessao"
+            android:layout_width="200dp"
+            android:layout_height="16dp"
+            android:text="17/05 Sessao sem título"
+            android:textStyle="bold"
+            android:textSize="13sp"
+            android:layout_marginTop="7dp"
+            app:layout_constraintTop_toBottomOf="@+id/linha"
+            app:layout_constraintLeft_toLeftOf="@+id/linha"
+            app:layout_constraintRight_toRightOf="@+id/linha"
+            app:layout_constraintHorizontal_bias="0.0" />
+        
+    </android.support.constraint.ConstraintLayout>
 
-            <ImageView
-                android:id="@+id/button_jogadores"
-                android:layout_width="170dp"
-                android:layout_height="35dp"
-                android:src="@drawable/buttonaceso2"
-                android:layout_marginTop="-1dp"
-                app:layout_constraintLeft_toLeftOf="@+id/caixa"
-
-                app:layout_constraintRight_toRightOf="@+id/caixa"
-                app:layout_constraintHorizontal_bias="0.976"
-                app:layout_constraintTop_toTopOf="parent"
-               />
-
-            <ImageView
-                android:id="@+id/caixa"
-                android:layout_width="300dp"
-                android:layout_height="340dp"
-                android:src="@drawable/caixa_andamento"
-                android:layout_marginTop="34dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginLeft="0dp" />
-
-            <TextView
-                android:id="@+id/jogadores"
-                android:layout_width="82dp"
-                android:layout_height="16dp"
-
-                android:text="JOGADORES"
-                android:textStyle="bold"
-                app:layout_constraintTop_toTopOf="@+id/button_jogadores"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="8dp"
-                android:textSize="13sp"
-                app:layout_constraintRight_toRightOf="@+id/button_jogadores"
-                android:layout_marginLeft="8dp"
-                app:layout_constraintLeft_toLeftOf="@+id/button_jogadores" />
-
-            <TextView
-                android:id="@+id/andamento"
-                android:layout_width="82dp"
-                android:layout_height="16dp"
-               
-                android:text="ANDAMENTO"
-                android:textStyle="bold"
-
-                android:textSize="13sp"
-                app:layout_constraintTop_toTopOf="@+id/button_andamento"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="8dp"
-                app:layout_constraintRight_toRightOf="@+id/button_andamento"
-                android:layout_marginLeft="8dp"
-                app:layout_constraintLeft_toLeftOf="@+id/button_andamento" />
-
-            <TextView
-                android:id="@+id/descricao"
-                android:layout_width="246dp"
-                android:layout_height="150dp"
-               
-                android:text="Após um misterioso desaparecimento do príncipe conhecido como senhor dos espinhos, um grupo de embaixadores deve impedir que as tensões entre os reinos cause uma guerra. O futuro do mundo será decidido na corte do Rei"
-
-
-                android:textSize="13.7sp"
-                android:textColor="#000000"
-                app:layout_constraintTop_toTopOf="@+id/caixa"
-                android:layout_marginLeft="8dp"
-                app:layout_constraintLeft_toLeftOf="@+id/caixa"
-                android:layout_marginRight="8dp"
-                app:layout_constraintRight_toRightOf="@+id/caixa"
-                app:layout_constraintBottom_toBottomOf="@+id/caixa"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintVertical_bias="0.011" />
-
-            <ImageButton
-                android:id="@+id/vermais"
-                android:layout_width="60dp"
-                android:layout_height="23dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/vermaisbutton_low"
-                android:background="?android:attr/selectableItemBackground"
-                android:layout_marginLeft="0dp"
-                app:layout_constraintLeft_toLeftOf="@+id/descricao"
-                app:layout_constraintTop_toTopOf="@+id/descricao"
-                android:layout_marginTop="127dp"
-                app:layout_constraintBottom_toBottomOf="@+id/descricao"
-                android:layout_marginBottom="10dp" />
-
-            <ImageView
-                android:id="@+id/linha"
-                android:layout_width="240dp"
-                android:layout_height="10dp"
-                android:src="@drawable/linha"
-                android:layout_marginTop="11dp"
-                app:layout_constraintTop_toBottomOf="@+id/descricao"
-                android:layout_marginLeft="8dp"
-                app:layout_constraintLeft_toLeftOf="@+id/caixa"
-                android:layout_marginRight="8dp"
-                app:layout_constraintRight_toRightOf="@+id/caixa" />
-
-            <TextView
-                android:id="@+id/sessao"
-                android:layout_width="200dp"
-                android:layout_height="16dp"
-               
-                android:text="17/05 Sessao sem título"
-                android:textStyle="bold"
-
-
-                android:textSize="13sp"
-                android:layout_marginTop="7dp"
-                app:layout_constraintTop_toBottomOf="@+id/linha"
-                android:layout_marginLeft="0dp"
-                app:layout_constraintLeft_toLeftOf="@+id/linha"
-                app:layout_constraintRight_toRightOf="@+id/linha"
-                app:layout_constraintHorizontal_bias="0.0" />
-
-
-        </android.support.constraint.ConstraintLayout>
-
-    </LinearLayout>
-</RelativeLayout>
+</LinearLayout>

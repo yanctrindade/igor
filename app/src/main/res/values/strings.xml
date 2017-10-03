@@ -28,7 +28,10 @@
 
     //Nova aventura
     <string name="criar_aventura">Criar Aventura</string>
-    <string name="d_um_nome_para_a_sua_aventura">Dê um nome para a sua aventura</string>
+    <string name="d_um_nome_para_a_sua_aventura">Dê um nome à sua aventura</string>
     <string name="edit_nome_aventura">Nome da aventura, se tiver duas linhas ele ocupa esse espaço</string>
+
+    //Edicao da aventura
+    <string name="editar_sua_aventura">Editar sua aventura</string>
 
 </resources>
