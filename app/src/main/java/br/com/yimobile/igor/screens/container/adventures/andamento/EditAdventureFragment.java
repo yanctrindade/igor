@@ -1,4 +1,4 @@
-package br.com.yimobile.igor.screens.container.adventures;
+package br.com.yimobile.igor.screens.container.adventures.andamento;
 
 import android.app.Activity;
 import android.content.Context;
@@ -17,14 +17,14 @@ import android.widget.ImageButton;
 import br.com.yimobile.igor.R;
 import br.com.yimobile.igor.screens.container.ContainerActivity;
 
-public class NewAdventureFragment extends Fragment {
+public class EditAdventureFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-        return inflater.inflate(R.layout.fragment_newadventure, container, false);
+        return inflater.inflate(R.layout.fragment_editadventure, container, false);
     }
 
     @Override
@@ -51,12 +51,12 @@ public class NewAdventureFragment extends Fragment {
                 if(adventureName.getText() != null && !adventureName.getText().toString().isEmpty())
                     name = adventureName.getText().toString();
                 else name = "Aventura sem título";
-                ((ContainerActivity) getActivity()).onAdventureCreated(name);
+                ((ContainerActivity) getActivity()).onAdventureEdited(name);
             }
         });
     }
 
-    public interface CreateAdventureOnClickListener {
-        public void onAdventureCreated(String name);
+    public interface EditAdventureOnClickListener {
+        public void onAdventureEdited(String name);
     }
 }

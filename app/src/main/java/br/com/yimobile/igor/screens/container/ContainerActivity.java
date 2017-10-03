@@ -21,15 +21,19 @@ import br.com.yimobile.igor.R;
 import br.com.yimobile.igor.screens.container.account.AccountFragment;
 import br.com.yimobile.igor.screens.container.adventures.AdventuresFragment;
 import br.com.yimobile.igor.screens.container.adventures.NewAdventureFragment;
-import br.com.yimobile.igor.screens.container.adventures.PlayersFragment;
-import br.com.yimobile.igor.screens.container.adventures.ResumeFragment;
+import br.com.yimobile.igor.screens.container.adventures.andamento.EditAdventureFragment;
+import br.com.yimobile.igor.screens.container.adventures.andamento.PlayersFragment;
+import br.com.yimobile.igor.screens.container.adventures.andamento.ResumeFragment;
 import br.com.yimobile.igor.screens.container.books.BooksFragment;
 import br.com.yimobile.igor.screens.container.notifications.NotificationsFragment;
 import br.com.yimobile.igor.screens.container.settings.SettingsFragment;
 
 public class ContainerActivity extends AppCompatActivity
         implements AdventuresFragment.NewAdventureOnClickListener,
-        NewAdventureFragment.CreateAdventureOnClickListener {
+        NewAdventureFragment.CreateAdventureOnClickListener,
+        ResumeFragment.ResumeOnClickListener,
+        EditAdventureFragment.EditAdventureOnClickListener,
+        PlayersFragment.PlayersOnClickListener {
 
     private static final String TAG = ContainerActivity.class.getSimpleName();
     private Toolbar toolbar;
@@ -170,17 +174,6 @@ public class ContainerActivity extends AppCompatActivity
         ft.replace(R.id.container, new NewAdventureFragment()).commit();
     }
 
-    public void onPlayersPressed(){
-        Log.d(TAG, "Players Pressed");
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.container, new PlayersFragment()).commit();
-    }
-    public void onResumePressed(){
-        Log.d(TAG, "Players Pressed");
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.container, new ResumeFragment()).commit();
-    }
-
     @Override
     public void onAdventureItemClicked(int itemPosition) {
         Log.d(TAG, "Selected item " + itemPosition);
@@ -190,6 +183,7 @@ public class ContainerActivity extends AppCompatActivity
 
     @Override
     public void onAdventureCreated(String name) {
+        Log.d(TAG, "Adventure Created");
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.container, new AdventuresFragment(), "AdventuresFragment").commit();
         getSupportFragmentManager().executePendingTransactions();
@@ -200,4 +194,40 @@ public class ContainerActivity extends AppCompatActivity
             adventuresFragment.addNewAdventure(name);
         }
     }
+
+    @Override
+    public void onPlayersPressed(){
+        Log.d(TAG, "Players Pressed");
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.container, new PlayersFragment()).commit();
+    }
+
+    @Override
+    public void onEditAdventurePressed(){
+        Log.d(TAG, "Edit Adventure Pressed");
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.container, new PlayersFragment()).commit();
+    }
+
+    @Override
+    public void onAdventureEdited(String name) {
+        Log.d(TAG, "Adventure Edited");
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.container, new ResumeFragment(), "ResumeFragment").commit();
+        getSupportFragmentManager().executePendingTransactions();
+
+        ResumeFragment adventuresFragment = (ResumeFragment)
+                getSupportFragmentManager().findFragmentByTag("ResumeFragment");
+        if (adventuresFragment != null) {
+            adventuresFragment.changeAdventureName(name);
+        }
+    }
+
+    @Override
+    public void onResumePressed(){
+        Log.d(TAG, "Resume Adventure Pressed");
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.container, new ResumeFragment()).commit();
+    }
+
 }

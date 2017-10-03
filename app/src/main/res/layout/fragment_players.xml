@@ -137,7 +137,7 @@
             app:layout_constraintLeft_toLeftOf="@+id/linha"
             app:layout_constraintRight_toRightOf="@+id/linha"
             app:layout_constraintHorizontal_bias="0.0" />
-        
+
     </android.support.constraint.ConstraintLayout>
 
 </LinearLayout>
