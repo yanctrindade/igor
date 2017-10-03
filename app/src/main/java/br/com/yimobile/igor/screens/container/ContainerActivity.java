@@ -21,12 +21,15 @@ import br.com.yimobile.igor.R;
 import br.com.yimobile.igor.screens.container.account.AccountFragment;
 import br.com.yimobile.igor.screens.container.adventures.AdventuresFragment;
 import br.com.yimobile.igor.screens.container.adventures.NewAdventureFragment;
+import br.com.yimobile.igor.screens.container.adventures.PlayersFragment;
+import br.com.yimobile.igor.screens.container.adventures.ResumeFragment;
 import br.com.yimobile.igor.screens.container.books.BooksFragment;
 import br.com.yimobile.igor.screens.container.notifications.NotificationsFragment;
 import br.com.yimobile.igor.screens.container.settings.SettingsFragment;
 
 public class ContainerActivity extends AppCompatActivity
-        implements AdventuresFragment.NewAdventureOnClickListener, NewAdventureFragment.CreateAdventureOnClickListener {
+        implements AdventuresFragment.NewAdventureOnClickListener,
+        NewAdventureFragment.CreateAdventureOnClickListener {
 
     private static final String TAG = ContainerActivity.class.getSimpleName();
     private Toolbar toolbar;
@@ -167,9 +170,22 @@ public class ContainerActivity extends AppCompatActivity
         ft.replace(R.id.container, new NewAdventureFragment()).commit();
     }
 
+    public void onPlayersPressed(){
+        Log.d(TAG, "Players Pressed");
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.container, new PlayersFragment()).commit();
+    }
+    public void onResumePressed(){
+        Log.d(TAG, "Players Pressed");
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.container, new ResumeFragment()).commit();
+    }
+
     @Override
     public void onAdventureItemClicked(int itemPosition) {
         Log.d(TAG, "Selected item " + itemPosition);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.container, new ResumeFragment()).commit();
     }
 
     @Override
