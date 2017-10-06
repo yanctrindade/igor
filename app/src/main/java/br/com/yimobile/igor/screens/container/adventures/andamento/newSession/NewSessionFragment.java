@@ -62,20 +62,21 @@ public class NewSessionFragment extends Fragment {
     View.OnClickListener saveOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-
+            Log.d(TAG, "Save Clicked");
         }
     };
 
     View.OnClickListener dateOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            Log.d(TAG, "Date Clicked");
             setDateTimeField();
         }
     };
 
     private void setDateTimeField() {
         Calendar newCalendar = dateSelected;
-        datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+        datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
 
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 dateSelected.set(year, monthOfYear, dayOfMonth, 0, 0);
@@ -87,6 +88,6 @@ public class NewSessionFragment extends Fragment {
             }
 
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-
+        datePickerDialog.show();
     }
 }
