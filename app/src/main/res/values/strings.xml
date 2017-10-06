@@ -34,4 +34,9 @@
     //Edicao da aventura
     <string name="editar_sua_aventura">Editar sua aventura</string>
 
+    //Sessão
+    <string name="new_session_subtitle">Dê um nome a próxima sessão</string>
+    <string name="new_session_title">Criar Sessão</string>
+    <string name="new_session_placeholder">Nome da sessão, se tiver duas linhas ele ocupa esse espaço</string>
+
 </resources>

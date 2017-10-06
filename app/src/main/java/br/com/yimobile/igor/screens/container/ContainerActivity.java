@@ -20,10 +20,11 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import br.com.yimobile.igor.R;
 import br.com.yimobile.igor.screens.container.account.AccountFragment;
 import br.com.yimobile.igor.screens.container.adventures.AdventuresFragment;
-import br.com.yimobile.igor.screens.container.adventures.NewAdventureFragment;
-import br.com.yimobile.igor.screens.container.adventures.andamento.EditAdventureFragment;
+import br.com.yimobile.igor.screens.container.adventures.andamento.SessionsFragment;
+import br.com.yimobile.igor.screens.container.adventures.andamento.newSession.NewSessionFragment;
+import br.com.yimobile.igor.screens.container.adventures.newAdventure.NewAdventureFragment;
+import br.com.yimobile.igor.screens.container.adventures.andamento.EditAdventureNameFragment;
 import br.com.yimobile.igor.screens.container.adventures.andamento.PlayersFragment;
-import br.com.yimobile.igor.screens.container.adventures.andamento.ResumeFragment;
 import br.com.yimobile.igor.screens.container.books.BooksFragment;
 import br.com.yimobile.igor.screens.container.notifications.NotificationsFragment;
 import br.com.yimobile.igor.screens.container.settings.SettingsFragment;
@@ -31,8 +32,8 @@ import br.com.yimobile.igor.screens.container.settings.SettingsFragment;
 public class ContainerActivity extends AppCompatActivity
         implements AdventuresFragment.NewAdventureOnClickListener,
         NewAdventureFragment.CreateAdventureOnClickListener,
-        ResumeFragment.ResumeOnClickListener,
-        EditAdventureFragment.EditAdventureOnClickListener,
+        SessionsFragment.ResumeOnClickListener,
+        EditAdventureNameFragment.EditAdventureOnClickListener,
         PlayersFragment.PlayersOnClickListener {
 
     private static final String TAG = ContainerActivity.class.getSimpleName();
@@ -178,7 +179,7 @@ public class ContainerActivity extends AppCompatActivity
     public void onAdventureItemClicked(int itemPosition) {
         Log.d(TAG, "Selected item " + itemPosition);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.container, new ResumeFragment()).commit();
+        ft.replace(R.id.container, new SessionsFragment()).commit();
     }
 
     @Override
@@ -206,18 +207,25 @@ public class ContainerActivity extends AppCompatActivity
     public void onEditAdventurePressed(){
         Log.d(TAG, "Edit Adventure Pressed");
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.container, new EditAdventureFragment()).commit();
+        ft.replace(R.id.container, new EditAdventureNameFragment()).commit();
+    }
+
+    @Override
+    public void newSessionPressed() {
+        Log.d(TAG, "Create new session clicked");
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.container, new NewSessionFragment()).commit();
     }
 
     @Override
     public void onAdventureEdited(String name) {
         Log.d(TAG, "Adventure Edited");
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.container, new ResumeFragment(), "ResumeFragment").commit();
+        ft.replace(R.id.container, new SessionsFragment(), "SessionsFragment").commit();
         getSupportFragmentManager().executePendingTransactions();
 
-        ResumeFragment adventuresFragment = (ResumeFragment)
-                getSupportFragmentManager().findFragmentByTag("ResumeFragment");
+        SessionsFragment adventuresFragment = (SessionsFragment)
+                getSupportFragmentManager().findFragmentByTag("SessionsFragment");
         if (adventuresFragment != null) {
             adventuresFragment.changeAdventureName(name);
         }
@@ -227,7 +235,7 @@ public class ContainerActivity extends AppCompatActivity
     public void onResumePressed(){
         Log.d(TAG, "Resume Adventure Pressed");
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.container, new ResumeFragment()).commit();
+        ft.replace(R.id.container, new SessionsFragment()).commit();
     }
 
 }

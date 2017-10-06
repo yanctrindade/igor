@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/loginbackground_640">
+
+    <ImageView
+        android:id="@+id/popup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/newadv_pop_640"
+        android:layout_marginTop="35dp"
+        android:contentDescription="@string/app_name" />
+
+    <Button
+        android:id="@+id/sair"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/newadv_fechar"
+        android:layout_alignTop="@id/popup"
+        android:layout_alignStart="@id/popup"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="30dp"/>
+
+    <TextView
+        android:id="@+id/text_criar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/new_session_title"
+        android:layout_alignTop="@id/sair"
+        android:layout_alignStart="@id/sair"
+        android:layout_marginStart="35dp"
+        android:textSize="7pt"
+        android:textColor="#00BFA5"/>
+
+    <TextView
+        android:id="@+id/text_nome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/new_session_subtitle"
+        android:layout_alignTop="@id/sair"
+        android:layout_alignStart="@id/text_criar"
+        android:layout_marginTop="40dp"
+        android:textSize="6pt"
+        android:textColor="#9E9E9E" />
+
+    <EditText
+        android:id="@+id/edit_avent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/new_session_placeholder"
+        android:layout_alignTop="@id/text_nome"
+        android:layout_alignStart="@id/sair"
+        android:layout_alignEnd="@id/popup"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="50dp"
+        android:maxLines="2"
+        android:imeOptions="actionDone"
+        android:textSize="8pt"
+        android:textColor="#000000">
+        <requestFocus/>
+    </EditText>
+
+    <ImageButton
+        android:id="@+id/create_session"
+        android:scaleType="fitCenter"
+        android:background="?android:attr/selectableItemBackground"
+        android:layout_width="82dp"
+        android:layout_height="30dp"
+        android:layout_alignTop="@id/edit_avent"
+        android:layout_alignEnd="@id/edit_avent"
+        android:layout_marginTop="80dp"
+        android:src="@drawable/newadv_pronto_60"
+        android:contentDescription="@string/entrar"/>
+
+    <ImageButton
+        android:id="@+id/create_session_date"
+        android:scaleType="fitCenter"
+        android:background="?android:attr/selectableItemBackground"
+        android:layout_width="82dp"
+        android:layout_height="30dp"
+        android:layout_alignTop="@id/edit_avent"
+        android:layout_alignStart="@id/edit_avent"
+        android:layout_marginTop="80dp"
+        android:src="@drawable/newadv_pronto_60"
+        android:contentDescription="@string/entrar"/>
+
+</RelativeLayout>
