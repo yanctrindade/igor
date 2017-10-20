@@ -15,6 +15,8 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
@@ -32,9 +34,19 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import br.com.yimobile.igor.R;
 import br.com.yimobile.igor.screens.container.ContainerActivity;
+import database.User;
 
 public class LoginActivity extends AppCompatActivity
         implements LoginFragment.OnLoginInteractionListener, RegisterFragment.OnRegisterInteractionListener {
@@ -42,6 +54,7 @@ public class LoginActivity extends AppCompatActivity
     private static final int RC_SIGN_IN = 0;
 
     private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
     private CallbackManager mCallbackManager;
     private GoogleApiClient mGoogleApiClient;
 
@@ -59,16 +72,28 @@ public class LoginActivity extends AppCompatActivity
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         // Initialize Facebook Login button
         mCallbackManager = CallbackManager.Factory.create();
         LoginButton loginButton = (LoginButton) findViewById(R.id.button_face);
-        loginButton.setReadPermissions("email", "public_profile");
+        loginButton.setReadPermissions("email", "public_profile", "user_birthday");
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
-            public void onSuccess(LoginResult loginResult) {
+            public void onSuccess(final LoginResult loginResult) {
                 Log.d("LOGIN", "facebook:onSuccess:" + loginResult);
-                handleFacebookAccessToken(loginResult.getAccessToken());
+                GraphRequest request = GraphRequest.newMeRequest(
+                        AccessToken.getCurrentAccessToken(),
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(JSONObject object, GraphResponse response) {
+                                handleFacebookAccessToken(loginResult.getAccessToken(), object);
+                            }
+                        });
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "name, email, gender, birthday");
+                request.setParameters(parameters);
+                request.executeAsync();
             }
 
             @Override
@@ -160,17 +185,24 @@ public class LoginActivity extends AppCompatActivity
         }
     }
 
-    private void handleFacebookAccessToken(AccessToken token) {
+    private void handleFacebookAccessToken(AccessToken token, JSONObject object) {
         Log.d("HANDLE_FACE", "handleFacebookAccessToken:" + token);
 
-        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        testTask(task, "signInWithCredential");
-                    }
-                });
+
+        try {
+            final User user = new User(object.getString("email"), object.getString("name"),
+                    object.getString("birthday"), object.getString("gender"));
+            AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+            mAuth.signInWithCredential(credential)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            testTask(task, "signInWithCredential", user);
+                        }
+                    });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void loginUser(String email, String senha){
@@ -178,17 +210,18 @@ public class LoginActivity extends AppCompatActivity
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        testTask(task, "signInWithEmail");
+                        testTask(task, "signInWithEmail", null);
                     }
                 });
     }
 
-    private void registerUser(String email, String senha){
+    private void registerUser(String email, String senha, String nome, String data, String sexo){
+        final User user = new User(email, nome, data, sexo);
         mAuth.createUserWithEmailAndPassword(email, senha)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        testTask(task, "createUserWithEmail");
+                        testTask(task, "createUserWithEmail", user);
                     }
                 });
     }
@@ -201,22 +234,24 @@ public class LoginActivity extends AppCompatActivity
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d("GOOGLE", "firebaseAuthWithGoogle:" + acct.getId());
 
+        final User user = new User(acct.getEmail(), acct.getDisplayName(), "", "");
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        testTask(task, "signInWithCredential");
+                        testTask(task, "signInWithCredential", user);
                     }
                 });
     }
 
-    private void testTask(Task<AuthResult> task, String logTask){
+    private void testTask(Task<AuthResult> task, String logTask, User user){
         if (task.isSuccessful()) {
             // Sign in success, update UI with the signed-in user's information
             Log.d("SUCCESS", logTask + ":success");
-            FirebaseUser user = mAuth.getCurrentUser();
-            updateUI(user);
+            FirebaseUser firebaseUser = mAuth.getCurrentUser();
+            if(user != null) writeNewUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), user);
+            updateUI(firebaseUser);
         } else {
             // If sign in fails, display a message to the user.
             Log.w("FAILURE", logTask + ":failure", task.getException());
@@ -226,8 +261,25 @@ public class LoginActivity extends AppCompatActivity
         }
     }
 
-    private void updateUI(FirebaseUser user){
-        if(user != null){
+    private void writeNewUser(final String userId, final User user) {
+        Query dataUser = mDatabase.child("users").orderByKey().equalTo(userId);
+        dataUser.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getChildrenCount() < 1){
+                    mDatabase.child("users").child(userId).setValue(user);
+                    Log.d("NEWUSER", "true");
+                } else Log.d("NEWUSER", "false");
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("ERROR", "onCancelled", databaseError.toException());
+            }
+        });
+    }
+
+    private void updateUI(FirebaseUser firebaseUser){
+        if(firebaseUser != null){
             startActivity(new Intent(LoginActivity.this, ContainerActivity.class));
         }
     }
@@ -238,8 +290,8 @@ public class LoginActivity extends AppCompatActivity
     }
 
     @Override
-    public void onRegisterInteraction(String email, String senha) {
-        registerUser(email, senha);
+    public void onRegisterInteraction(String email, String senha, String nome, String data, String sexo) {
+        registerUser(email, senha, nome, data, sexo);
     }
 
     // Codigo para gerar chave para o facebook, caso necessario

@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
@@ -19,7 +18,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class RegisterFragment extends Fragment {
     private OnRegisterInteractionListener mCallback;
-    private EditText emailText, senhaText;
+    private EditText emailText, senhaText, nomeText, dataText, sexoText;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -32,12 +31,18 @@ public class RegisterFragment extends Fragment {
 
         emailText = view.findViewById(R.id.email);
         senhaText = view.findViewById(R.id.senha);
+        nomeText = view.findViewById(R.id.nome);
+        dataText = view.findViewById(R.id.data);
+        sexoText = view.findViewById(R.id.sexo);
         view.findViewById(R.id.cadastrobutton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Animation wiggle = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.wiggle);
                 String email = emailText.getText().toString();
                 String senha = senhaText.getText().toString();
+                String nome = nomeText.getText().toString();
+                String data = dataText.getText().toString();
+                String sexo = sexoText.getText().toString();
 
                 if(email.isEmpty() || email.equals("")) {
                     emailText.startAnimation(wiggle);
@@ -52,7 +57,7 @@ public class RegisterFragment extends Fragment {
                     senhaText.setError("Preencha sua senha");
                 }
                 else if (mCallback != null) {
-                    mCallback.onRegisterInteraction(email, senha);
+                    mCallback.onRegisterInteraction(email, senha, nome, data, sexo);
                 }
             }
         });
@@ -80,7 +85,7 @@ public class RegisterFragment extends Fragment {
 
     interface OnRegisterInteractionListener {
 
-        public void onRegisterInteraction(String email, String senha);
+        public void onRegisterInteraction(String email, String senha, String nome, String data, String sexo);
 
     }
 
