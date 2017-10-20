@@ -2,6 +2,7 @@ package br.com.yimobile.igor.screens.container.account;
 
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.DatePicker;
 import android.widget.EditText;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,12 +22,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
 import br.com.yimobile.igor.R;
 import database.User;
 
 public class AccountFragment extends Fragment {
     private DatabaseReference mDatabase;
     private EditText emailText, nomeText, dataText, sexoText;
+    private DatePickerDialog data_Dialog;
 
     @Nullable
     @Override
@@ -56,11 +64,38 @@ public class AccountFragment extends Fragment {
                     nomeText.setText(user.getUsername());
                     dataText.setText(user.getNascimento());
                     sexoText.setText(user.getSexo());
+
+                    if(!dataText.getText().toString().isEmpty()) {
+                        Calendar aux = stringToDate(dataText.getText().toString(), "dd/MM/yyyy");
+                        data_Dialog.updateDate(aux.get(Calendar.YEAR), aux.get(Calendar.MONTH), aux.get(Calendar.DAY_OF_MONTH));
+                    }
                 }
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.e("ERROR", "onCancelled", databaseError.toException());
+            }
+        });
+
+        Calendar data_atual = Calendar.getInstance();
+        data_Dialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Calendar dataPicker = Calendar.getInstance();
+                dataPicker.set(year, monthOfYear, dayOfMonth);
+                dataText.setText(dateToString(dataPicker, "dd/MM/yyyy"));
+            }
+
+        }, data_atual.get(Calendar.YEAR)-20, data_atual.get(Calendar.MONTH), data_atual.get(Calendar.DAY_OF_MONTH));
+        data_Dialog.getDatePicker().setMaxDate(data_atual.getTimeInMillis());
+        if(!dataText.getText().toString().isEmpty()) {
+            Calendar aux = stringToDate(dataText.getText().toString(), "dd/MM/yyyy");
+            data_Dialog.updateDate(aux.get(Calendar.YEAR), aux.get(Calendar.MONTH), aux.get(Calendar.DAY_OF_MONTH));
+        }
+        dataText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                data_Dialog.show();
             }
         });
 
@@ -79,5 +114,23 @@ public class AccountFragment extends Fragment {
                 mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user);
             }
         });
+    }
+
+    public static Calendar stringToDate(String d, String f){
+        if(d == null || f == null || f.isEmpty()) return null;
+        Calendar cal = Calendar.getInstance();
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat(f, Locale.ENGLISH);
+            cal.setTime(formatter.parse(d));
+        } catch (ParseException e) {
+            cal = null;
+        }
+        return cal;
+    }
+
+    public static String dateToString(Calendar d, String f){
+        if(d == null || f == null || f.isEmpty()) return null;
+        SimpleDateFormat formatter = new SimpleDateFormat(f, Locale.ENGLISH);
+        return formatter.format(d.getTime());
     }
 }

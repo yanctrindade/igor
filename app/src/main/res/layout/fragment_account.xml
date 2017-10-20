@@ -62,11 +62,11 @@
             android:layout_height="wrap_content"
             android:ems="12"
             android:backgroundTint="@android:color/white"
-            android:inputType="text|datetime"
             android:textColor="#ffff"
             android:hint="@string/data_de_nascimento"
             android:maxLines="1"
             android:imeOptions="actionNext"
+            android:focusable="false"
             app:layout_constraintTop_toBottomOf="@+id/nome"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />

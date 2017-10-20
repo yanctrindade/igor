@@ -44,6 +44,11 @@ import com.google.firebase.database.ValueEventListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
 import br.com.yimobile.igor.R;
 import br.com.yimobile.igor.screens.container.ContainerActivity;
 import database.User;
@@ -188,10 +193,13 @@ public class LoginActivity extends AppCompatActivity
     private void handleFacebookAccessToken(AccessToken token, JSONObject object) {
         Log.d("HANDLE_FACE", "handleFacebookAccessToken:" + token);
 
-
         try {
             final User user = new User(object.getString("email"), object.getString("name"),
                     object.getString("birthday"), object.getString("gender"));
+            if(!user.getNascimento().isEmpty()){
+                Calendar aux = stringToDate(user.getNascimento(), "MM/dd/yyyy");
+                user.setNascimento(dateToString(aux, "dd/MM/yyyy"));
+            }
             AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
             mAuth.signInWithCredential(credential)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -292,6 +300,24 @@ public class LoginActivity extends AppCompatActivity
     @Override
     public void onRegisterInteraction(String email, String senha, String nome, String data, String sexo) {
         registerUser(email, senha, nome, data, sexo);
+    }
+
+    public static Calendar stringToDate(String d, String f){
+        if(d == null || f == null || f.isEmpty()) return null;
+        Calendar cal = Calendar.getInstance();
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat(f, Locale.ENGLISH);
+            cal.setTime(formatter.parse(d));
+        } catch (ParseException e) {
+            cal = null;
+        }
+        return cal;
+    }
+
+    public static String dateToString(Calendar d, String f){
+        if(d == null || f == null || f.isEmpty()) return null;
+        SimpleDateFormat formatter = new SimpleDateFormat(f, Locale.ENGLISH);
+        return formatter.format(d.getTime());
     }
 
     // Codigo para gerar chave para o facebook, caso necessario

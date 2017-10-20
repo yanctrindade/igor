@@ -1,5 +1,6 @@
 package br.com.yimobile.igor.screens.auth;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -10,7 +11,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.DatePicker;
 import android.widget.EditText;
+
+import com.facebook.login.Login;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 import br.com.yimobile.igor.R;
 
@@ -19,6 +28,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 public class RegisterFragment extends Fragment {
     private OnRegisterInteractionListener mCallback;
     private EditText emailText, senhaText, nomeText, dataText, sexoText;
+    private DatePickerDialog data_Dialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -34,6 +44,29 @@ public class RegisterFragment extends Fragment {
         nomeText = view.findViewById(R.id.nome);
         dataText = view.findViewById(R.id.data);
         sexoText = view.findViewById(R.id.sexo);
+
+        Calendar data_atual = Calendar.getInstance();
+        data_Dialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Calendar dataPicker = Calendar.getInstance();
+                dataPicker.set(year, monthOfYear, dayOfMonth);
+                dataText.setText(LoginActivity.dateToString(dataPicker, "dd/MM/yyyy"));
+            }
+
+        }, data_atual.get(Calendar.YEAR)-20, data_atual.get(Calendar.MONTH), data_atual.get(Calendar.DAY_OF_MONTH));
+        data_Dialog.getDatePicker().setMaxDate(data_atual.getTimeInMillis());
+        if(!dataText.getText().toString().isEmpty()) {
+            Calendar aux = LoginActivity.stringToDate(dataText.getText().toString(), "dd/MM/yyyy");
+            data_Dialog.updateDate(aux.get(Calendar.YEAR), aux.get(Calendar.MONTH), aux.get(Calendar.DAY_OF_MONTH));
+        }
+        dataText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                data_Dialog.show();
+            }
+        });
+
         view.findViewById(R.id.cadastrobutton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
