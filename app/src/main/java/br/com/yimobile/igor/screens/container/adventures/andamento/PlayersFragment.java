@@ -2,6 +2,7 @@ package br.com.yimobile.igor.screens.container.adventures.andamento;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,6 +26,8 @@ public class PlayersFragment extends Fragment {
     PlayerRecyclerViewAdapter playerRecyclerViewAdapter;
     RecyclerView recyclerView;
     ArrayList<String> playerArrayList = new ArrayList<>();
+    FloatingActionButton newPlayerButton;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_players, container, false);
@@ -34,6 +37,9 @@ public class PlayersFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setHasOptionsMenu(true);
+
+        newPlayerButton = (FloatingActionButton) view.findViewById(R.id.new_player_button);
+        newPlayerButton.setOnClickListener(newPlayerOnClickListener);
 
         ImageButton andamento_button = view.findViewById(R.id.button_andamento);
         andamento_button.setOnClickListener(new Button.OnClickListener() {
@@ -63,6 +69,13 @@ public class PlayersFragment extends Fragment {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    View.OnClickListener newPlayerOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            ((ContainerActivity) getActivity()).newPlayerPressed();
+        }
+    };
 
     public interface PlayersOnClickListener {
         public void onResumePressed();

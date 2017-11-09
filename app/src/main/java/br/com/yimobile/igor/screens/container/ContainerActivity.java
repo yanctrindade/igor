@@ -21,6 +21,7 @@ import br.com.yimobile.igor.R;
 import br.com.yimobile.igor.screens.container.account.AccountFragment;
 import br.com.yimobile.igor.screens.container.adventures.AdventuresFragment;
 import br.com.yimobile.igor.screens.container.adventures.andamento.SessionsFragment;
+import br.com.yimobile.igor.screens.container.adventures.andamento.newPlayer.NewPlayerFragment;
 import br.com.yimobile.igor.screens.container.adventures.andamento.newSession.NewSessionFragment;
 import br.com.yimobile.igor.screens.container.adventures.newAdventure.NewAdventureFragment;
 import br.com.yimobile.igor.screens.container.adventures.andamento.EditAdventureNameFragment;
@@ -215,6 +216,12 @@ public class ContainerActivity extends AppCompatActivity
         Log.d(TAG, "Create new session clicked");
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.container, new NewSessionFragment()).commit();
+    }
+
+    public void newPlayerPressed() {
+        Log.d(TAG, "Create new player clicked");
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.container, new NewPlayerFragment()).commit();
     }
 
     @Override

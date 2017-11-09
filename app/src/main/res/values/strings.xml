@@ -39,4 +39,8 @@
     <string name="new_session_title">Criar Sessão</string>
     <string name="new_session_placeholder">Nome da sessão, se tiver duas linhas ele ocupa esse espaço</string>
 
+    //Novo jogador
+    <string name="new_player_title">Adicionar Jogador</string>
+    <string name="new_player_subtitle">Informe o nickname do jogador</string>
+
 </resources>
