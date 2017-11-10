@@ -1,7 +1,9 @@
 package br.com.yimobile.igor.screens.container.adventures.andamento.newSession;
 
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -21,6 +25,8 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import br.com.yimobile.igor.R;
+import br.com.yimobile.igor.screens.container.ContainerActivity;
+import database.Adventure;
 
 public class NewSessionFragment extends Fragment {
 
@@ -30,12 +36,16 @@ public class NewSessionFragment extends Fragment {
     private Calendar dateSelected = Calendar.getInstance();
     private DatePickerDialog datePickerDialog;
     private Button close;
+    Adventure adventure;
 
     private static final String TAG = NewSessionFragment.class.getSimpleName();
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
         return inflater.inflate(R.layout.fragment_new_session, container, false);
     }
 
@@ -54,10 +64,16 @@ public class NewSessionFragment extends Fragment {
         close.setOnClickListener(closeOnClickListener);
     }
 
+    public void SetAdventure(Adventure adventure){
+        this.adventure = adventure;
+    }
+
     /* On Click Listeners */
     View.OnClickListener closeOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+            imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
             getActivity().onBackPressed();
         }
     };
@@ -66,6 +82,11 @@ public class NewSessionFragment extends Fragment {
         @Override
         public void onClick(View view) {
             Log.d(TAG, "Save Clicked");
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+            imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+            ((ContainerActivity) getActivity()).onSessionCreated(
+                    sessionNameEditText.getText().toString(), dateText.getText().toString(), adventure);
+            getActivity().onBackPressed();
         }
     };
 
@@ -73,6 +94,8 @@ public class NewSessionFragment extends Fragment {
         @Override
         public void onClick(View view) {
             Log.d(TAG, "Date Clicked");
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+            imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
             setDateTimeField();
         }
     };
@@ -94,6 +117,10 @@ public class NewSessionFragment extends Fragment {
         datePickerDialog.getDatePicker().setMinDate(atual.getTimeInMillis());
         datePickerDialog.show();
     }
+
+    public interface NewSessionOnClickListener {
+        public void onSessionCreated(String name, String data, Adventure adventure);
+    };
 
     public static Calendar stringToDate(String d, String f){
         if(d == null || f == null || f.isEmpty()) return null;

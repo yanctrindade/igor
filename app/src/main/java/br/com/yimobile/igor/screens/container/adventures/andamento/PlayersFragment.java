@@ -12,13 +12,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import br.com.yimobile.igor.R;
 import br.com.yimobile.igor.screens.container.ContainerActivity;
-import br.com.yimobile.igor.screens.container.adventures.andamento.ItensList.ItensRecyclerViewAdapter;
 import br.com.yimobile.igor.screens.container.adventures.andamento.ItensList.PlayerRecyclerViewAdapter;
+import database.Adventure;
 
 
 public class PlayersFragment extends Fragment {
@@ -27,16 +28,15 @@ public class PlayersFragment extends Fragment {
     RecyclerView recyclerView;
     ArrayList<String> playerArrayList = new ArrayList<>();
     FloatingActionButton newPlayerButton;
+    Adventure adventure;
+    TextView nameAdventure;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_players, container, false);
-    }
+        View view = inflater.inflate(R.layout.fragment_players, container, false);
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        setHasOptionsMenu(true);
+        nameAdventure = (TextView) view.findViewById(R.id.titulo);
+        if(adventure != null) nameAdventure.setText(adventure.getNome());
 
         newPlayerButton = (FloatingActionButton) view.findViewById(R.id.new_player_button);
         newPlayerButton.setOnClickListener(newPlayerOnClickListener);
@@ -45,9 +45,17 @@ public class PlayersFragment extends Fragment {
         andamento_button.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((ContainerActivity) getActivity()).onResumePressed();
+                ((ContainerActivity) getActivity()).onResumePressed(adventure);
             }
         });
+
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setHasOptionsMenu(true);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.sessions_recyclerview);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -70,6 +78,12 @@ public class PlayersFragment extends Fragment {
         }
     }
 
+    public void SetAdventure(Adventure adventure){
+        this.adventure = adventure;
+        if(nameAdventure != null) nameAdventure.setText(adventure.getNome());
+    }
+
+
     View.OnClickListener newPlayerOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -78,7 +92,7 @@ public class PlayersFragment extends Fragment {
     };
 
     public interface PlayersOnClickListener {
-        public void onResumePressed();
+        public void onResumePressed(Adventure adventure);
     }
 
 }

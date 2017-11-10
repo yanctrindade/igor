@@ -96,7 +96,7 @@ public class AdventuresFragment extends Fragment {
 
     public interface NewAdventureOnClickListener {
         public void onNewAdventureClicked();
-        public void onAdventureItemClicked(int itemPosition);
+        public void onAdventureItemClicked(int itemPosition, Adventure adventure);
     };
 
     public void addNewAdventure(Adventure adv){

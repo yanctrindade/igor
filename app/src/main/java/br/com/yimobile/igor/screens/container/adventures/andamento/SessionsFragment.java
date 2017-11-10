@@ -12,12 +12,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import br.com.yimobile.igor.R;
 import br.com.yimobile.igor.screens.container.ContainerActivity;
 import br.com.yimobile.igor.screens.container.adventures.andamento.ItensList.ItensRecyclerViewAdapter;
+import database.Adventure;
 
 public class SessionsFragment extends Fragment {
 
@@ -27,10 +29,15 @@ public class SessionsFragment extends Fragment {
     RecyclerView recyclerView;
     ArrayList<String> sessionsArrayList = new ArrayList<>();
     FloatingActionButton newSessionButton;
+    Adventure adventure;
+    TextView nameAdventure;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_resume, container, false);
+        View view = inflater.inflate(R.layout.fragment_resume, container, false);
+        nameAdventure = (TextView) view.findViewById(R.id.titulo);
+        if(adventure != null) nameAdventure.setText(adventure.getNome());
+        return view;
     }
 
     @Override
@@ -56,18 +63,23 @@ public class SessionsFragment extends Fragment {
         recyclerView.setAdapter(sessionsRecyclerViewAdapter);
     }
 
+    public void SetAdventure(Adventure adventure){
+        this.adventure = adventure;
+        if(nameAdventure != null) nameAdventure.setText(adventure.getNome());
+    }
+
     /* On Clicks */
     View.OnClickListener newSessionOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            ((ContainerActivity) getActivity()).newSessionPressed();
+            ((ContainerActivity) getActivity()).newSessionPressed(adventure);
         }
     };
 
     View.OnClickListener playersOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            ((ContainerActivity) getActivity()).onPlayersPressed();
+            ((ContainerActivity) getActivity()).onPlayersPressed(adventure);
         }
     };
 
@@ -90,9 +102,9 @@ public class SessionsFragment extends Fragment {
 
     /* Public Interface for Listener */
     public interface ResumeOnClickListener {
-        public void onPlayersPressed();
+        public void onPlayersPressed(Adventure adventure);
         public void onEditAdventurePressed();
-        public void newSessionPressed();
+        public void newSessionPressed(Adventure adventure);
     }
 
 }

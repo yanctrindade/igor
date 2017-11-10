@@ -8,14 +8,16 @@ import android.widget.TextView;
 
 import br.com.yimobile.igor.R;
 import br.com.yimobile.igor.screens.container.ContainerActivity;
+import database.Adventure;
 
 public class AdventuresViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     Context context;
+    Adventure adventure;
     TextView titleTextView;
     TextView subtitleTextView;
 
-    public AdventuresViewHolder(View itemView, Context context) {
+    AdventuresViewHolder(View itemView, Context context) {
         super(itemView);
 
         this.context = context;
@@ -28,6 +30,6 @@ public class AdventuresViewHolder extends RecyclerView.ViewHolder implements Vie
 
     @Override
     public void onClick(View view) {
-        ((ContainerActivity) context).onAdventureItemClicked(getPosition());
+        ((ContainerActivity) context).onAdventureItemClicked(getAdapterPosition(), adventure);
     }
 }

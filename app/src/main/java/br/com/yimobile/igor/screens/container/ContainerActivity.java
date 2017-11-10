@@ -49,7 +49,8 @@ public class ContainerActivity extends AppCompatActivity
         NewAdventureFragment.CreateAdventureOnClickListener,
         SessionsFragment.ResumeOnClickListener,
         EditAdventureNameFragment.EditAdventureOnClickListener,
-        PlayersFragment.PlayersOnClickListener {
+        PlayersFragment.PlayersOnClickListener,
+        NewSessionFragment.NewSessionOnClickListener {
 
     private static final String TAG = ContainerActivity.class.getSimpleName();
     private Toolbar toolbar;
@@ -204,10 +205,12 @@ public class ContainerActivity extends AppCompatActivity
     }
 
     @Override
-    public void onAdventureItemClicked(int itemPosition) {
+    public void onAdventureItemClicked(int itemPosition, Adventure adventure) {
         Log.d(TAG, "Selected item " + itemPosition);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.container, new SessionsFragment()).addToBackStack(null).commit();
+        SessionsFragment sf = new SessionsFragment();
+        ft.replace(R.id.container, sf).commit();
+        sf.SetAdventure(adventure);
     }
 
     @Override
@@ -255,10 +258,12 @@ public class ContainerActivity extends AppCompatActivity
     }
 
     @Override
-    public void onPlayersPressed(){
+    public void onPlayersPressed(Adventure adventure){
         Log.d(TAG, "Players Pressed");
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.container, new PlayersFragment()).commit();
+        PlayersFragment pf = new PlayersFragment();
+        ft.replace(R.id.container, pf).commit();
+        pf.SetAdventure(adventure);
     }
 
     @Override
@@ -269,10 +274,35 @@ public class ContainerActivity extends AppCompatActivity
     }
 
     @Override
-    public void newSessionPressed() {
+    public void newSessionPressed(Adventure adventure) {
         Log.d(TAG, "Create new session clicked");
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.container, new NewSessionFragment()).addToBackStack(null).commit();
+        NewSessionFragment nsf = new NewSessionFragment();
+        ft.replace(R.id.container, nsf).addToBackStack(null).commit();
+        nsf.SetAdventure(adventure);
+    }
+
+    @Override
+    public void onSessionCreated(final String name, String data, final Adventure adventure) {
+        Log.d(TAG, "Session Created");
+        Session session = new Session(name, data);
+        adventure.addSessao(session);
+        mDatabase.child("adventure").child(adventure.getNome())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Map<String, Object> postValues = new HashMap<String,Object>();
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            postValues.put(snapshot.getKey(), snapshot.getValue());
+                        }
+                        postValues.put("sessoes", adventure.getSessoes());
+                        mDatabase.child("adventure").child(adventure.getNome()).updateChildren(postValues);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {}
+                });
+
     }
 
     public void newPlayerPressed() {
@@ -296,10 +326,12 @@ public class ContainerActivity extends AppCompatActivity
     }
 
     @Override
-    public void onResumePressed(){
+    public void onResumePressed(Adventure adventure){
         Log.d(TAG, "Resume Adventure Pressed");
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.container, new SessionsFragment()).commit();
+        SessionsFragment sf = new SessionsFragment();
+        ft.replace(R.id.container, sf).commit();
+        sf.SetAdventure(adventure);
     }
 
 }

@@ -7,8 +7,8 @@ public class Adventure {
     private String nome;
     private String descricao;
     private String mestre;
-    private List<String> jogadores;
-    private List<Session> sessoes;
+    private List<String> jogadores = new ArrayList<>();
+    private List<Session> sessoes = new ArrayList<>();
 
     public Adventure() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
@@ -55,6 +55,10 @@ public class Adventure {
     }
 
     public List<Session> getSessoes() { return sessoes; }
+
+    public void addSessao(Session session){
+        sessoes.add(session);
+    }
 
     public void setSessoes( ArrayList<Session> sessoes) {this.sessoes = sessoes; }
 }
