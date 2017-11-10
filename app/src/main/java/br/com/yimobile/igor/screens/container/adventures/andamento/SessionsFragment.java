@@ -110,7 +110,7 @@ public class SessionsFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_editar:
-                ((ContainerActivity) getActivity()).onEditAdventurePressed();
+                ((ContainerActivity) getActivity()).onEditAdventurePressed(adventure);
                 return true;
             case R.id.action_ordenar:
                 return true;
@@ -126,7 +126,7 @@ public class SessionsFragment extends Fragment {
     /* Public Interface for Listener */
     public interface ResumeOnClickListener {
         public void onPlayersPressed(Adventure adventure);
-        public void onEditAdventurePressed();
+        public void onEditAdventurePressed(Adventure adventure);
         public void newSessionPressed(Adventure adventure);
     }
 

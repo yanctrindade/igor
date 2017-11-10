@@ -267,10 +267,12 @@ public class ContainerActivity extends AppCompatActivity
     }
 
     @Override
-    public void onEditAdventurePressed(){
+    public void onEditAdventurePressed(Adventure adventure){
         Log.d(TAG, "Edit Adventure Pressed");
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.container, new EditAdventureNameFragment()).commit();
+        EditAdventureNameFragment eanf = new EditAdventureNameFragment();
+        ft.replace(R.id.container, eanf).addToBackStack(null).commit();
+        eanf.SetAdventure(adventure);
     }
 
     @Override
@@ -312,17 +314,39 @@ public class ContainerActivity extends AppCompatActivity
     }
 
     @Override
-    public void onAdventureEdited(String name) {
+    public void onAdventureEdited(Adventure adventure, final String name) {
         Log.d(TAG, "Adventure Edited");
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.container, new SessionsFragment(), "SessionsFragment").commit();
-        getSupportFragmentManager().executePendingTransactions();
+        final String oldName = adventure.getNome();
+        adventure.setNome(name);
+        mDatabase.child("adventure").child(name).setValue(adventure);
+        mDatabase.child("adventure").child(oldName).removeValue();
 
-        SessionsFragment adventuresFragment = (SessionsFragment)
-                getSupportFragmentManager().findFragmentByTag("SessionsFragment");
-        if (adventuresFragment != null) {
-            adventuresFragment.changeAdventureName(name);
-        }
+        final String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        mDatabase.child("users").child(uid)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        User active = dataSnapshot.getValue(User.class);
+                        List<String> aventuras = active.getAventuras();
+                        Map<String, Object> postValues = new HashMap<String,Object>();
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            postValues.put(snapshot.getKey(), snapshot.getValue());
+                        }
+                        if(aventuras == null) aventuras = new ArrayList<String>();
+                        for(int i = 0; i < aventuras.size(); i++){
+                            if(aventuras.get(i).equals(oldName)){
+                                aventuras.remove(i);
+                                break;
+                            }
+                        }
+                        aventuras.add(name);
+                        postValues.put("aventuras", aventuras);
+                        mDatabase.child("users").child(uid).updateChildren(postValues);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {}
+                });
     }
 
     @Override

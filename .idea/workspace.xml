@@ -27,10 +27,10 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.bin" afterPath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.lock" afterPath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.lock" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/andamento/ItensList/ItensRecyclerViewAdapter.java" afterPath="$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/andamento/ItensList/ItensRecyclerViewAdapter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/ContainerActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/ContainerActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/AdventuresFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/AdventuresFragment.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/andamento/EditAdventureNameFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/andamento/EditAdventureNameFragment.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/andamento/SessionsFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/andamento/SessionsFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/andamento/newSession/NewSessionFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/andamento/newSession/NewSessionFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/newAdventure/NewAdventureFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/newAdventure/NewAdventureFragment.java" />
     </list>
     <ignored path="Igor.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -67,30 +67,26 @@
       <file leaf-file-name="ContainerActivity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/ContainerActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="311" column="5" lean-forward="false" selection-start-line="311" selection-start-column="5" selection-end-line="311" selection-end-column="5" />
+            <state relative-caret-position="187">
+              <caret line="338" column="38" lean-forward="false" selection-start-line="338" selection-start-column="38" selection-end-line="338" selection-end-column="38" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#10548#10563#0" expanded="true" />
-                <element signature="e#12730#12745#0" expanded="true" />
+                <element signature="e#12855#12870#0" expanded="true" />
+                <element signature="e#14521#14536#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="NewSessionFragment.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/andamento/newSession/NewSessionFragment.java">
+      <file leaf-file-name="EditAdventureNameFragment.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/andamento/EditAdventureNameFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="47" column="97" lean-forward="false" selection-start-line="47" selection-start-column="97" selection-end-line="47" selection-end-column="97" />
+            <state relative-caret-position="255">
+              <caret line="59" column="46" lean-forward="false" selection-start-line="59" selection-start-column="46" selection-end-line="59" selection-end-column="46" />
               <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#2629#2630#0" expanded="true" />
-                <element signature="e#2671#2672#0" expanded="true" />
-                <element signature="e#3140#3690#0" expanded="true" />
-                <element signature="e#3689#3690#0" expanded="true" />
-                <element signature="e#4256#4619#0" expanded="true" />
-                <element signature="e#4618#4619#0" expanded="true" />
+                <element signature="e#2844#2845#0" expanded="true" />
+                <element signature="e#2886#2887#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -109,30 +105,22 @@
       <file leaf-file-name="SessionsFragment.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/andamento/SessionsFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="51" column="5" lean-forward="false" selection-start-line="51" selection-start-column="5" selection-end-line="51" selection-end-column="5" />
+            <state relative-caret-position="113">
+              <caret line="112" column="84" lean-forward="false" selection-start-line="112" selection-start-column="84" selection-end-line="112" selection-end-column="84" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ItensRecyclerViewAdapter.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/andamento/ItensList/ItensRecyclerViewAdapter.java">
+      <file leaf-file-name="AdventuresFragment.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/AdventuresFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="15" column="5" lean-forward="false" selection-start-line="15" selection-start-column="5" selection-end-line="15" selection-end-column="5" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AdventuresRecyclerViewAdapter.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/AdventuresRecyclerViewAdapter.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="203">
-              <caret line="50" column="4" lean-forward="false" selection-start-line="50" selection-start-column="4" selection-end-line="52" selection-end-column="5" />
+            <state relative-caret-position="170">
+              <caret line="74" column="53" lean-forward="true" selection-start-line="74" selection-start-column="53" selection-end-line="74" selection-end-column="53" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#4170#4171#0" expanded="true" />
+                <element signature="e#4202#4203#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -156,6 +144,7 @@
       <find>Play</find>
       <find>IMPLICIT_ONLY</find>
       <find>NewSe</find>
+      <find>EditAd</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -1926,7 +1915,6 @@
         <option value="$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/auth/LoginFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/NewAdventureFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_newadventure.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/andamento/EditAdventureNameFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/database.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_login.xml" />
@@ -1941,18 +1929,19 @@
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/rounded_edit_text.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/colored_edit_text.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_new_session.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/AdventuresRecyclerViewAdapter.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/AdventuresFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/AdventuresViewHolder.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_resume.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_players.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/ContainerActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/database/Adventure.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/andamento/PlayersFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/andamento/ItensList/ItensRecyclerViewAdapter.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/andamento/SessionsFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/newAdventure/NewAdventureFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/andamento/newSession/NewSessionFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/andamento/SessionsFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/andamento/EditAdventureNameFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/AdventuresRecyclerViewAdapter.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/AdventuresFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/ContainerActivity.java" />
       </list>
     </option>
   </component>
@@ -2393,7 +2382,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1510323127284" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1510325976507" />
       </method>
     </configuration>
     <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Instrumented Tests">
@@ -2441,7 +2430,7 @@
       </Profilers>
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1510323127285" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1510325976507" />
       </method>
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -2624,7 +2613,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1510323127285" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1510325976508" />
       </method>
     </configuration>
     <list size="1">
@@ -2996,17 +2985,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/andamento/EditAdventureNameFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#1470#1635#0" expanded="true" />
-            <element signature="e#1634#1635#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_resume.xml">
       <provider editor-type-id="android-designer2">
         <state />
@@ -3080,58 +3058,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/AdventuresRecyclerViewAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="203">
-          <caret line="50" column="4" lean-forward="false" selection-start-line="50" selection-start-column="4" selection-end-line="52" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/AdventuresFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="101" column="4" lean-forward="false" selection-start-line="101" selection-start-column="4" selection-end-line="105" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/ContainerActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="311" column="5" lean-forward="false" selection-start-line="311" selection-start-column="5" selection-end-line="311" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#10548#10563#0" expanded="true" />
-            <element signature="e#12730#12745#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/andamento/ItensList/ItensRecyclerViewAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="15" column="5" lean-forward="false" selection-start-line="15" selection-start-column="5" selection-end-line="15" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/newAdventure/NewAdventureFragment.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
           <caret line="21" column="13" lean-forward="false" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/andamento/SessionsFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="51" column="5" lean-forward="false" selection-start-line="51" selection-start-column="5" selection-end-line="51" selection-end-column="5" />
           <folding />
         </state>
       </provider>
@@ -3144,10 +3074,36 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/andamento/ItensList/ItensRecyclerViewAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="305">
+          <caret line="38" column="0" lean-forward="true" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/AdventuresRecyclerViewAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="237">
+          <caret line="54" column="0" lean-forward="true" selection-start-line="54" selection-start-column="0" selection-end-line="54" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/andamento/SessionsFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="113">
+          <caret line="112" column="84" lean-forward="false" selection-start-line="112" selection-start-column="84" selection-end-line="112" selection-end-column="84" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/andamento/newSession/NewSessionFragment.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
-          <caret line="47" column="97" lean-forward="false" selection-start-line="47" selection-start-column="97" selection-end-line="47" selection-end-column="97" />
+          <caret line="66" column="0" lean-forward="false" selection-start-line="66" selection-start-column="0" selection-end-line="69" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#2629#2630#0" expanded="true" />
@@ -3156,6 +3112,42 @@
             <element signature="e#3689#3690#0" expanded="true" />
             <element signature="e#4256#4619#0" expanded="true" />
             <element signature="e#4618#4619#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/andamento/EditAdventureNameFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="59" column="46" lean-forward="false" selection-start-line="59" selection-start-column="46" selection-end-line="59" selection-end-column="46" />
+          <folding>
+            <element signature="e#2844#2845#0" expanded="true" />
+            <element signature="e#2886#2887#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/ContainerActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="338" column="38" lean-forward="false" selection-start-line="338" selection-start-column="38" selection-end-line="338" selection-end-column="38" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#10548#10563#0" expanded="true" />
+            <element signature="e#12855#12870#0" expanded="true" />
+            <element signature="e#14521#14536#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/br/com/yimobile/igor/screens/container/adventures/AdventuresFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="74" column="53" lean-forward="true" selection-start-line="74" selection-start-column="53" selection-end-line="74" selection-end-column="53" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#4170#4171#0" expanded="true" />
+            <element signature="e#4202#4203#0" expanded="true" />
           </folding>
         </state>
       </provider>

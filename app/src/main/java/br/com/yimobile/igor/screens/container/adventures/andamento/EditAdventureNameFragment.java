@@ -16,8 +16,11 @@ import android.widget.ImageButton;
 
 import br.com.yimobile.igor.R;
 import br.com.yimobile.igor.screens.container.ContainerActivity;
+import database.Adventure;
 
 public class EditAdventureNameFragment extends Fragment {
+
+    Adventure adventure;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -35,6 +38,8 @@ public class EditAdventureNameFragment extends Fragment {
         exit_button.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.HIDE_NOT_ALWAYS, 0);
                 getActivity().onBackPressed();
             }
         });
@@ -45,18 +50,23 @@ public class EditAdventureNameFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                imm.toggleSoftInput(InputMethodManager.HIDE_NOT_ALWAYS, 0);
 
                 String name;
                 if(adventureName.getText() != null && !adventureName.getText().toString().isEmpty())
                     name = adventureName.getText().toString();
                 else name = "Aventura sem título";
-                ((ContainerActivity) getActivity()).onAdventureEdited(name);
+                ((ContainerActivity) getActivity()).onAdventureEdited(adventure, name);
+                getActivity().onBackPressed();
             }
         });
     }
 
+    public void SetAdventure(Adventure adventure){
+        this.adventure = adventure;
+    }
+
     public interface EditAdventureOnClickListener {
-        public void onAdventureEdited(String name);
+        public void onAdventureEdited(Adventure adventure, String name);
     }
 }

@@ -94,6 +94,11 @@ public class AdventuresFragment extends Fragment {
         }
     };
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
     public interface NewAdventureOnClickListener {
         public void onNewAdventureClicked();
         public void onAdventureItemClicked(int itemPosition, Adventure adventure);
