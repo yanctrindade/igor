@@ -48,4 +48,8 @@ public class ItensRecyclerViewAdapter extends RecyclerView.Adapter {
     public int getItemCount() {
         return sessionsArrayList.size();
     }
+
+    public void swap() {
+        notifyDataSetChanged();
+    }
 }

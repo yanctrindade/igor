@@ -35,6 +35,8 @@ public class NewAdventureFragment extends Fragment {
         exit_button.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.HIDE_NOT_ALWAYS, 0);
                 getActivity().onBackPressed();
             }
         });
@@ -45,7 +47,7 @@ public class NewAdventureFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                imm.toggleSoftInput(InputMethodManager.HIDE_NOT_ALWAYS, 0);
 
                 String name;
                 if(adventureName.getText() != null && !adventureName.getText().toString().isEmpty())

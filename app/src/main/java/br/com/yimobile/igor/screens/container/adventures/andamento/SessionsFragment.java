@@ -14,12 +14,22 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
+import java.util.List;
 
 import br.com.yimobile.igor.R;
 import br.com.yimobile.igor.screens.container.ContainerActivity;
 import br.com.yimobile.igor.screens.container.adventures.andamento.ItensList.ItensRecyclerViewAdapter;
 import database.Adventure;
+import database.Session;
+import database.User;
 
 public class SessionsFragment extends Fragment {
 
@@ -31,6 +41,7 @@ public class SessionsFragment extends Fragment {
     FloatingActionButton newSessionButton;
     Adventure adventure;
     TextView nameAdventure;
+    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -54,13 +65,25 @@ public class SessionsFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.sessions_recyclerview);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        sessionsArrayList.add("17/05 Sessão 5");
+        /*sessionsArrayList.add("17/05 Sessão 5");
         sessionsArrayList.add("16/05 Sessão 4");
         sessionsArrayList.add("15/05 Sessão 3");
         sessionsArrayList.add("13/05 Sessão 2");
-        sessionsArrayList.add("10/05 Sessão 1");
+        sessionsArrayList.add("10/05 Sessão 1");*/
         sessionsRecyclerViewAdapter = new ItensRecyclerViewAdapter(sessionsArrayList, getActivity());
         recyclerView.setAdapter(sessionsRecyclerViewAdapter);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        sessionsArrayList.clear();
+        List<Session> sessoes = adventure.getSessoes();
+        if(sessoes != null && !sessoes.isEmpty()) {
+            for (int i = sessoes.size() - 1; i >= 0; i--) {
+                addNewSession(sessoes.get(i));
+            }
+        }
     }
 
     public void SetAdventure(Adventure adventure){
@@ -105,6 +128,12 @@ public class SessionsFragment extends Fragment {
         public void onPlayersPressed(Adventure adventure);
         public void onEditAdventurePressed();
         public void newSessionPressed(Adventure adventure);
+    }
+
+    public void addNewSession(Session session){
+        sessionsArrayList.add(session.getData() + " " + session.getTitulo());
+        Log.d("SESLIST", sessionsArrayList.size() + " TAMANHO");
+        sessionsRecyclerViewAdapter.swap();
     }
 
 }
