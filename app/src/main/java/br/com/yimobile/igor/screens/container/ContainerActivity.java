@@ -210,7 +210,7 @@ public class ContainerActivity extends AppCompatActivity
         AdventuresFragment adventuresFragment = (AdventuresFragment)
                 getSupportFragmentManager().findFragmentByTag("AdventuresFragment");
         if (adventuresFragment != null) {
-            adventuresFragment.addNewAdventure(name);
+
             List<String> jog = new ArrayList<String>();
             List<Session> ses = new ArrayList<Session>();
             jog.add("");
@@ -240,8 +240,10 @@ public class ContainerActivity extends AppCompatActivity
             if(nome_mestre == null){
                 nome_mestre = "";
             }
-            Adventure adv = new Adventure(nome_adv_aux, "",nome_mestre,  jog, ses);
+            Adventure adv = new Adventure(name, "",nome_mestre,  jog, ses);
             mDatabase.child("adventure").child(nome_adv_aux).setValue(adv);
+
+            adventuresFragment.addNewAdventure(adv);
         }
     }
 

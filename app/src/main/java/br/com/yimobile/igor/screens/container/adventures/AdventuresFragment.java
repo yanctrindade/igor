@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +16,13 @@ import java.util.ArrayList;
 
 import br.com.yimobile.igor.R;
 import br.com.yimobile.igor.screens.container.ContainerActivity;
+import database.Adventure;
 
 public class AdventuresFragment extends Fragment {
 
     AdventuresRecyclerViewAdapter adventuresRecyclerViewAdapter;
     RecyclerView recyclerView;
-    ArrayList<String> adventuresArrayList = new ArrayList<>();
+    ArrayList<Adventure> adventuresArrayList = new ArrayList<>();
     FloatingActionButton newAdventureButton;
 
     @Nullable
@@ -44,7 +46,7 @@ public class AdventuresFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.adventures_recyclerview);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        
+
         adventuresRecyclerViewAdapter = new AdventuresRecyclerViewAdapter(adventuresArrayList, getActivity());
         recyclerView.setAdapter(adventuresRecyclerViewAdapter);
     }
@@ -61,7 +63,8 @@ public class AdventuresFragment extends Fragment {
         public void onAdventureItemClicked(int itemPosition);
     };
 
-    public void addNewAdventure(String name){
-        adventuresArrayList.add(name);
+    public void addNewAdventure(Adventure adv){
+        adventuresArrayList.add(adv);
+        Log.d("A", adventuresArrayList.size()+" TAMANHO");
     }
 }

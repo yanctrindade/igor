@@ -10,14 +10,15 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import br.com.yimobile.igor.R;
+import database.Adventure;
 
 public class AdventuresRecyclerViewAdapter extends RecyclerView.Adapter {
 
-    private ArrayList<String> adventuresArrayList;
+    private ArrayList<Adventure> adventuresArrayList;
     private Context context;
 
 
-    public AdventuresRecyclerViewAdapter(ArrayList<String> adventures, Context context) {
+    public AdventuresRecyclerViewAdapter(ArrayList<Adventure> adventures, Context context) {
         this.adventuresArrayList = adventures;
         this.context = context;
     }
@@ -37,7 +38,7 @@ public class AdventuresRecyclerViewAdapter extends RecyclerView.Adapter {
 
         AdventuresViewHolder adventureHolder = (AdventuresViewHolder) holder;
 
-        String title  = adventuresArrayList.get(position);
+        String title  = adventuresArrayList.get(position).getNome();
 
         adventureHolder.titleTextView.setText(title);
     }
