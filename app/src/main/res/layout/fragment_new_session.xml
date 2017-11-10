@@ -75,16 +75,19 @@
         android:src="@drawable/newadv_pronto_60"
         android:contentDescription="@string/entrar"/>
 
-    <ImageButton
+    <EditText
         android:id="@+id/create_session_date"
-        android:scaleType="fitCenter"
-        android:background="?android:attr/selectableItemBackground"
-        android:layout_width="82dp"
+        android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:layout_alignTop="@id/edit_avent"
         android:layout_alignStart="@id/edit_avent"
         android:layout_marginTop="80dp"
-        android:src="@drawable/newadv_pronto_60"
-        android:contentDescription="@string/entrar"/>
+        android:paddingStart="2dp"
+        android:paddingEnd="2dp"
+        android:background="@drawable/colored_edit_text"
+        android:inputType="text|datetime"
+        android:focusable="false"
+        android:textColor="@color/white"
+        android:textSize="15sp"/>
 
 </RelativeLayout>

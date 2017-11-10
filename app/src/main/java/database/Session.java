@@ -2,10 +2,6 @@ package database;
 
 import java.util.ArrayList;
 
-/**
- * Created by renne on 09/11/2017.
- */
-
 public class Session {
     private String titulo;
     private String data;

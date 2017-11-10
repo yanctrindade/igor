@@ -15,8 +15,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 import br.com.yimobile.igor.R;
 
@@ -24,7 +26,7 @@ public class NewSessionFragment extends Fragment {
 
     private EditText sessionNameEditText;
     private ImageButton saveButton;
-    private ImageButton dateButton;
+    private EditText dateText;
     private Calendar dateSelected = Calendar.getInstance();
     private DatePickerDialog datePickerDialog;
     private Button close;
@@ -44,11 +46,12 @@ public class NewSessionFragment extends Fragment {
         sessionNameEditText = (EditText) view.findViewById(R.id.edit_avent);
         saveButton = (ImageButton) view.findViewById(R.id.create_session);
         saveButton.setOnClickListener(saveOnClickListener);
-        dateButton = (ImageButton) view.findViewById(R.id.create_session_date);
-        dateButton.setOnClickListener(dateOnClickListener);
+        dateText = (EditText) view.findViewById(R.id.create_session_date);
+        dateText.setOnClickListener(dateOnClickListener);
+        Calendar aux = Calendar.getInstance();
+        dateText.setText(dateToString(aux, "dd/MM/yyyy"));
         close = (Button) view.findViewById(R.id.sair);
         close.setOnClickListener(closeOnClickListener);
-
     }
 
     /* On Click Listeners */
@@ -79,15 +82,34 @@ public class NewSessionFragment extends Fragment {
         datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
 
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                dateSelected.set(year, monthOfYear, dayOfMonth, 0, 0);
-
-                DateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy hh:mm");
-
-                String date = dateFormatter.format(dateSelected.getTime());
-                Log.d(TAG, "Data Selecionada :" + date);
+                Calendar dataPicker = Calendar.getInstance();
+                dataPicker.set(year, monthOfYear, dayOfMonth);
+                dateText.setText(dateToString(dataPicker, "dd/MM/yyyy"));
             }
 
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+        Calendar atual = Calendar.getInstance();
+        Calendar esc = stringToDate(dateText.getText().toString(), "dd/MM/yyyy");
+        datePickerDialog.updateDate(esc.get(Calendar.YEAR), esc.get(Calendar.MONTH), esc.get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.getDatePicker().setMinDate(atual.getTimeInMillis());
         datePickerDialog.show();
+    }
+
+    public static Calendar stringToDate(String d, String f){
+        if(d == null || f == null || f.isEmpty()) return null;
+        Calendar cal = Calendar.getInstance();
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat(f, Locale.ENGLISH);
+            cal.setTime(formatter.parse(d));
+        } catch (ParseException e) {
+            cal = null;
+        }
+        return cal;
+    }
+
+    public static String dateToString(Calendar d, String f){
+        if(d == null || f == null || f.isEmpty()) return null;
+        SimpleDateFormat formatter = new SimpleDateFormat(f, Locale.ENGLISH);
+        return formatter.format(d.getTime());
     }
 }

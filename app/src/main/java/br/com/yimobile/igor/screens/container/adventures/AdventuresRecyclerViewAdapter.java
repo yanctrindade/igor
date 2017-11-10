@@ -37,8 +37,9 @@ public class AdventuresRecyclerViewAdapter extends RecyclerView.Adapter {
         AdventuresViewHolder adventureHolder = (AdventuresViewHolder) holder;
 
         String title  = adventuresArrayList.get(position).getNome();
-
+        String descr  = adventuresArrayList.get(position).getDescricao();
         adventureHolder.titleTextView.setText(title);
+        adventureHolder.subtitleTextView.setText(descr);
     }
 
     @Override

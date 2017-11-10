@@ -1,5 +1,6 @@
 package br.com.yimobile.igor.screens.container;
 
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -83,6 +84,18 @@ public class ContainerActivity extends AppCompatActivity
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onBackPressed(){
+        FragmentManager fm = getFragmentManager();
+        if (fm.getBackStackEntryCount() > 0) {
+            Log.i("MainActivity", "popping backstack");
+            fm.popBackStack();
+        } else {
+            Log.i("MainActivity", "nothing on backstack, calling super");
+            super.onBackPressed();
         }
     }
 
@@ -194,7 +207,7 @@ public class ContainerActivity extends AppCompatActivity
     public void onAdventureItemClicked(int itemPosition) {
         Log.d(TAG, "Selected item " + itemPosition);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.container, new SessionsFragment()).commit();
+        ft.replace(R.id.container, new SessionsFragment()).addToBackStack(null).commit();
     }
 
     @Override
@@ -259,7 +272,7 @@ public class ContainerActivity extends AppCompatActivity
     public void newSessionPressed() {
         Log.d(TAG, "Create new session clicked");
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.container, new NewSessionFragment()).commit();
+        ft.replace(R.id.container, new NewSessionFragment()).addToBackStack(null).commit();
     }
 
     public void newPlayerPressed() {
