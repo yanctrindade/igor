@@ -12,10 +12,19 @@ import android.view.View;
 
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import br.com.yimobile.igor.R;
 import br.com.yimobile.igor.screens.container.account.AccountFragment;
@@ -29,6 +38,9 @@ import br.com.yimobile.igor.screens.container.adventures.andamento.PlayersFragme
 import br.com.yimobile.igor.screens.container.books.BooksFragment;
 import br.com.yimobile.igor.screens.container.notifications.NotificationsFragment;
 import br.com.yimobile.igor.screens.container.settings.SettingsFragment;
+import database.Adventure;
+import database.Session;
+import database.User;
 
 public class ContainerActivity extends AppCompatActivity
         implements AdventuresFragment.NewAdventureOnClickListener,
@@ -40,11 +52,15 @@ public class ContainerActivity extends AppCompatActivity
     private static final String TAG = ContainerActivity.class.getSimpleName();
     private Toolbar toolbar;
     private Drawer navDrawer;
+    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();;
+
+    private String nome_adv_aux;
+    private String nome_mestre;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+         setContentView(R.layout.activity_home);
 
         setupToolbar();
         setupNavDrawer();
@@ -185,6 +201,7 @@ public class ContainerActivity extends AppCompatActivity
 
     @Override
     public void onAdventureCreated(String name) {
+        nome_adv_aux = name;
         Log.d(TAG, "Adventure Created");
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.container, new AdventuresFragment(), "AdventuresFragment").commit();
@@ -194,6 +211,37 @@ public class ContainerActivity extends AppCompatActivity
                 getSupportFragmentManager().findFragmentByTag("AdventuresFragment");
         if (adventuresFragment != null) {
             adventuresFragment.addNewAdventure(name);
+            List<String> jog = new ArrayList<String>();
+            List<Session> ses = new ArrayList<Session>();
+            jog.add("");
+            ses.add(new Session("",""));
+
+            Query dataUser = mDatabase.child("users").orderByKey().equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            dataUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    User user = null;
+                    for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
+                        user = singleSnapshot.getValue(User.class);
+                    }
+                    if (user != null) {
+                        nome_adv_aux = nome_adv_aux + " " + user.getUsername();
+                        nome_mestre = user.getUsername();
+                    }else{
+                        nome_mestre = "";
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.e("ERROR", "onCancelled", databaseError.toException());
+                }
+            });
+
+            if(nome_mestre == null){
+                nome_mestre = "";
+            }
+            Adventure adv = new Adventure(nome_adv_aux, "",nome_mestre,  jog, ses);
+            mDatabase.child("adventure").child(nome_adv_aux).setValue(adv);
         }
     }
 

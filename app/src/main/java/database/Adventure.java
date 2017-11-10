@@ -1,6 +1,7 @@
 package database;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by renne on 09/11/2017.
@@ -10,18 +11,19 @@ public class Adventure {
     private String nome;
     private String descricao;
     private String mestre;
-    private ArrayList<String> jogadores;
-    private ArrayList<Session> sessoes;
+    private List<String> jogadores;
+    private List<Session> sessoes;
 
     public Adventure() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public Adventure(String nome, String descricao, String mestre,  ArrayList<String> jogadores) {
+    public Adventure(String nome, String descricao, String mestre,  List<String> jogadores, List<Session> sessoes) {
         this.nome = nome;
         this.descricao = descricao;
         this.mestre = mestre;
         this.jogadores = jogadores;
+        this.sessoes = sessoes;
     }
 
     public String getNome() {
@@ -48,7 +50,7 @@ public class Adventure {
         this.mestre = mestre;
     }
 
-    public ArrayList<String> getJogadores() {
+    public List<String> getJogadores() {
         return jogadores;
     }
 
@@ -56,7 +58,7 @@ public class Adventure {
         this.jogadores = jogadores;
     }
 
-    public ArrayList<Session> getSessoes() { return sessoes; }
+    public List<Session> getSessoes() { return sessoes; }
 
     public void setSessoes( ArrayList<Session> sessoes) {this.sessoes = sessoes; }
 }

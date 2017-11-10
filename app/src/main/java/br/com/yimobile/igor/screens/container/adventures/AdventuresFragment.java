@@ -44,9 +44,7 @@ public class AdventuresFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.adventures_recyclerview);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        adventuresArrayList.add("Teste 1");
-        adventuresArrayList.add("Teste 2");
-        adventuresArrayList.add("Teste 3");
+        
         adventuresRecyclerViewAdapter = new AdventuresRecyclerViewAdapter(adventuresArrayList, getActivity());
         recyclerView.setAdapter(adventuresRecyclerViewAdapter);
     }
