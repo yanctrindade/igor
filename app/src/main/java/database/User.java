@@ -1,11 +1,14 @@
 package database;
 
+import java.util.List;
+
 public class User {
 
     private String email;
     private String username;
     private String nascimento;
     private String sexo;
+    private List<String> aventuras;
 
     public User() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
@@ -48,5 +51,13 @@ public class User {
 
     public void setSexo(String sexo) {
         this.sexo = sexo;
+    }
+
+    public List<String> getAventuras() {
+        return aventuras;
+    }
+
+    public void setAventuras(List<String> aventuras) {
+        this.aventuras = aventuras;
     }
 }

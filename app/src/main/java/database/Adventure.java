@@ -3,10 +3,6 @@ package database;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by renne on 09/11/2017.
- */
-
 public class Adventure {
     private String nome;
     private String descricao;

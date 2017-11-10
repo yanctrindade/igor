@@ -16,7 +16,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
@@ -24,7 +23,9 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import br.com.yimobile.igor.R;
 import br.com.yimobile.igor.screens.container.account.AccountFragment;
@@ -52,10 +53,7 @@ public class ContainerActivity extends AppCompatActivity
     private static final String TAG = ContainerActivity.class.getSimpleName();
     private Toolbar toolbar;
     private Drawer navDrawer;
-    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();;
-
-    private String nome_adv_aux;
-    private String nome_mestre;
+    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,8 +198,7 @@ public class ContainerActivity extends AppCompatActivity
     }
 
     @Override
-    public void onAdventureCreated(String name) {
-        nome_adv_aux = name;
+    public void onAdventureCreated(final String name) {
         Log.d(TAG, "Adventure Created");
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.container, new AdventuresFragment(), "AdventuresFragment").commit();
@@ -213,37 +210,34 @@ public class ContainerActivity extends AppCompatActivity
 
             List<String> jog = new ArrayList<String>();
             List<Session> ses = new ArrayList<Session>();
-            jog.add("");
-            ses.add(new Session("",""));
+            final String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            jog.add(uid);
+            //ses.add(new Session("",""));
 
-            Query dataUser = mDatabase.child("users").orderByKey().equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid());
-            dataUser.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    User user = null;
-                    for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
-                        user = singleSnapshot.getValue(User.class);
-                    }
-                    if (user != null) {
-                        nome_adv_aux = nome_adv_aux + " " + user.getUsername();
-                        nome_mestre = user.getUsername();
-                    }else{
-                        nome_mestre = "";
-                    }
-                }
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    Log.e("ERROR", "onCancelled", databaseError.toException());
-                }
-            });
-
-            if(nome_mestre == null){
-                nome_mestre = "";
-            }
-            Adventure adv = new Adventure(name, "",nome_mestre,  jog, ses);
-            mDatabase.child("adventure").child(nome_adv_aux).setValue(adv);
+            Adventure adv = new Adventure(name, "", uid,  jog, ses);
+            mDatabase.child("adventure").child(name).setValue(adv);
 
             adventuresFragment.addNewAdventure(adv);
+
+            mDatabase.child("users").child(uid)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        User active = dataSnapshot.getValue(User.class);
+                        List<String> aventuras = active.getAventuras();
+                        Map<String, Object> postValues = new HashMap<String,Object>();
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            postValues.put(snapshot.getKey(), snapshot.getValue());
+                        }
+                        if(aventuras == null) aventuras = new ArrayList<String>();
+                        aventuras.add(name);
+                        postValues.put("aventuras", aventuras);
+                        mDatabase.child("users").child(uid).updateChildren(postValues);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {}
+                });
         }
     }
 

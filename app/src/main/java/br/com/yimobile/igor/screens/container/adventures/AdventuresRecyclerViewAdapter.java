@@ -18,7 +18,7 @@ public class AdventuresRecyclerViewAdapter extends RecyclerView.Adapter {
     private Context context;
 
 
-    public AdventuresRecyclerViewAdapter(ArrayList<Adventure> adventures, Context context) {
+    AdventuresRecyclerViewAdapter(ArrayList<Adventure> adventures, Context context) {
         this.adventuresArrayList = adventures;
         this.context = context;
     }
@@ -28,9 +28,7 @@ public class AdventuresRecyclerViewAdapter extends RecyclerView.Adapter {
         View view = LayoutInflater.from(context)
                 .inflate(R.layout.adventures_list_item, parent, false);
 
-        AdventuresViewHolder holder = new AdventuresViewHolder(view, context);
-
-        return holder;
+        return new AdventuresViewHolder(view, context);
     }
 
     @Override
@@ -46,5 +44,9 @@ public class AdventuresRecyclerViewAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemCount() {
         return adventuresArrayList.size();
+    }
+
+    void swap() {
+        notifyDataSetChanged();
     }
 }
