@@ -423,24 +423,26 @@ public class ContainerActivity extends AppCompatActivity
                 Log.d("ADVLIST", aventuras.size() + " TAMANHO");
                 for (int i = aventuras.size() - 1; i >= 0; i--) {
                     final int finalI = i;
-                    mDatabase.child("adventure").child(aventuras.get(i))
-                            .addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    Adventure adventure = dataSnapshot.getValue(Adventure.class);
-                                    userAdventures.add(adventure);
-                                    if (finalI == 0) {
-                                        Fragment fragment = getVisibleFragment();
-                                        if (fragment instanceof AdventuresFragment) {
-                                            ((AdventuresFragment) fragment).fillFragment(userAdventures);
+                    if(aventuras.get(i) != null) {
+                        mDatabase.child("adventure").child(aventuras.get(i))
+                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        Adventure adventure = dataSnapshot.getValue(Adventure.class);
+                                        userAdventures.add(adventure);
+                                        if (finalI == 0) {
+                                            Fragment fragment = getVisibleFragment();
+                                            if (fragment instanceof AdventuresFragment) {
+                                                ((AdventuresFragment) fragment).fillFragment(userAdventures);
+                                            }
                                         }
                                     }
-                                }
 
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-                                }
-                            });
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                    }
+                                });
+                    }
                 }
             }
         }
