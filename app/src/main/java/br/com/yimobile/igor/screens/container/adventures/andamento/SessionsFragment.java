@@ -41,13 +41,23 @@ public class SessionsFragment extends Fragment {
     FloatingActionButton newSessionButton;
     Adventure adventure;
     TextView nameAdventure;
-    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_resume, container, false);
-        nameAdventure = (TextView) view.findViewById(R.id.titulo);
+
+        nameAdventure = view.findViewById(R.id.titulo);
         if(adventure != null) nameAdventure.setText(adventure.getNome());
+
+        newSessionButton = view.findViewById(R.id.new_session_button);
+        newSessionButton.setOnClickListener(newSessionOnClickListener);
+        if(!((ContainerActivity) getActivity()).getUid().equals(adventure.getMestre())){
+            newSessionButton.hide();
+        }
+
+        ImageButton players_button = view.findViewById(R.id.button_jogadores);
+        players_button.setOnClickListener(playersOnClickListener);
+
         return view;
     }
 
@@ -56,20 +66,9 @@ public class SessionsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         setHasOptionsMenu(true);
 
-        newSessionButton = (FloatingActionButton) view.findViewById(R.id.new_session_button);
-        newSessionButton.setOnClickListener(newSessionOnClickListener);
-
-        ImageButton players_button = view.findViewById(R.id.button_jogadores);
-        players_button.setOnClickListener(playersOnClickListener);
-
-        recyclerView = (RecyclerView) view.findViewById(R.id.sessions_recyclerview);
+        recyclerView = view.findViewById(R.id.sessions_recyclerview);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        /*sessionsArrayList.add("17/05 Sessão 5");
-        sessionsArrayList.add("16/05 Sessão 4");
-        sessionsArrayList.add("15/05 Sessão 3");
-        sessionsArrayList.add("13/05 Sessão 2");
-        sessionsArrayList.add("10/05 Sessão 1");*/
         sessionsRecyclerViewAdapter = new ItensRecyclerViewAdapter(sessionsArrayList, getActivity());
         recyclerView.setAdapter(sessionsRecyclerViewAdapter);
     }
@@ -117,10 +116,6 @@ public class SessionsFragment extends Fragment {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    public void changeAdventureName(String name){
-
     }
 
     /* Public Interface for Listener */

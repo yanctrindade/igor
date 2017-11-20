@@ -22,13 +22,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Locale;
 
 import br.com.yimobile.igor.R;
+import br.com.yimobile.igor.screens.container.ContainerActivity;
 import database.User;
+
+import static br.com.yimobile.igor.screens.auth.LoginActivity.dateToString;
+import static br.com.yimobile.igor.screens.auth.LoginActivity.stringToDate;
 
 public class AccountFragment extends Fragment {
     private DatabaseReference mDatabase;
@@ -51,31 +52,10 @@ public class AccountFragment extends Fragment {
         dataText = view.findViewById(R.id.data);
         sexoText = view.findViewById(R.id.sexo);
 
-        Query dataUser = mDatabase.child("users").orderByKey().equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        dataUser.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                User user = null;
-                for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
-                    user = singleSnapshot.getValue(User.class);
-                }
-                if (user != null) {
-                    emailText.setText(user.getEmail());
-                    nomeText.setText(user.getUsername());
-                    dataText.setText(user.getNascimento());
-                    sexoText.setText(user.getSexo());
-
-                    if(!dataText.getText().toString().isEmpty()) {
-                        Calendar aux = stringToDate(dataText.getText().toString(), "dd/MM/yyyy");
-                        data_Dialog.updateDate(aux.get(Calendar.YEAR), aux.get(Calendar.MONTH), aux.get(Calendar.DAY_OF_MONTH));
-                    }
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.e("ERROR", "onCancelled", databaseError.toException());
-            }
-        });
+        User user = ((ContainerActivity) getActivity()).getUser();
+        if (user != null) {
+            fillFragment(user);
+        }
 
         Calendar data_atual = Calendar.getInstance();
         data_Dialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
@@ -110,27 +90,19 @@ public class AccountFragment extends Fragment {
                 String data = dataText.getText().toString();
                 String sexo = sexoText.getText().toString();
 
-                User user = new User(email, nome, data, sexo);
-                mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user);
+                ((ContainerActivity) getActivity()).setUser(new User(email, nome, data, sexo));
+                mDatabase.child("users").child(
+                        ((ContainerActivity) getActivity()).getUid()).setValue(
+                                ((ContainerActivity) getActivity()).getUser());
             }
         });
     }
 
-    public static Calendar stringToDate(String d, String f){
-        if(d == null || f == null || f.isEmpty()) return null;
-        Calendar cal = Calendar.getInstance();
-        try {
-            SimpleDateFormat formatter = new SimpleDateFormat(f, Locale.ENGLISH);
-            cal.setTime(formatter.parse(d));
-        } catch (ParseException e) {
-            cal = null;
-        }
-        return cal;
+    public void fillFragment(User user){
+        emailText.setText(user.getEmail());
+        nomeText.setText(user.getUsername());
+        dataText.setText(user.getNascimento());
+        sexoText.setText(user.getSexo());
     }
 
-    public static String dateToString(Calendar d, String f){
-        if(d == null || f == null || f.isEmpty()) return null;
-        SimpleDateFormat formatter = new SimpleDateFormat(f, Locale.ENGLISH);
-        return formatter.format(d.getTime());
-    }
 }

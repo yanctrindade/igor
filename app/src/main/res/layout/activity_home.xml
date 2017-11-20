@@ -23,6 +23,18 @@
 
     </android.support.v7.widget.Toolbar>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/notification_center"
+        android:layout_below="@id/toolbar"
+        android:paddingLeft="35dp"
+        android:paddingRight="35dp"
+        android:paddingBottom="30dp"
+        android:elevation="5dp">
+        <include layout="@layout/notifications_layout"/>
+    </RelativeLayout>
+
     <android.support.v7.widget.ContentFrameLayout
         android:id="@+id/container"
         android:layout_marginTop="54dp"

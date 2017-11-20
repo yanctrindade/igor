@@ -1,15 +1,27 @@
 package br.com.yimobile.igor.screens.container;
 
 import android.app.FragmentManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
@@ -17,6 +29,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
@@ -41,8 +54,10 @@ import br.com.yimobile.igor.screens.container.books.BooksFragment;
 import br.com.yimobile.igor.screens.container.notifications.NotificationsFragment;
 import br.com.yimobile.igor.screens.container.settings.SettingsFragment;
 import database.Adventure;
+import database.Notifications;
 import database.Session;
 import database.User;
+
 
 public class ContainerActivity extends AppCompatActivity
         implements AdventuresFragment.NewAdventureOnClickListener,
@@ -56,14 +71,82 @@ public class ContainerActivity extends AppCompatActivity
     private Toolbar toolbar;
     private Drawer navDrawer;
     private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+    private User user;
+    private List<Adventure> userAdventures;
+    private String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+    private SwipeRefreshLayout swipeNotifyContainer;
+    private RelativeLayout notification;
+    private TextView Title, noNotification;
+    static List<Notifications> arrayNotifications;
+    public static MenuItem menuItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-         setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_home);
 
+        user = getUserDatabase();
         setupToolbar();
         setupNavDrawer();
+
+        Title = findViewById(R.id.Title);
+        noNotification = findViewById(R.id.noNotification);
+        Title.setVisibility(View.INVISIBLE);
+        notification = findViewById(R.id.notification_center);
+        notification.setVisibility(View.INVISIBLE);
+
+        if(user != null){
+            arrayNotifications = getUser().getNotifications();
+        } else{
+            arrayNotifications = new ArrayList<>();
+        }
+
+        RecyclerView notList = findViewById(R.id.notificationList);
+        notList.setHasFixedSize(false);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        notList.setLayoutManager(llm);
+
+        final NotificationAdapter Notadapter = new NotificationAdapter(arrayNotifications, this);
+        notList.setAdapter(Notadapter);
+
+        swipeNotifyContainer = findViewById(R.id.notification_refresh_scroll);
+
+        if(swipeNotifyContainer != null) {
+            // Configure the refreshing colors
+            swipeNotifyContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                    android.R.color.holo_green_light,
+                    android.R.color.holo_orange_light,
+                    android.R.color.holo_red_light);
+
+            swipeNotifyContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+
+                    //lida com o swipeDownToUpdate
+                    if(user != null){
+                        arrayNotifications = getUser().getNotifications();
+                    } else{
+                        arrayNotifications = new ArrayList<>();
+                    }
+                    Notadapter.clear();
+                    Notadapter.addAll(arrayNotifications);
+
+                    updateNot();
+                    int i = countUnread();
+                    if(countUnread() > 0) {
+                        menuItem.setIcon(buildCounterDrawable(countUnread(), R.drawable.nav_drawer_notifications_selected));
+                    } else{
+                        menuItem.setIcon(buildCounterDrawable(countUnread(), R.drawable.nav_drawer_notifications));
+                    }
+
+                    swipeNotifyContainer.setRefreshing(false);
+                }
+            });
+        }
+
+        updateNot();
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.container, new AdventuresFragment());
@@ -74,6 +157,16 @@ public class ContainerActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
+        inflater.inflate(R.menu.notifications_menu, menu);
+
+        menuItem = menu.findItem(R.id.notifications);
+        int i = countUnread();
+        if(i > 0) {
+            menuItem.setIcon(buildCounterDrawable(countUnread(), R.drawable.nav_drawer_notifications_selected));
+        } else {
+            menuItem.setIcon(buildCounterDrawable(0, R.drawable.nav_drawer_notifications));
+        }
+
         return true;
     }
 
@@ -82,6 +175,17 @@ public class ContainerActivity extends AppCompatActivity
         switch (item.getItemId()) {
             case android.R.id.home:
                 navDrawer.openDrawer();
+                return true;
+            case R.id.notifications:
+                if(notification.getVisibility() == View.VISIBLE) {
+                    notification.setVisibility(View.INVISIBLE);
+                    Animation animation = AnimationUtils.loadAnimation(this, R.anim.slide_out_down);
+                    notification.setAnimation(animation);
+                } else {
+                    notification.setVisibility(View.VISIBLE);
+                    Animation animation = AnimationUtils.loadAnimation(this, R.anim.slide_in_down);
+                    notification.setAnimation(animation);
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -98,6 +202,57 @@ public class ContainerActivity extends AppCompatActivity
             Log.i("MainActivity", "nothing on backstack, calling super");
             super.onBackPressed();
         }
+    }
+
+    private void updateNot() {
+        if (arrayNotifications == null || arrayNotifications.size() == 0) {
+            //Log.d("Notification: ", "VAZIO");
+            Title.setVisibility(View.INVISIBLE);
+            noNotification.setVisibility(View.VISIBLE);
+        } else {
+            //Log.d("Notification: ", arrayNotifications.toString());
+            Title.setVisibility(View.VISIBLE);
+            noNotification.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    public static int countUnread(){
+        int contador = 0;
+        if(arrayNotifications != null) {
+            Notifications current;
+            for (int i = 0; i < arrayNotifications.size(); i++) {
+                current = arrayNotifications.get(i);
+                if (current.getDateRecebimento() == null)
+                    contador++;
+            }
+        }
+        return contador;
+    }
+
+    private Drawable buildCounterDrawable(int count, int backgroundImageId) {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View view = inflater.inflate(R.layout.unread_background, null);
+        view.setBackgroundResource(backgroundImageId);
+
+        if (count == 0) {
+            View counterTextPanel = view.findViewById(R.id.counterValuePanel);
+            counterTextPanel.setVisibility(View.GONE);
+        } else {
+            TextView textView = view.findViewById(R.id.count);
+            textView.setText(String.valueOf(count));
+        }
+
+        view.measure(
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+
+        view.setDrawingCacheEnabled(true);
+        view.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+        Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache());
+        view.setDrawingCacheEnabled(false);
+
+        return new BitmapDrawable(getResources(), bitmap);
     }
 
     private void setupToolbar() {
@@ -196,6 +351,101 @@ public class ContainerActivity extends AppCompatActivity
         }
     }
 
+    public Fragment getVisibleFragment(){
+        android.support.v4.app.FragmentManager fragmentManager = ContainerActivity.this.getSupportFragmentManager();
+        List<Fragment> fragments = fragmentManager.getFragments();
+        if(fragments != null){
+            for(Fragment fragment : fragments){
+                if(fragment != null && fragment.isVisible())
+                    return fragment;
+            }
+        }
+        return null;
+    }
+
+    public void setUser(User user){
+        this.user = user;
+    }
+
+    public User getUser(){
+        if(user == null) return getUserDatabase();
+        Log.d("USERV", user.getEmail());
+        return user;
+    }
+
+    public String getUid(){
+        return uid;
+    }
+
+    private User getUserDatabase(){
+        Query dataUser = mDatabase.child("users").orderByKey().equalTo(uid);
+        dataUser.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
+                    user = singleSnapshot.getValue(User.class);
+                    arrayNotifications = getUser().getNotifications();
+                    Fragment fragment = getVisibleFragment();
+                    if(fragment instanceof AdventuresFragment){
+                        getUserAdventuresDatabase();
+                    } else if(fragment instanceof AccountFragment){
+                        ((AccountFragment) fragment).fillFragment(user);
+                    }
+                    Log.d("USERN", user.getEmail());
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("ERROR", "onCancelled", databaseError.toException());
+            }
+        });
+
+        return user;
+    }
+
+    public List<Adventure> getUserAdventures(){
+        if(userAdventures == null) {
+            userAdventures = new ArrayList<>();
+            return getUserAdventuresDatabase();
+        }
+        return userAdventures;
+    }
+
+    public void refreshUserAdventure(){
+        getUserAdventuresDatabase();
+    }
+
+    private List<Adventure> getUserAdventuresDatabase(){
+        if(user != null) {
+            List<String> aventuras = user.getAventuras();
+            if (aventuras != null && !aventuras.isEmpty()) {
+                userAdventures.clear();
+                Log.d("ADVLIST", aventuras.size() + " TAMANHO");
+                for (int i = aventuras.size() - 1; i >= 0; i--) {
+                    final int finalI = i;
+                    mDatabase.child("adventure").child(aventuras.get(i))
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Adventure adventure = dataSnapshot.getValue(Adventure.class);
+                                    userAdventures.add(adventure);
+                                    if (finalI == 0) {
+                                        Fragment fragment = getVisibleFragment();
+                                        if (fragment instanceof AdventuresFragment) {
+                                            ((AdventuresFragment) fragment).fillFragment(userAdventures);
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                }
+                            });
+                }
+            }
+        }
+        return userAdventures;
+    }
 
     @Override
     public void onNewAdventureClicked() {
@@ -226,14 +476,13 @@ public class ContainerActivity extends AppCompatActivity
 
             List<String> jog = new ArrayList<String>();
             List<Session> ses = new ArrayList<Session>();
-            final String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
             jog.add(uid);
-            //ses.add(new Session("",""));
 
             Adventure adv = new Adventure(name, "", uid,  jog, ses);
             mDatabase.child("adventure").child(name).setValue(adv);
 
-            adventuresFragment.addNewAdventure(adv);
+            userAdventures.add(0, adv);
+            adventuresFragment.fillFragment(userAdventures);
 
             mDatabase.child("users").child(uid)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -321,7 +570,6 @@ public class ContainerActivity extends AppCompatActivity
         mDatabase.child("adventure").child(name).setValue(adventure);
         mDatabase.child("adventure").child(oldName).removeValue();
 
-        final String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         mDatabase.child("users").child(uid)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -27,13 +28,13 @@ import br.com.yimobile.igor.screens.container.ContainerActivity;
 import database.Adventure;
 import database.User;
 
-public class AdventuresFragment extends Fragment {
+public class AdventuresFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     AdventuresRecyclerViewAdapter adventuresRecyclerViewAdapter;
     RecyclerView recyclerView;
     ArrayList<Adventure> adventuresArrayList = new ArrayList<>();
     FloatingActionButton newAdventureButton;
-    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+    SwipeRefreshLayout swipeLayout;
 
     @Nullable
     @Override
@@ -41,16 +42,23 @@ public class AdventuresFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_adventures, null);
 
-        newAdventureButton = (FloatingActionButton) view.findViewById(R.id.new_adventure_button);
+        newAdventureButton = view.findViewById(R.id.new_adventure_button);
         newAdventureButton.setOnClickListener(floatingActionOnClickListener);
         newAdventureButton.setImageResource(R.drawable.float_button_new_adventure);
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.adventures_recyclerview);
+        recyclerView = view.findViewById(R.id.adventures_recyclerview);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
         adventuresRecyclerViewAdapter = new AdventuresRecyclerViewAdapter(adventuresArrayList, getActivity());
         recyclerView.setAdapter(adventuresRecyclerViewAdapter);
+
+        swipeLayout = view.findViewById(R.id.swipe_container);
+        swipeLayout.setOnRefreshListener(this);
+        swipeLayout.setColorSchemeColors(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
 
         return view;
     }
@@ -59,32 +67,10 @@ public class AdventuresFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        User active = dataSnapshot.getValue(User.class);
-                        List<String> aventuras = active.getAventuras();
-                        if(aventuras != null && !aventuras.isEmpty()){
-                            for(int i = aventuras.size() - 1; i >= 0; i--){
-                                mDatabase.child("adventure").child(aventuras.get(i))
-                                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(DataSnapshot dataSnapshot) {
-                                            Adventure adventure = dataSnapshot.getValue(Adventure.class);
-                                            addNewAdventure(adventure);
-                                        }
-
-                                        @Override
-                                        public void onCancelled(DatabaseError databaseError) {}
-                                    });
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {}
-                });
+        List<Adventure> adventureList = ((ContainerActivity) getActivity()).getUserAdventures();
+        if(adventureList != null){
+            fillFragment(adventureList);
+        }
     }
 
     View.OnClickListener floatingActionOnClickListener = new View.OnClickListener() {
@@ -99,6 +85,23 @@ public class AdventuresFragment extends Fragment {
         super.onResume();
     }
 
+    @Override
+    public void onRefresh() {
+        ((ContainerActivity) getActivity()).refreshUserAdventure();
+    }
+
+    public void fillFragment(List<Adventure> adventureList) {
+        adventuresArrayList.clear();
+        for (Adventure adventure : adventureList) {
+            addNewAdventure(adventure);
+        }
+        if (swipeLayout != null) {
+            swipeLayout.setRefreshing(false);
+            swipeLayout.destroyDrawingCache();
+            swipeLayout.clearAnimation();
+        }
+    }
+
     public interface NewAdventureOnClickListener {
         public void onNewAdventureClicked();
         public void onAdventureItemClicked(int itemPosition, Adventure adventure);
@@ -106,7 +109,6 @@ public class AdventuresFragment extends Fragment {
 
     public void addNewAdventure(Adventure adv){
         adventuresArrayList.add(adv);
-        Log.d("ADVLIST", adventuresArrayList.size()+" TAMANHO");
         adventuresRecyclerViewAdapter.swap();
     }
 }

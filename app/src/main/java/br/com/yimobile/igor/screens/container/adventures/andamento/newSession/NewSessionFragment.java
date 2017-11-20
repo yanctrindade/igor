@@ -28,6 +28,9 @@ import br.com.yimobile.igor.R;
 import br.com.yimobile.igor.screens.container.ContainerActivity;
 import database.Adventure;
 
+import static br.com.yimobile.igor.screens.auth.LoginActivity.dateToString;
+import static br.com.yimobile.igor.screens.auth.LoginActivity.stringToDate;
+
 public class NewSessionFragment extends Fragment {
 
     private EditText sessionNameEditText;
@@ -120,23 +123,5 @@ public class NewSessionFragment extends Fragment {
 
     public interface NewSessionOnClickListener {
         public void onSessionCreated(String name, String data, Adventure adventure);
-    };
-
-    public static Calendar stringToDate(String d, String f){
-        if(d == null || f == null || f.isEmpty()) return null;
-        Calendar cal = Calendar.getInstance();
-        try {
-            SimpleDateFormat formatter = new SimpleDateFormat(f, Locale.ENGLISH);
-            cal.setTime(formatter.parse(d));
-        } catch (ParseException e) {
-            cal = null;
-        }
-        return cal;
-    }
-
-    public static String dateToString(Calendar d, String f){
-        if(d == null || f == null || f.isEmpty()) return null;
-        SimpleDateFormat formatter = new SimpleDateFormat(f, Locale.ENGLISH);
-        return formatter.format(d.getTime());
     }
 }

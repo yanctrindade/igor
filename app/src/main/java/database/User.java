@@ -1,5 +1,6 @@
 package database;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class User {
@@ -9,6 +10,7 @@ public class User {
     private String nascimento;
     private String sexo;
     private List<String> aventuras;
+    private List<Notifications> notifications;
 
     public User() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
@@ -59,5 +61,18 @@ public class User {
 
     public void setAventuras(List<String> aventuras) {
         this.aventuras = aventuras;
+    }
+
+    public List<Notifications> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(List<Notifications> notifications) {
+        this.notifications = notifications;
+    }
+
+    public void addNotification(Notifications notification){
+        if(this.notifications == null) notifications = new ArrayList<>();
+        this.notifications.add(notification);
     }
 }
