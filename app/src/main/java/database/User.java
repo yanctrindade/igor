@@ -75,4 +75,12 @@ public class User {
         if(this.notifications == null) notifications = new ArrayList<>();
         this.notifications.add(notification);
     }
+
+    public void changeNotification(int pos, Notifications notification){
+        this.notifications.set(pos, notification);
+    }
+
+    public void removeNotification(int pos){
+        this.notifications.remove(pos);
+    }
 }

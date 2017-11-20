@@ -37,6 +37,7 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,6 +58,9 @@ import database.Adventure;
 import database.Notifications;
 import database.Session;
 import database.User;
+
+import static br.com.yimobile.igor.screens.auth.LoginActivity.dateToString;
+import static br.com.yimobile.igor.screens.auth.LoginActivity.stringToDate;
 
 
 public class ContainerActivity extends AppCompatActivity
@@ -80,6 +84,7 @@ public class ContainerActivity extends AppCompatActivity
     private TextView Title, noNotification;
     static List<Notifications> arrayNotifications;
     public static MenuItem menuItem;
+    NotificationAdapter notificationAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,13 +113,12 @@ public class ContainerActivity extends AppCompatActivity
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         notList.setLayoutManager(llm);
 
-        final NotificationAdapter Notadapter = new NotificationAdapter(arrayNotifications, this);
-        notList.setAdapter(Notadapter);
+        notificationAdapter = new NotificationAdapter(arrayNotifications, this);
+        notList.setAdapter(notificationAdapter);
 
         swipeNotifyContainer = findViewById(R.id.notification_refresh_scroll);
 
         if(swipeNotifyContainer != null) {
-            // Configure the refreshing colors
             swipeNotifyContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
                     android.R.color.holo_green_light,
                     android.R.color.holo_orange_light,
@@ -123,30 +127,12 @@ public class ContainerActivity extends AppCompatActivity
             swipeNotifyContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-
-                    //lida com o swipeDownToUpdate
-                    if(user != null){
-                        arrayNotifications = getUser().getNotifications();
-                    } else{
-                        arrayNotifications = new ArrayList<>();
-                    }
-                    Notadapter.clear();
-                    Notadapter.addAll(arrayNotifications);
-
-                    updateNot();
-                    int i = countUnread();
-                    if(countUnread() > 0) {
-                        menuItem.setIcon(buildCounterDrawable(countUnread(), R.drawable.nav_drawer_notifications_selected));
-                    } else{
-                        menuItem.setIcon(buildCounterDrawable(countUnread(), R.drawable.nav_drawer_notifications));
-                    }
-
-                    swipeNotifyContainer.setRefreshing(false);
+                    getUserDatabase();
                 }
             });
         }
 
-        updateNot();
+        updateNotification();
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.container, new AdventuresFragment());
@@ -204,7 +190,7 @@ public class ContainerActivity extends AppCompatActivity
         }
     }
 
-    private void updateNot() {
+    private void updateNotification() {
         if (arrayNotifications == null || arrayNotifications.size() == 0) {
             //Log.d("Notification: ", "VAZIO");
             Title.setVisibility(View.INVISIBLE);
@@ -222,11 +208,27 @@ public class ContainerActivity extends AppCompatActivity
             Notifications current;
             for (int i = 0; i < arrayNotifications.size(); i++) {
                 current = arrayNotifications.get(i);
-                if (current.getDateRecebimento() == null)
+                if (current.getDataRecebimento() == null)
                     contador++;
             }
         }
         return contador;
+    }
+
+    private void updateNotificationCounter(){
+        if(notificationAdapter != null){
+            notificationAdapter.clear();
+            notificationAdapter.addAll(arrayNotifications);
+        }
+
+        updateNotification();
+
+        int i = countUnread();
+        if(countUnread() > 0) {
+            menuItem.setIcon(buildCounterDrawable(countUnread(), R.drawable.nav_drawer_notifications_selected));
+        } else{
+            menuItem.setIcon(buildCounterDrawable(countUnread(), R.drawable.nav_drawer_notifications));
+        }
     }
 
     private Drawable buildCounterDrawable(int count, int backgroundImageId) {
@@ -384,13 +386,41 @@ public class ContainerActivity extends AppCompatActivity
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
                     user = singleSnapshot.getValue(User.class);
+                    if (user != null) {
+                        boolean removed = false;
+                        for(int i = 0; i < user.getNotifications().size(); i++){
+                            Notifications notification = user.getNotifications().get(i);
+                            Calendar dataAgenda = stringToDate(notification.getDataAgenda(), "dd/MM/yyyy");
+                            Calendar dataAtual = Calendar.getInstance();
+                            dataAtual.add(Calendar.DATE, -1);
+                            if(dataAtual.after(dataAgenda)){
+                                user.removeNotification(i);
+                                removed = true;
+                            }
+                        }
+                        if(removed) {
+                            Map<String, Object> postValues = new HashMap<>();
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                postValues.put(snapshot.getKey(), snapshot.getValue());
+                            }
+
+                            postValues.put("notifications", user.getNotifications());
+                            mDatabase.child("users").child(uid).updateChildren(postValues);
+                        }
+                    }
+
                     arrayNotifications = getUser().getNotifications();
+
                     Fragment fragment = getVisibleFragment();
                     if(fragment instanceof AdventuresFragment){
                         getUserAdventuresDatabase();
                     } else if(fragment instanceof AccountFragment){
                         ((AccountFragment) fragment).fillFragment(user);
                     }
+
+                    updateNotificationCounter();
+                    swipeNotifyContainer.setRefreshing(false);
+
                     Log.d("USERN", user.getEmail());
                 }
             }
@@ -449,6 +479,75 @@ public class ContainerActivity extends AppCompatActivity
         return userAdventures;
     }
 
+    private void setNewNotification(final String nomeSessao, final String dataAgenda, final Adventure adventure){
+        Log.d(TAG, "Notification Created");
+
+        for(final String userID : adventure.getJogadores()) {
+
+            mDatabase.child("users").child(userID)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            User aux = dataSnapshot.getValue(User.class);
+                            Map<String, Object> postValues = new HashMap<>();
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                postValues.put(snapshot.getKey(), snapshot.getValue());
+                            }
+
+                            if (aux != null) {
+                                Notifications notification = new Notifications(userID,
+                                        adventure.getMestre(), adventure.getNome(), nomeSessao, dataAgenda,
+                                        dateToString(Calendar.getInstance(), "dd/MM/yyyy"), null);
+
+                                if(userID.equals(uid)) {
+                                    user.addNotification(notification);
+                                    arrayNotifications = user.getNotifications();
+                                    updateNotificationCounter();
+                                }
+                                aux.addNotification(notification);
+                                postValues.put("notifications", aux.getNotifications());
+
+                                mDatabase.child("users").child(userID).updateChildren(postValues);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                        }
+                    });
+
+        }
+
+    }
+
+    public void setNotificationReceived(final Notifications notification, final int position){
+        Log.d(TAG, "Notification Received");
+
+        mDatabase.child("users").child(uid)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Map<String, Object> postValues = new HashMap<>();
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            postValues.put(snapshot.getKey(), snapshot.getValue());
+                        }
+
+                        user.changeNotification(position, notification);
+                        arrayNotifications = user.getNotifications();
+                        updateNotificationCounter();
+
+                        postValues.put("notifications", user.getNotifications());
+
+                        mDatabase.child("users").child(uid).updateChildren(postValues);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+
+    }
+
     @Override
     public void onNewAdventureClicked() {
         Log.d(TAG, "New Adventure Button Clicked");
@@ -476,8 +575,8 @@ public class ContainerActivity extends AppCompatActivity
                 getSupportFragmentManager().findFragmentByTag("AdventuresFragment");
         if (adventuresFragment != null) {
 
-            List<String> jog = new ArrayList<String>();
-            List<Session> ses = new ArrayList<Session>();
+            List<String> jog = new ArrayList<>();
+            List<Session> ses = new ArrayList<>();
             jog.add(uid);
 
             Adventure adv = new Adventure(name, "", uid,  jog, ses);
@@ -491,12 +590,12 @@ public class ContainerActivity extends AppCompatActivity
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         User active = dataSnapshot.getValue(User.class);
-                        List<String> aventuras = active.getAventuras();
-                        Map<String, Object> postValues = new HashMap<String,Object>();
+                        List<String> aventuras = active != null ? active.getAventuras() : null;
+                        Map<String, Object> postValues = new HashMap<>();
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             postValues.put(snapshot.getKey(), snapshot.getValue());
                         }
-                        if(aventuras == null) aventuras = new ArrayList<String>();
+                        if(aventuras == null) aventuras = new ArrayList<>();
                         aventuras.add(name);
                         postValues.put("aventuras", aventuras);
                         mDatabase.child("users").child(uid).updateChildren(postValues);
@@ -536,7 +635,7 @@ public class ContainerActivity extends AppCompatActivity
     }
 
     @Override
-    public void onSessionCreated(final String name, String data, final Adventure adventure) {
+    public void onSessionCreated(final String name, final String data, final Adventure adventure) {
         Log.d(TAG, "Session Created");
         Session session = new Session(name, data);
         adventure.addSessao(session);
@@ -544,12 +643,13 @@ public class ContainerActivity extends AppCompatActivity
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Map<String, Object> postValues = new HashMap<String,Object>();
+                        Map<String, Object> postValues = new HashMap<>();
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             postValues.put(snapshot.getKey(), snapshot.getValue());
                         }
                         postValues.put("sessoes", adventure.getSessoes());
                         mDatabase.child("adventure").child(adventure.getNome()).updateChildren(postValues);
+                        setNewNotification(name, data, adventure);
                     }
 
                     @Override
@@ -578,11 +678,11 @@ public class ContainerActivity extends AppCompatActivity
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         User active = dataSnapshot.getValue(User.class);
                         List<String> aventuras = active.getAventuras();
-                        Map<String, Object> postValues = new HashMap<String,Object>();
+                        Map<String, Object> postValues = new HashMap<>();
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             postValues.put(snapshot.getKey(), snapshot.getValue());
                         }
-                        if(aventuras == null) aventuras = new ArrayList<String>();
+                        if(aventuras == null) aventuras = new ArrayList<>();
                         for(int i = 0; i < aventuras.size(); i++){
                             if(aventuras.get(i).equals(oldName)){
                                 aventuras.remove(i);

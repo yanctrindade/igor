@@ -42,21 +42,21 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     }
 
     @Override
-    public void onBindViewHolder(NotificationAdapter.NotificationViewHolder holder, int position) {
+    public void onBindViewHolder(final NotificationAdapter.NotificationViewHolder holder, int position) {
         final Notifications notification = arrayNotification.get(position);
         final NotificationAdapter.NotificationViewHolder h = holder;
 
         //Título
-        holder.vTitleNotification.setText(notification.getAventuraNome());
+        holder.vTitleNotification.setText(notification.getAventuraNome() + " - " + notification.getSessaoNome());
 
         //Texto
-        holder.vNotification.setText("Sessão marcada para: " + notification.getDateAgenda());
+        holder.vNotification.setText("Sessão marcada para: " + notification.getDataAgenda());
 
         //Data
-        holder.vDataNotification.setText(notification.getDateEnvio());
+        holder.vDataNotification.setText(notification.getDataEnvio());
 
         //Lida
-        if(notification.getDateRecebimento() == null)
+        if(notification.getDataRecebimento() == null)
             holder.vLida.setVisibility(View.VISIBLE);
         else
             holder.vLida.setVisibility(View.INVISIBLE);
@@ -74,14 +74,14 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
                 // set the custom dialog components - text, image and button
                 TextView text = dialog.findViewById(R.id.text);
-                text.setText(notification.getAventuraNome());
+                text.setText(notification.getAventuraNome() + " - " + notification.getSessaoNome());
                 image.setImageResource(R.drawable.ic_warning_white_24dp);
 
                 TextView conteudo = dialog.findViewById(R.id.conteudo) ;
-                conteudo.setText("Sessão marcada para: " + notification.getDateAgenda());
+                conteudo.setText("Sessão marcada para: " + notification.getDataAgenda());
 
                 TextView date = dialog.findViewById(R.id.data);
-                date.setText(notification.getDateEnvio());
+                date.setText(notification.getDataEnvio());
 
                 Button dialogButton = dialog.findViewById(R.id.dialogButtonOK);
                 dialogButton.setOnClickListener(new View.OnClickListener() {
@@ -93,11 +93,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
                 dialog.show();
 
-                final Calendar data_atual = Calendar.getInstance();
-                notification.setDateRecebimento(dateToString(data_atual, "dd/MM/yyyy"));
-                //UPDATE!!!
+                notification.setDataRecebimento(dateToString(Calendar.getInstance(), "dd/MM/yyyy"));
+                ((ContainerActivity) activity).setNotificationReceived(notification, holder.getAdapterPosition());
                 h.vLida.setVisibility(View.INVISIBLE);
-                ContainerActivity.menuItem.setIcon(buildCounterDrawable(countUnread(), R.drawable.ic_notifications_none_white_48dp));
             }
         });
     }

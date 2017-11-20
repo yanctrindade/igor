@@ -2,35 +2,36 @@ package database;
 
 public class Notifications {
 
-    private int usuarioDestinatario, usuarioRemetente;
-    private String aventuraNome, dateAgenda, dateEnvio, dateRecebimento;
+    private String usuarioDestinatario, usuarioRemetente;
+    private String aventuraNome, sessaoNome, dataAgenda, dataEnvio, dataRecebimento;
 
     public Notifications() {
     }
 
-    public Notifications(int usuarioDestinatario, int usuarioRemetente, String aventuraNome,
-                         String dateAgenda, String dateEnvio, String dateRecebimento) {
+    public Notifications(String usuarioDestinatario, String usuarioRemetente, String aventuraNome,
+                         String sessaoNome, String dataAgenda, String dataEnvio, String dataRecebimento) {
         this.usuarioDestinatario = usuarioDestinatario;
         this.usuarioRemetente = usuarioRemetente;
         this.aventuraNome = aventuraNome;
-        this.dateAgenda = dateAgenda;
-        this.dateEnvio = dateEnvio;
-        this.dateRecebimento = dateRecebimento;
+        this.sessaoNome = sessaoNome;
+        this.dataAgenda = dataAgenda;
+        this.dataEnvio = dataEnvio;
+        this.dataRecebimento = dataRecebimento;
     }
 
-    public int getUsuarioDestinatario() {
+    public String getUsuarioDestinatario() {
         return usuarioDestinatario;
     }
 
-    public void setUsuarioDestinatario(int usuarioDestinatario) {
+    public void setUsuarioDestinatario(String usuarioDestinatario) {
         this.usuarioDestinatario = usuarioDestinatario;
     }
 
-    public int getUsuarioRemetente() {
+    public String getUsuarioRemetente() {
         return usuarioRemetente;
     }
 
-    public void setUsuarioRemetente(int usuarioRemetente) {
+    public void setUsuarioRemetente(String usuarioRemetente) {
         this.usuarioRemetente = usuarioRemetente;
     }
 
@@ -42,28 +43,36 @@ public class Notifications {
         this.aventuraNome = aventuraNome;
     }
 
-    public String getDateAgenda() {
-        return dateAgenda;
+    public String getSessaoNome() {
+        return sessaoNome;
     }
 
-    public void setDateAgenda(String dateAgenda) {
-        this.dateAgenda = dateAgenda;
+    public void setSessaoNome(String sessaoNome) {
+        this.sessaoNome = sessaoNome;
     }
 
-    public String getDateEnvio() {
-        return dateEnvio;
+    public String getDataAgenda() {
+        return dataAgenda;
     }
 
-    public void setDateEnvio(String dateEnvio) {
-        this.dateEnvio = dateEnvio;
+    public void setDataAgenda(String dataAgenda) {
+        this.dataAgenda = dataAgenda;
     }
 
-    public String getDateRecebimento() {
-        return dateRecebimento;
+    public String getDataEnvio() {
+        return dataEnvio;
     }
 
-    public void setDateRecebimento(String dateRecebimento) {
-        this.dateRecebimento = dateRecebimento;
+    public void setDataEnvio(String dataEnvio) {
+        this.dataEnvio = dataEnvio;
+    }
+
+    public String getDataRecebimento() {
+        return dataRecebimento;
+    }
+
+    public void setDataRecebimento(String dataRecebimento) {
+        this.dataRecebimento = dataRecebimento;
     }
 
 }
