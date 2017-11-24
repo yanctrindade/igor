@@ -14,30 +14,22 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.yimobile.igor.R;
 import br.com.yimobile.igor.screens.container.ContainerActivity;
-import br.com.yimobile.igor.screens.container.adventures.andamento.ItensList.ItensRecyclerViewAdapter;
+import br.com.yimobile.igor.screens.container.adventures.andamento.ItensList.SessionRecyclerViewAdapter;
 import database.Adventure;
 import database.Session;
-import database.User;
 
 public class SessionsFragment extends Fragment {
 
     private static final String TAG = SessionsFragment.class.getSimpleName();
 
-    ItensRecyclerViewAdapter sessionsRecyclerViewAdapter;
+    SessionRecyclerViewAdapter sessionsRecyclerViewAdapter;
     RecyclerView recyclerView;
-    ArrayList<String> sessionsArrayList = new ArrayList<>();
+    ArrayList<Session> sessionsArrayList = new ArrayList<>();
     FloatingActionButton newSessionButton;
     Adventure adventure;
     TextView nameAdventure;
@@ -69,7 +61,7 @@ public class SessionsFragment extends Fragment {
         recyclerView = view.findViewById(R.id.sessions_recyclerview);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        sessionsRecyclerViewAdapter = new ItensRecyclerViewAdapter(sessionsArrayList, getActivity());
+        sessionsRecyclerViewAdapter = new SessionRecyclerViewAdapter(sessionsArrayList, getActivity());
         recyclerView.setAdapter(sessionsRecyclerViewAdapter);
     }
 
@@ -109,7 +101,9 @@ public class SessionsFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_editar:
-                ((ContainerActivity) getActivity()).onEditAdventurePressed(adventure);
+                if(!((ContainerActivity) getActivity()).getUid().equals(adventure.getMestre())){
+                    ((ContainerActivity) getActivity()).onEditAdventurePressed(adventure);
+                }
                 return true;
             case R.id.action_ordenar:
                 return true;
@@ -126,7 +120,7 @@ public class SessionsFragment extends Fragment {
     }
 
     public void addNewSession(Session session){
-        sessionsArrayList.add(session.getData() + " " + session.getTitulo());
+        sessionsArrayList.add(session);
         Log.d("SESLIST", sessionsArrayList.size() + " TAMANHO");
         sessionsRecyclerViewAdapter.swap();
     }

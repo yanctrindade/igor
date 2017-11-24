@@ -1,8 +1,5 @@
 package br.com.yimobile.igor.screens.container.adventures.andamento.ItensList;
 
-/**
- * Created by renne on 03/10/2017.
- */
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,14 +9,15 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import br.com.yimobile.igor.R;
+import database.Session;
 
-public class ItensRecyclerViewAdapter extends RecyclerView.Adapter {
+public class SessionRecyclerViewAdapter extends RecyclerView.Adapter {
 
-    private ArrayList<String> sessionsArrayList;
+    private ArrayList<Session> sessionsArrayList;
     private Context context;
 
 
-    public ItensRecyclerViewAdapter(ArrayList<String> sessions, Context context) {
+    public SessionRecyclerViewAdapter(ArrayList<Session> sessions, Context context) {
         this.sessionsArrayList = sessions;
         this.context = context;
     }
@@ -29,7 +27,7 @@ public class ItensRecyclerViewAdapter extends RecyclerView.Adapter {
         View view = LayoutInflater.from(context)
                 .inflate(R.layout.resume_list_item, parent, false);
 
-        ItensViewHolder holder = new ItensViewHolder(view, context);
+        SessionViewHolder holder = new SessionViewHolder(view, context);
 
         return holder;
     }
@@ -37,9 +35,10 @@ public class ItensRecyclerViewAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        ItensViewHolder sessionsHolder = (ItensViewHolder) holder;
+        SessionViewHolder sessionsHolder = (SessionViewHolder) holder;
 
-        String title  = sessionsArrayList.get(position);
+        Session session = sessionsArrayList.get(position);
+        String title  = session.getData() + " " + session.getTitulo();
 
         sessionsHolder.titleTextView.setText(title);
     }

@@ -89,6 +89,10 @@ public class RegisterFragment extends Fragment {
                     senhaText.startAnimation(wiggle);
                     senhaText.setError("Preencha sua senha");
                 }
+                else if(senha.length() < 6) {
+                    senhaText.startAnimation(wiggle);
+                    senhaText.setError("Senha deve ter, no mínimo, 6 dígitos");
+                }
                 else if (mCallback != null) {
                     mCallback.onRegisterInteraction(email, senha, nome, data, sexo);
                 }

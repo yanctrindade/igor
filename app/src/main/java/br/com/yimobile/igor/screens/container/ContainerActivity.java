@@ -223,11 +223,13 @@ public class ContainerActivity extends AppCompatActivity
 
         updateNotification();
 
-        int i = countUnread();
-        if(countUnread() > 0) {
-            menuItem.setIcon(buildCounterDrawable(countUnread(), R.drawable.nav_drawer_notifications_selected));
-        } else{
-            menuItem.setIcon(buildCounterDrawable(countUnread(), R.drawable.nav_drawer_notifications));
+        if(menuItem != null) {
+            int i = countUnread();
+            if (countUnread() > 0) {
+                menuItem.setIcon(buildCounterDrawable(countUnread(), R.drawable.nav_drawer_notifications_selected));
+            } else {
+                menuItem.setIcon(buildCounterDrawable(countUnread(), R.drawable.nav_drawer_notifications));
+            }
         }
     }
 
@@ -388,14 +390,16 @@ public class ContainerActivity extends AppCompatActivity
                     user = singleSnapshot.getValue(User.class);
                     if (user != null) {
                         boolean removed = false;
-                        for(int i = 0; i < user.getNotifications().size(); i++){
-                            Notifications notification = user.getNotifications().get(i);
-                            Calendar dataAgenda = stringToDate(notification.getDataAgenda(), "dd/MM/yyyy");
-                            Calendar dataAtual = Calendar.getInstance();
-                            dataAtual.add(Calendar.DATE, -1);
-                            if(dataAtual.after(dataAgenda)){
-                                user.removeNotification(i);
-                                removed = true;
+                        if(user.getNotifications() != null) {
+                            for (int i = 0; i < user.getNotifications().size(); i++) {
+                                Notifications notification = user.getNotifications().get(i);
+                                Calendar dataAgenda = stringToDate(notification.getDataAgenda(), "dd/MM/yyyy");
+                                Calendar dataAtual = Calendar.getInstance();
+                                dataAtual.add(Calendar.DATE, -1);
+                                if (dataAtual.after(dataAgenda)) {
+                                    user.removeNotification(i);
+                                    removed = true;
+                                }
                             }
                         }
                         if(removed) {
