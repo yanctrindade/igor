@@ -139,8 +139,7 @@ public class ContainerActivity extends AppCompatActivity
         updateNotification();
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.container, new AdventuresFragment());
-        ft.commit();
+        ft.add(R.id.container, new AdventuresFragment()).commit();
     }
 
     @Override
@@ -452,7 +451,7 @@ public class ContainerActivity extends AppCompatActivity
     }
 
     public void refreshUserAdventure(){
-        getUserAdventuresDatabase();
+        getUserDatabase();
     }
 
     private List<Adventure> getUserAdventuresDatabase(){
@@ -944,13 +943,14 @@ public class ContainerActivity extends AppCompatActivity
     @Override
     public void onAdventureCreated(final String name) {
         Log.d(TAG, "Adventure Created");
+
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.container, new AdventuresFragment(), "AdventuresFragment").commit();
+        ft.replace(R.id.container, new AdventuresFragment()).commit();
         getSupportFragmentManager().executePendingTransactions();
 
-        AdventuresFragment adventuresFragment = (AdventuresFragment)
-                getSupportFragmentManager().findFragmentByTag("AdventuresFragment");
-        if (adventuresFragment != null) {
+        Fragment adventuresFragment = getVisibleFragment();
+        Log.d("ADVENTURE", adventuresFragment.toString());
+        if (adventuresFragment instanceof AdventuresFragment) {
 
             List<String> jog = new ArrayList<>();
             List<Session> ses = new ArrayList<>();
@@ -960,7 +960,7 @@ public class ContainerActivity extends AppCompatActivity
             mDatabase.child("adventure").child(name).setValue(adv);
 
             userAdventures.add(0, adv);
-            adventuresFragment.fillFragment(userAdventures);
+            ((AdventuresFragment) adventuresFragment).fillFragment(userAdventures);
 
             mDatabase.child("users").child(uid)
                 .addListenerForSingleValueEvent(new ValueEventListener() {

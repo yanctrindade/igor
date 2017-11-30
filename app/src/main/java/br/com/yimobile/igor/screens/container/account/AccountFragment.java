@@ -6,21 +6,17 @@ import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.Calendar;
 
@@ -85,15 +81,38 @@ public class AccountFragment extends Fragment {
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
                 imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
 
+                Animation wiggle = AnimationUtils.loadAnimation(getActivity(), R.anim.wiggle);
                 String email = emailText.getText().toString();
                 String nome = nomeText.getText().toString();
                 String data = dataText.getText().toString();
                 String sexo = sexoText.getText().toString();
 
-                ((ContainerActivity) getActivity()).setUser(new User(email, nome, data, sexo));
-                mDatabase.child("users").child(
-                        ((ContainerActivity) getActivity()).getUid()).setValue(
-                                ((ContainerActivity) getActivity()).getUser());
+                if(email.isEmpty() || email.equals("")) {
+                    emailText.startAnimation(wiggle);
+                    emailText.setError("Preencha seu email");
+                }
+                else if(!email.contains("@") || !email.contains(".")) {
+                    emailText.startAnimation(wiggle);
+                    emailText.setError("Email inválido");
+                }
+                else if(nome.isEmpty() || nome.equals("")){
+                    nomeText.startAnimation(wiggle);
+                    nomeText.setError("Preencha seu nome de usuário");
+                }
+                else if(data.isEmpty() || data.equals("")){
+                    dataText.startAnimation(wiggle);
+                    dataText.setError("Preencha sua data de nascimento");
+                }
+                else if(sexo.isEmpty() || sexo.equals("")){
+                    sexoText.startAnimation(wiggle);
+                    sexoText.setError("Preencha seu sexo");
+                }
+                else {
+                    ((ContainerActivity) getActivity()).setUser(new User(email, nome, data, sexo));
+                    mDatabase.child("users").child(
+                            ((ContainerActivity) getActivity()).getUid()).setValue(
+                            ((ContainerActivity) getActivity()).getUser());
+                }
             }
         });
     }

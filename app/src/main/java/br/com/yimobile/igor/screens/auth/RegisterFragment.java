@@ -70,7 +70,7 @@ public class RegisterFragment extends Fragment {
         view.findViewById(R.id.cadastrobutton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Animation wiggle = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.wiggle);
+                Animation wiggle = AnimationUtils.loadAnimation(getActivity(), R.anim.wiggle);
                 String email = emailText.getText().toString();
                 String senha = senhaText.getText().toString();
                 String nome = nomeText.getText().toString();
@@ -93,6 +93,18 @@ public class RegisterFragment extends Fragment {
                     senhaText.startAnimation(wiggle);
                     senhaText.setError("Senha deve ter, no mínimo, 6 dígitos");
                 }
+                else if(nome.isEmpty() || nome.equals("")){
+                    nomeText.startAnimation(wiggle);
+                    nomeText.setError("Preencha seu nome de usuário");
+                }
+                else if(data.isEmpty() || data.equals("")){
+                    dataText.startAnimation(wiggle);
+                    dataText.setError("Preencha sua data de nascimento");
+                }
+                else if(sexo.isEmpty() || sexo.equals("")){
+                    sexoText.startAnimation(wiggle);
+                    sexoText.setError("Preencha seu sexo");
+                }
                 else if (mCallback != null) {
                     mCallback.onRegisterInteraction(email, senha, nome, data, sexo);
                 }
@@ -104,8 +116,6 @@ public class RegisterFragment extends Fragment {
     public void onAttach(Context activity) {
         super.onAttach(activity);
 
-        // This makes sure that the container activity has implemented
-        // the callback interface. If not, it throws an exception
         try {
             mCallback = (OnRegisterInteractionListener) activity;
         } catch (ClassCastException e) {

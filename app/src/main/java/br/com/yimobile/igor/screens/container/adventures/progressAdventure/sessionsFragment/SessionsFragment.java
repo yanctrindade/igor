@@ -100,7 +100,7 @@ public class SessionsFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_editar:
-                if(!((ContainerActivity) getActivity()).getUid().equals(adventure.getMestre())){
+                if(((ContainerActivity) getActivity()).getUid().equals(adventure.getMestre())){
                     ((ContainerActivity) getActivity()).onEditAdventurePressed(adventure);
                 }
                 return true;

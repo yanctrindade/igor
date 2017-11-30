@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,14 +48,19 @@ public class NewAdventureFragment extends Fragment {
         create_button.setOnClickListener(new ImageButton.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(InputMethodManager.HIDE_NOT_ALWAYS, 0);
-
-                String name;
-                if(adventureName.getText() != null && !adventureName.getText().toString().isEmpty())
-                    name = adventureName.getText().toString();
-                else name = "Aventura sem título";
-                ((ContainerActivity) getActivity()).onAdventureCreated(name);
+                Animation wiggle = AnimationUtils.loadAnimation(getActivity(), R.anim.wiggle);
+                if(adventureName.getText() == null ||
+                        adventureName.getText().toString().isEmpty() ||
+                        adventureName.getText().toString().equals("")){
+                    adventureName.startAnimation(wiggle);
+                    adventureName.setError("Preencha o nome da aventura");
+                } else {
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    imm.toggleSoftInput(InputMethodManager.HIDE_NOT_ALWAYS, 0);
+                    String name = adventureName.getText().toString();
+                    ((ContainerActivity) getActivity()).onAdventureCreated(name);
+                    //getActivity().onBackPressed();
+                }
             }
         });
     }

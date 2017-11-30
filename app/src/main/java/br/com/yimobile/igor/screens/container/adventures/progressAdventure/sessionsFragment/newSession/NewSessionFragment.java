@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -30,11 +32,8 @@ import static br.com.yimobile.igor.screens.auth.LoginActivity.stringToDate;
 public class NewSessionFragment extends Fragment {
 
     private EditText sessionNameEditText;
-    private ImageButton saveButton;
     private EditText dateText;
     private Calendar dateSelected = Calendar.getInstance();
-    private DatePickerDialog datePickerDialog;
-    private Button close;
     Adventure adventure;
 
     private static final String TAG = NewSessionFragment.class.getSimpleName();
@@ -52,14 +51,14 @@ public class NewSessionFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        sessionNameEditText = (EditText) view.findViewById(R.id.edit_avent);
-        saveButton = (ImageButton) view.findViewById(R.id.create_session);
+        sessionNameEditText = view.findViewById(R.id.edit_avent);
+        ImageButton saveButton = view.findViewById(R.id.create_session);
         saveButton.setOnClickListener(saveOnClickListener);
-        dateText = (EditText) view.findViewById(R.id.create_session_date);
+        dateText = view.findViewById(R.id.create_session_date);
         dateText.setOnClickListener(dateOnClickListener);
         Calendar aux = Calendar.getInstance();
         dateText.setText(dateToString(aux, "dd/MM/yyyy"));
-        close = (Button) view.findViewById(R.id.sair);
+        Button close = view.findViewById(R.id.sair);
         close.setOnClickListener(closeOnClickListener);
     }
 
@@ -81,11 +80,19 @@ public class NewSessionFragment extends Fragment {
         @Override
         public void onClick(View view) {
             Log.d(TAG, "Save Clicked");
-            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
-            imm.toggleSoftInput(InputMethodManager.HIDE_NOT_ALWAYS, 0);
-            ((ContainerActivity) getActivity()).onSessionCreated(
-                    sessionNameEditText.getText().toString(), dateText.getText().toString(), adventure);
-            getActivity().onBackPressed();
+            Animation wiggle = AnimationUtils.loadAnimation(getActivity(), R.anim.wiggle);
+            if(sessionNameEditText.getText() == null ||
+                    sessionNameEditText.getText().toString().isEmpty() ||
+                    sessionNameEditText.getText().toString().equals("")){
+                sessionNameEditText.startAnimation(wiggle);
+                sessionNameEditText.setError("Preencha o nome da sessão");
+            } else {
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.HIDE_NOT_ALWAYS, 0);
+                ((ContainerActivity) getActivity()).onSessionCreated(
+                        sessionNameEditText.getText().toString(), dateText.getText().toString(), adventure);
+                getActivity().onBackPressed();
+            }
         }
     };
 
@@ -101,7 +108,7 @@ public class NewSessionFragment extends Fragment {
 
     private void setDateTimeField() {
         Calendar newCalendar = dateSelected;
-        datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
 
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 Calendar dataPicker = Calendar.getInstance();
