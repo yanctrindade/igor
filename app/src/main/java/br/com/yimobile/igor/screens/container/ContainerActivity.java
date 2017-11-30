@@ -80,7 +80,7 @@ public class ContainerActivity extends AppCompatActivity
     private User user;
     private List<Adventure> userAdventures;
     private HashMap<String, User> userList = new HashMap<>();
-    private String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    private String uid;
 
     private SwipeRefreshLayout swipeNotifyContainer;
     private RelativeLayout notification;
@@ -88,6 +88,10 @@ public class ContainerActivity extends AppCompatActivity
     static List<Notifications> arrayNotifications;
     public static MenuItem menuItem;
     NotificationAdapter notificationAdapter;
+
+    public ContainerActivity() {
+        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -227,11 +231,11 @@ public class ContainerActivity extends AppCompatActivity
         updateNotification();
 
         if(menuItem != null) {
-            int i = countUnread();
-            if (countUnread() > 0) {
-                menuItem.setIcon(buildCounterDrawable(countUnread(), R.drawable.nav_drawer_notifications_selected));
+            int count = countUnread();
+            if (count > 0) {
+                menuItem.setIcon(buildCounterDrawable(count, R.drawable.nav_drawer_notifications_selected));
             } else {
-                menuItem.setIcon(buildCounterDrawable(countUnread(), R.drawable.nav_drawer_notifications));
+                menuItem.setIcon(buildCounterDrawable(count, R.drawable.nav_drawer_notifications));
             }
         }
     }
@@ -778,7 +782,7 @@ public class ContainerActivity extends AppCompatActivity
                         List<Session> sessionList = adventure.getSessoes();
                         if(sessionList != null) {
                             int i = 0;
-                            if(sessionList.get(position).equals(session.getTitulo())){
+                            if(sessionList.get(position).getTitulo().equals(session.getTitulo())){
                                 i = position;
                             } else {
                                 for (; i < sessionList.size(); i++) {
@@ -874,7 +878,7 @@ public class ContainerActivity extends AppCompatActivity
                         List<Session> sessionList = adventure.getSessoes();
                         if(sessionList != null) {
                             int i = 0;
-                            if(sessionList.get(position).equals(session.getTitulo())){
+                            if(sessionList.get(position).getTitulo().equals(session.getTitulo())){
                                 i = position;
                             } else {
                                 for (; i < sessionList.size(); i++) {
@@ -1050,7 +1054,7 @@ public class ContainerActivity extends AppCompatActivity
     }
 
     @Override
-    public void onAdventureEdited(Adventure adventure, final String name) {
+    public void onAdventureEdited(final Adventure adventure, final String name) {
         Log.d(TAG, "Adventure Edited");
         final String oldName = adventure.getNome();
         adventure.setNome(name);
@@ -1061,13 +1065,12 @@ public class ContainerActivity extends AppCompatActivity
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        User active = dataSnapshot.getValue(User.class);
-                        List<String> aventuras = active.getAventuras();
                         Map<String, Object> postValues = new HashMap<>();
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             postValues.put(snapshot.getKey(), snapshot.getValue());
                         }
-                        if(aventuras == null) aventuras = new ArrayList<>();
+
+                        List<String> aventuras = user.getAventuras();
                         for(int i = 0; i < aventuras.size(); i++){
                             if(aventuras.get(i).equals(oldName)){
                                 aventuras.remove(i);
@@ -1075,13 +1078,72 @@ public class ContainerActivity extends AppCompatActivity
                             }
                         }
                         aventuras.add(name);
+                        user.setAventuras(aventuras);
+
+                        arrayNotifications = getUser().getNotifications();
+                        updateNotificationCounter();
+                        swipeNotifyContainer.setRefreshing(false);
+
+                        List<Notifications> notifications = user.getNotifications();
+                        for(int j = 0; j < notifications.size(); j++){
+                            if(notifications.get(j).getAventuraNome().equals(oldName)){
+                                notifications.get(j).setAventuraNome(name);
+                            }
+                        }
+                        user.setNotifications(notifications);
+
                         postValues.put("aventuras", aventuras);
+                        postValues.put("notifications", notifications);
                         mDatabase.child("users").child(uid).updateChildren(postValues);
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {}
                 });
+
+        final List<String> jogadores = adventure.getJogadores();
+        for(int k = 0; k < jogadores.size(); k++){
+            if(!jogadores.get(k).equals(uid)) {
+                final int finalK = k;
+                mDatabase.child("users").child(jogadores.get(k))
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                User active = dataSnapshot.getValue(User.class);
+                                if (active != null) {
+                                    Map<String, Object> postValues = new HashMap<>();
+                                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                        postValues.put(snapshot.getKey(), snapshot.getValue());
+                                    }
+
+                                    List<String> aventuras = active.getAventuras();
+                                    for (int i = 0; i < aventuras.size(); i++) {
+                                        if (aventuras.get(i).equals(oldName)) {
+                                            aventuras.remove(i);
+                                            break;
+                                        }
+                                    }
+                                    aventuras.add(name);
+
+                                    List<Notifications> notifications = active.getNotifications();
+                                    for (int j = 0; j < notifications.size(); j++) {
+                                        if(notifications.get(j).getAventuraNome().equals(oldName)){
+                                            notifications.get(j).setAventuraNome(name);
+                                        }
+                                    }
+
+                                    postValues.put("aventuras", aventuras);
+                                    postValues.put("notifications", notifications);
+                                    mDatabase.child("users").child(jogadores.get(finalK)).updateChildren(postValues);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                            }
+                        });
+            }
+        }
     }
 
     @Override

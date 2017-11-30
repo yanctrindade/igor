@@ -56,6 +56,7 @@ public class User {
     }
 
     public List<String> getAventuras() {
+        if(aventuras == null) aventuras = new ArrayList<>();
         return aventuras;
     }
 
@@ -64,6 +65,7 @@ public class User {
     }
 
     public List<Notifications> getNotifications() {
+        if(notifications == null) notifications = new ArrayList<>();
         return notifications;
     }
 
