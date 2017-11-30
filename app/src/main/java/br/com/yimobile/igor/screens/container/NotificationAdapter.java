@@ -21,7 +21,6 @@ import java.util.List;
 import br.com.yimobile.igor.R;
 import database.Notifications;
 
-import static br.com.yimobile.igor.screens.container.ContainerActivity.countUnread;
 import static br.com.yimobile.igor.screens.auth.LoginActivity.dateToString;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder> {
@@ -29,7 +28,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     private List<Notifications> arrayNotification;
     private Activity activity;
 
-    public NotificationAdapter(List<Notifications> arrayNotification, Activity activity){
+    NotificationAdapter(List<Notifications> arrayNotification, Activity activity){
         this.arrayNotification = arrayNotification;
         this.activity = activity;
     }
@@ -44,13 +43,13 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     @Override
     public void onBindViewHolder(final NotificationAdapter.NotificationViewHolder holder, int position) {
         final Notifications notification = arrayNotification.get(position);
-        final NotificationAdapter.NotificationViewHolder h = holder;
 
         //Título
-        holder.vTitleNotification.setText(notification.getAventuraNome() + " - " + notification.getSessaoNome());
+        holder.vTitleNotification.setText(String.format("%s - %s",
+                notification.getAventuraNome(), notification.getSessaoNome()));
 
         //Texto
-        holder.vNotification.setText("Sessão marcada para: " + notification.getDataAgenda());
+        holder.vNotification.setText(String.format("Sessão marcada para: %s", notification.getDataAgenda()));
 
         //Data
         holder.vDataNotification.setText(notification.getDataEnvio());
@@ -65,20 +64,19 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         holder.vClickArea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // custom dialog
+
                 final Dialog dialog = new Dialog(activity);
                 dialog.setContentView(R.layout.notification_dialog);
-                //dialog.setTitle("Title...");
 
                 ImageView image = dialog.findViewById(R.id.image);
 
-                // set the custom dialog components - text, image and button
                 TextView text = dialog.findViewById(R.id.text);
-                text.setText(notification.getAventuraNome() + " - " + notification.getSessaoNome());
+                text.setText(String.format("%s - %s",
+                        notification.getAventuraNome(), notification.getSessaoNome()));
                 image.setImageResource(R.drawable.ic_warning_white_24dp);
 
                 TextView conteudo = dialog.findViewById(R.id.conteudo) ;
-                conteudo.setText("Sessão marcada para: " + notification.getDataAgenda());
+                conteudo.setText(String.format("Sessão marcada para: %s", notification.getDataAgenda()));
 
                 TextView date = dialog.findViewById(R.id.data);
                 date.setText(notification.getDataEnvio());
@@ -116,7 +114,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
                 notification.setDataRecebimento(dateToString(Calendar.getInstance(), "dd/MM/yyyy"));
                 ((ContainerActivity) activity).setNotificationReceived(notification, holder.getAdapterPosition());
-                h.vLida.setVisibility(View.INVISIBLE);
+                holder.vLida.setVisibility(View.INVISIBLE);
             }
         });
     }
@@ -127,31 +125,30 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         return 0;
     }
 
-    public void clear() {
+    void clear() {
 
         arrayNotification.clear();
         notifyDataSetChanged();
     }
 
-    public void addAll(List<Notifications> list) {
+    void addAll(List<Notifications> list) {
         if(arrayNotification == null) arrayNotification = new ArrayList<>();
         if(list != null) arrayNotification.addAll(list);
         notifyDataSetChanged();
     }
 
-    public static class NotificationViewHolder extends RecyclerView.ViewHolder{
+    static class NotificationViewHolder extends RecyclerView.ViewHolder{
         TextView vNotification, vDataNotification, vTitleNotification;
         ImageView vLida;
         RelativeLayout vClickArea;
 
-        public NotificationViewHolder(View v){
+        NotificationViewHolder(View v){
             super(v);
             vNotification = v.findViewById(R.id.txtNotification);
             vDataNotification = v.findViewById(R.id.dataNotification);
             vTitleNotification = v.findViewById(R.id.titleNotification);
             vLida = v.findViewById(R.id.newNotification);
             vClickArea = v.findViewById(R.id.notification_click_area);
-            //vNoNotification = v.findViewById(R.id.noNotification);
         }
    }
 
@@ -165,7 +162,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             counterTextPanel.setVisibility(View.GONE);
         } else {
             TextView textView = view.findViewById(R.id.count);
-            textView.setText("" + count);
+            textView.setText(String.valueOf(count));
         }
 
         view.measure(

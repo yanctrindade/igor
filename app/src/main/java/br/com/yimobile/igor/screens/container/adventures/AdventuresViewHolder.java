@@ -12,7 +12,7 @@ import database.Adventure;
 
 public class AdventuresViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    Context context;
+    private Context context;
     Adventure adventure;
     TextView titleTextView;
     TextView subtitleTextView;
@@ -21,8 +21,8 @@ public class AdventuresViewHolder extends RecyclerView.ViewHolder implements Vie
         super(itemView);
 
         this.context = context;
-        titleTextView = (TextView) itemView.findViewById(R.id.adventures_title);
-        subtitleTextView = (TextView) itemView.findViewById(R.id.adventures_subtitle);
+        titleTextView = itemView.findViewById(R.id.adventures_title);
+        subtitleTextView = itemView.findViewById(R.id.adventures_subtitle);
 
         itemView.setOnClickListener(this);
     }

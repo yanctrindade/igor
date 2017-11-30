@@ -17,7 +17,6 @@ public class AdventuresRecyclerViewAdapter extends RecyclerView.Adapter {
     private ArrayList<Adventure> adventuresArrayList;
     private Context context;
 
-
     AdventuresRecyclerViewAdapter(ArrayList<Adventure> adventures, Context context) {
         this.adventuresArrayList = adventures;
         this.context = context;

@@ -35,7 +35,7 @@ public class SessionsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_resume, container, false);
+        View view = inflater.inflate(R.layout.fragment_sessions, container, false);
 
         nameAdventure = view.findViewById(R.id.titulo);
         if(adventure != null) nameAdventure.setText(adventure.getNome());
@@ -60,7 +60,7 @@ public class SessionsFragment extends Fragment {
         recyclerView = view.findViewById(R.id.sessions_recyclerview);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        sessionsRecyclerViewAdapter = new SessionRecyclerViewAdapter(sessionsArrayList, getActivity());
+        sessionsRecyclerViewAdapter = new SessionRecyclerViewAdapter(sessionsArrayList, adventure, getActivity());
         recyclerView.setAdapter(sessionsRecyclerViewAdapter);
     }
 

@@ -1,6 +1,7 @@
 package br.com.yimobile.igor.screens.container;
 
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -43,6 +44,7 @@ import java.util.List;
 import java.util.Map;
 
 import br.com.yimobile.igor.R;
+import br.com.yimobile.igor.screens.auth.LoginActivity;
 import br.com.yimobile.igor.screens.container.account.AccountFragment;
 import br.com.yimobile.igor.screens.container.adventures.AdventuresFragment;
 import br.com.yimobile.igor.screens.container.adventures.progressAdventure.sessionsFragment.SessionsFragment;
@@ -77,6 +79,7 @@ public class ContainerActivity extends AppCompatActivity
     private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     private User user;
     private List<Adventure> userAdventures;
+    private HashMap<String, User> userList = new HashMap<>();
     private String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
     private SwipeRefreshLayout swipeNotifyContainer;
@@ -106,6 +109,7 @@ public class ContainerActivity extends AppCompatActivity
         } else{
             arrayNotifications = new ArrayList<>();
         }
+        getAllUsers();
 
         RecyclerView notList = findViewById(R.id.notificationList);
         notList.setHasFixedSize(false);
@@ -348,6 +352,7 @@ public class ContainerActivity extends AppCompatActivity
             case 5:
                 FirebaseAuth.getInstance().signOut();
                 LoginManager.getInstance().logOut();
+                startActivity(new Intent(ContainerActivity.this, LoginActivity.class));
                 finish();
                 break;
             default:
@@ -390,6 +395,7 @@ public class ContainerActivity extends AppCompatActivity
                     user = singleSnapshot.getValue(User.class);
                     if (user != null) {
                         boolean removed = false;
+
                         if(user.getNotifications() != null) {
                             for (int i = 0; i < user.getNotifications().size(); i++) {
                                 Notifications notification = user.getNotifications().get(i);
@@ -402,6 +408,20 @@ public class ContainerActivity extends AppCompatActivity
                                 }
                             }
                         }
+
+                        Fragment fragment = getVisibleFragment();
+                        getUserAdventuresDatabase();
+                        if(fragment instanceof AccountFragment){
+                            ((AccountFragment) fragment).fillFragment(user);
+                        }
+
+                        arrayNotifications = getUser().getNotifications();
+
+                        updateNotificationCounter();
+                        swipeNotifyContainer.setRefreshing(false);
+
+                        Log.d("USERN", user.getEmail());
+
                         if(removed) {
                             Map<String, Object> postValues = new HashMap<>();
                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -412,20 +432,6 @@ public class ContainerActivity extends AppCompatActivity
                             mDatabase.child("users").child(uid).updateChildren(postValues);
                         }
                     }
-
-                    arrayNotifications = getUser().getNotifications();
-
-                    Fragment fragment = getVisibleFragment();
-                    if(fragment instanceof AdventuresFragment){
-                        getUserAdventuresDatabase();
-                    } else if(fragment instanceof AccountFragment){
-                        ((AccountFragment) fragment).fillFragment(user);
-                    }
-
-                    updateNotificationCounter();
-                    swipeNotifyContainer.setRefreshing(false);
-
-                    Log.d("USERN", user.getEmail());
                 }
             }
             @Override
@@ -481,6 +487,26 @@ public class ContainerActivity extends AppCompatActivity
             }
         }
         return userAdventures;
+    }
+
+    private void getAllUsers(){
+        Query dataUser = mDatabase.child("users").orderByKey();
+        dataUser.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
+                    userList.put(singleSnapshot.getKey(), singleSnapshot.getValue(User.class));
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("ERROR", "onCancelled", databaseError.toException());
+            }
+        });
+    }
+
+    public HashMap<String, User> getUserList(){
+        return userList;
     }
 
     private void setNewNotification(final String nomeSessao, final String dataAgenda, final Adventure adventure){
@@ -698,11 +724,212 @@ public class ContainerActivity extends AppCompatActivity
                 });
     }
 
+    public void setSessionConfirmed(final Adventure adventure, final Session session,
+                                    final int position, final boolean cancelado){
+        Log.d(TAG, "Session Confirmed");
+
+        mDatabase.child("users").child(uid)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Map<String, Object> postValues = new HashMap<>();
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            postValues.put(snapshot.getKey(), snapshot.getValue());
+                        }
+
+                        Notifications notification = new Notifications(uid,
+                                adventure.getMestre(), adventure.getNome(),
+                                session.getTitulo(), session.getData(),
+                                dateToString(Calendar.getInstance(), "dd/MM/yyyy"),
+                                null, true);
+
+                        if(cancelado){
+                            user.addNotification(notification);
+                        } else {
+                            for(int i = 0; i < user.getNotifications().size(); i++){
+                                if(user.getNotifications().get(i).getAventuraNome().equals(adventure.getNome()) &&
+                                        user.getNotifications().get(i).getSessaoNome().equals(session.getTitulo()) &&
+                                        user.getNotifications().get(i).getDataAgenda().equals(session.getData())){
+                                    user.changeNotification(i, notification);
+                                    break;
+                                }
+                            }
+                        }
+                        arrayNotifications = user.getNotifications();
+                        updateNotificationCounter();
+
+                        postValues.put("notifications", user.getNotifications());
+
+                        mDatabase.child("users").child(uid).updateChildren(postValues);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+
+        mDatabase.child("adventure").child(adventure.getNome())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Map<String, Object> postValues = new HashMap<>();
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            postValues.put(snapshot.getKey(), snapshot.getValue());
+                        }
+                        List<Session> sessionList = adventure.getSessoes();
+                        if(sessionList != null) {
+                            int i = 0;
+                            if(sessionList.get(position).equals(session.getTitulo())){
+                                i = position;
+                            } else {
+                                for (; i < sessionList.size(); i++) {
+                                    if (sessionList.get(i).getTitulo().equals(session.getTitulo())) {
+                                        break;
+                                    }
+                                }
+                            }
+                            if (sessionList.get(i).getTitulo().equals(session.getTitulo())) {
+                                List<String> jogadoresConfirmados = sessionList.get(i).getJogadoresConfirmados();
+                                jogadoresConfirmados.add(uid);
+                                sessionList.get(i).setJogadoresConfirmados(jogadoresConfirmados);
+                                if (cancelado) {
+                                    List<String> jogadoresCancelados = sessionList.get(i).getJogadoresCancelados();
+                                    for (int j = 0; j < jogadoresCancelados.size(); j++) {
+                                        if (jogadoresCancelados.get(j).equals(uid)) {
+                                            jogadoresCancelados.remove(j);
+                                            break;
+                                        }
+                                    }
+                                    sessionList.get(i).setJogadoresCancelados(jogadoresCancelados);
+                                } else {
+                                    List<String> jogadoresConvidados = sessionList.get(i).getJogadoresConvidados();
+                                    for (int j = 0; j < jogadoresConvidados.size(); j++) {
+                                        if (jogadoresConvidados.get(j).equals(uid)) {
+                                            jogadoresConvidados.remove(j);
+                                            break;
+                                        }
+                                    }
+                                    sessionList.get(i).setJogadoresConvidados(jogadoresConvidados);
+                                }
+                            }
+                        }
+
+                        adventure.setSessoes(sessionList);
+                        Fragment fragment = getVisibleFragment();
+                        if(fragment instanceof SessionsFragment){
+                            ((SessionsFragment) fragment).setAdventure(adventure);
+                        }
+
+                        postValues.put("sessoes", sessionList);
+                        mDatabase.child("adventure").child(adventure.getNome()).updateChildren(postValues);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {}
+                });
+
+    }
+
+    public void setSessionCanceled(final Adventure adventure, final Session session,
+                                   final int position, final boolean confirmado){
+        Log.d(TAG, "Session Canceled");
+
+        mDatabase.child("users").child(uid)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Map<String, Object> postValues = new HashMap<>();
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            postValues.put(snapshot.getKey(), snapshot.getValue());
+                        }
+
+                        for(int i = 0; i < user.getNotifications().size(); i++){
+                            if(user.getNotifications().get(i).getAventuraNome().equals(adventure.getNome()) &&
+                                    user.getNotifications().get(i).getSessaoNome().equals(session.getTitulo()) &&
+                                    user.getNotifications().get(i).getDataAgenda().equals(session.getData())){
+                                user.removeNotification(i);
+                                break;
+                            }
+                        }
+                        arrayNotifications = user.getNotifications();
+                        updateNotificationCounter();
+
+                        postValues.put("notifications", user.getNotifications());
+                        mDatabase.child("users").child(uid).updateChildren(postValues);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+
+        mDatabase.child("adventure").child(adventure.getNome())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Map<String, Object> postValues = new HashMap<>();
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            postValues.put(snapshot.getKey(), snapshot.getValue());
+                        }
+
+                        List<Session> sessionList = adventure.getSessoes();
+                        if(sessionList != null) {
+                            int i = 0;
+                            if(sessionList.get(position).equals(session.getTitulo())){
+                                i = position;
+                            } else {
+                                for (; i < sessionList.size(); i++) {
+                                    if (sessionList.get(i).getTitulo().equals(session.getTitulo())) {
+                                        break;
+                                    }
+                                }
+                            }
+                            if (sessionList.get(i).getTitulo().equals(session.getTitulo())) {
+                                List<String> jogadoresCancelados = sessionList.get(i).getJogadoresCancelados();
+                                jogadoresCancelados.add(uid);
+                                sessionList.get(i).setJogadoresCancelados(jogadoresCancelados);
+                                if (confirmado) {
+                                    List<String> jogadoresConfirmados = sessionList.get(i).getJogadoresConfirmados();
+                                    for (int j = 0; j < jogadoresConfirmados.size(); j++) {
+                                        if (jogadoresConfirmados.get(j).equals(uid)) {
+                                            jogadoresConfirmados.remove(j);
+                                            break;
+                                        }
+                                    }
+                                    sessionList.get(i).setJogadoresConfirmados(jogadoresConfirmados);
+                                } else {
+                                    List<String> jogadoresConvidados = sessionList.get(i).getJogadoresConvidados();
+                                    for (int j = 0; j < jogadoresConvidados.size(); j++) {
+                                        if (jogadoresConvidados.get(j).equals(uid)) {
+                                            jogadoresConvidados.remove(j);
+                                            break;
+                                        }
+                                    }
+                                    sessionList.get(i).setJogadoresConvidados(jogadoresConvidados);
+                                }
+                            }
+                        }
+
+                        adventure.setSessoes(sessionList);
+                        Fragment fragment = getVisibleFragment();
+                        if(fragment instanceof SessionsFragment){
+                            ((SessionsFragment) fragment).setAdventure(adventure);
+                        }
+
+                        postValues.put("sessoes", sessionList);
+                        mDatabase.child("adventure").child(adventure.getNome()).updateChildren(postValues);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {}
+                });
+    }
+
     @Override
     public void onNewAdventureClicked() {
         Log.d(TAG, "New Adventure Button Clicked");
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.container, new NewAdventureFragment()).commit();
+        ft.replace(R.id.container, new NewAdventureFragment()).addToBackStack(null).commit();
     }
 
     @Override
@@ -710,7 +937,7 @@ public class ContainerActivity extends AppCompatActivity
         Log.d(TAG, "Selected item " + itemPosition);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         SessionsFragment sf = new SessionsFragment();
-        ft.replace(R.id.container, sf).commit();
+        ft.replace(R.id.container, sf).addToBackStack(null).commit();
         sf.setAdventure(adventure);
     }
 
@@ -819,7 +1046,7 @@ public class ContainerActivity extends AppCompatActivity
     public void newPlayerPressed() {
         Log.d(TAG, "Create new player clicked");
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.container, new NewPlayerFragment()).commit();
+        ft.replace(R.id.container, new NewPlayerFragment()).addToBackStack(null).commit();
     }
 
     @Override
