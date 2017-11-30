@@ -1,4 +1,4 @@
-package br.com.yimobile.igor.screens.container.adventures.andamento.newSession;
+package br.com.yimobile.igor.screens.container.adventures.progressAdventure.sessionsFragment.newSession;
 
 
 import android.app.Activity;
@@ -18,11 +18,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Locale;
 
 import br.com.yimobile.igor.R;
 import br.com.yimobile.igor.screens.container.ContainerActivity;

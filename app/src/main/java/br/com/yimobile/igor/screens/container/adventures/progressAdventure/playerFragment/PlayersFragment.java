@@ -1,4 +1,4 @@
-package br.com.yimobile.igor.screens.container.adventures.andamento;
+package br.com.yimobile.igor.screens.container.adventures.progressAdventure.playerFragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 import br.com.yimobile.igor.R;
 import br.com.yimobile.igor.screens.container.ContainerActivity;
-import br.com.yimobile.igor.screens.container.adventures.andamento.ItensList.PlayerRecyclerViewAdapter;
+import br.com.yimobile.igor.screens.container.adventures.progressAdventure.playerFragment.PlayerRecyclerViewAdapter;
 import database.Adventure;
 
 
@@ -35,10 +35,10 @@ public class PlayersFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_players, container, false);
 
-        nameAdventure = (TextView) view.findViewById(R.id.titulo);
+        nameAdventure = view.findViewById(R.id.titulo);
         if(adventure != null) nameAdventure.setText(adventure.getNome());
 
-        newPlayerButton = (FloatingActionButton) view.findViewById(R.id.new_player_button);
+        newPlayerButton = view.findViewById(R.id.new_player_button);
         newPlayerButton.setOnClickListener(newPlayerOnClickListener);
 
         ImageButton andamento_button = view.findViewById(R.id.button_andamento);
@@ -57,7 +57,7 @@ public class PlayersFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         setHasOptionsMenu(true);
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.sessions_recyclerview);
+        recyclerView = view.findViewById(R.id.sessions_recyclerview);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         playerArrayList.add("17/05 Sessão 5");
@@ -78,7 +78,7 @@ public class PlayersFragment extends Fragment {
         }
     }
 
-    public void SetAdventure(Adventure adventure){
+    public void setAdventure(Adventure adventure){
         this.adventure = adventure;
         if(nameAdventure != null) nameAdventure.setText(adventure.getNome());
     }

@@ -4,12 +4,14 @@ public class Notifications {
 
     private String usuarioDestinatario, usuarioRemetente;
     private String aventuraNome, sessaoNome, dataAgenda, dataEnvio, dataRecebimento;
+    private boolean confirmado;
 
     public Notifications() {
     }
 
     public Notifications(String usuarioDestinatario, String usuarioRemetente, String aventuraNome,
-                         String sessaoNome, String dataAgenda, String dataEnvio, String dataRecebimento) {
+                         String sessaoNome, String dataAgenda, String dataEnvio, String dataRecebimento,
+                         boolean confirmado) {
         this.usuarioDestinatario = usuarioDestinatario;
         this.usuarioRemetente = usuarioRemetente;
         this.aventuraNome = aventuraNome;
@@ -17,6 +19,7 @@ public class Notifications {
         this.dataAgenda = dataAgenda;
         this.dataEnvio = dataEnvio;
         this.dataRecebimento = dataRecebimento;
+        this.confirmado = confirmado;
     }
 
     public String getUsuarioDestinatario() {
@@ -75,4 +78,11 @@ public class Notifications {
         this.dataRecebimento = dataRecebimento;
     }
 
+    public boolean isConfirmado() {
+        return confirmado;
+    }
+
+    public void setConfirmado(boolean confirmado) {
+        this.confirmado = confirmado;
+    }
 }

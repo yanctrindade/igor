@@ -1,4 +1,4 @@
-package br.com.yimobile.igor.screens.container.adventures.andamento.ItensList;
+package br.com.yimobile.igor.screens.container.adventures.progressAdventure.playerFragment;
 
 /**
  * Created by renne on 20/10/2017.

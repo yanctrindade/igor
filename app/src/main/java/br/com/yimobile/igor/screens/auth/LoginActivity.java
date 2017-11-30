@@ -156,7 +156,7 @@ public class LoginActivity extends AppCompatActivity
     }
 
     private void replaceFragment(Fragment fragment) {
-        FragmentTransaction  transaction = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         transaction.replace(R.id.layout_fragments, fragment);
         transaction.addToBackStack(null);
@@ -289,6 +289,7 @@ public class LoginActivity extends AppCompatActivity
     private void updateUI(FirebaseUser firebaseUser){
         if(firebaseUser != null){
             startActivity(new Intent(LoginActivity.this, ContainerActivity.class));
+            finish();
         }
     }
 

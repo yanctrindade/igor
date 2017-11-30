@@ -1,4 +1,4 @@
-package br.com.yimobile.igor.screens.container.adventures.andamento;
+package br.com.yimobile.igor.screens.container.adventures.progressAdventure.sessionsFragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,7 +19,6 @@ import java.util.List;
 
 import br.com.yimobile.igor.R;
 import br.com.yimobile.igor.screens.container.ContainerActivity;
-import br.com.yimobile.igor.screens.container.adventures.andamento.ItensList.SessionRecyclerViewAdapter;
 import database.Adventure;
 import database.Session;
 
@@ -77,7 +76,7 @@ public class SessionsFragment extends Fragment {
         }
     }
 
-    public void SetAdventure(Adventure adventure){
+    public void setAdventure(Adventure adventure){
         this.adventure = adventure;
         if(nameAdventure != null) nameAdventure.setText(adventure.getNome());
     }

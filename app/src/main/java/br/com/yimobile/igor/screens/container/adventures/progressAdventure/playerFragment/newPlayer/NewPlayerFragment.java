@@ -1,4 +1,4 @@
-package br.com.yimobile.igor.screens.container.adventures.andamento.newPlayer;
+package br.com.yimobile.igor.screens.container.adventures.progressAdventure.playerFragment.newPlayer;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

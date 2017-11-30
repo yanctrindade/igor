@@ -54,11 +54,14 @@ public class Adventure {
         this.jogadores = jogadores;
     }
 
-    public List<Session> getSessoes() { return sessoes; }
+    public List<Session> getSessoes() {
+        if(sessoes == null) sessoes = new ArrayList<>();
+        return sessoes;
+    }
 
     public void addSessao(Session session){
         sessoes.add(session);
     }
 
-    public void setSessoes( ArrayList<Session> sessoes) {this.sessoes = sessoes; }
+    public void setSessoes( List<Session> sessoes) {this.sessoes = sessoes; }
 }

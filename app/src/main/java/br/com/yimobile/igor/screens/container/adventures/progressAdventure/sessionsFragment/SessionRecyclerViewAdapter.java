@@ -1,4 +1,4 @@
-package br.com.yimobile.igor.screens.container.adventures.andamento.ItensList;
+package br.com.yimobile.igor.screens.container.adventures.progressAdventure.sessionsFragment;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

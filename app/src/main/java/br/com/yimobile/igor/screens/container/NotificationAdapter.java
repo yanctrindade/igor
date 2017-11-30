@@ -83,13 +83,34 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                 TextView date = dialog.findViewById(R.id.data);
                 date.setText(notification.getDataEnvio());
 
-                Button dialogButton = dialog.findViewById(R.id.dialogButtonOK);
-                dialogButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
+                Button dialogButtonOK = dialog.findViewById(R.id.dialogButtonOK);
+                Button dialogButtonCancelar = dialog.findViewById(R.id.dialogButtonCancelar);
+
+                if(notification.isConfirmado()){
+                    dialogButtonOK.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
+                    dialogButtonCancelar.setVisibility(View.GONE);
+                } else{
+                    dialogButtonOK.setText("Confirmar");
+                    dialogButtonOK.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ((ContainerActivity) activity).setNotificationConfirmed(notification, holder.getAdapterPosition());
+                            dialog.dismiss();
+                        }
+                    });
+                    dialogButtonCancelar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ((ContainerActivity) activity).setNotificationCanceled(notification, holder.getAdapterPosition());
+                            dialog.dismiss();
+                        }
+                    });
+                }
 
                 dialog.show();
 

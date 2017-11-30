@@ -45,12 +45,12 @@ import java.util.Map;
 import br.com.yimobile.igor.R;
 import br.com.yimobile.igor.screens.container.account.AccountFragment;
 import br.com.yimobile.igor.screens.container.adventures.AdventuresFragment;
-import br.com.yimobile.igor.screens.container.adventures.andamento.SessionsFragment;
-import br.com.yimobile.igor.screens.container.adventures.andamento.newPlayer.NewPlayerFragment;
-import br.com.yimobile.igor.screens.container.adventures.andamento.newSession.NewSessionFragment;
+import br.com.yimobile.igor.screens.container.adventures.progressAdventure.sessionsFragment.SessionsFragment;
+import br.com.yimobile.igor.screens.container.adventures.progressAdventure.playerFragment.newPlayer.NewPlayerFragment;
+import br.com.yimobile.igor.screens.container.adventures.progressAdventure.sessionsFragment.newSession.NewSessionFragment;
 import br.com.yimobile.igor.screens.container.adventures.newAdventure.NewAdventureFragment;
-import br.com.yimobile.igor.screens.container.adventures.andamento.EditAdventureNameFragment;
-import br.com.yimobile.igor.screens.container.adventures.andamento.PlayersFragment;
+import br.com.yimobile.igor.screens.container.adventures.progressAdventure.editAdventure.EditAdventureNameFragment;
+import br.com.yimobile.igor.screens.container.adventures.progressAdventure.playerFragment.PlayersFragment;
 import br.com.yimobile.igor.screens.container.books.BooksFragment;
 import br.com.yimobile.igor.screens.container.notifications.NotificationsFragment;
 import br.com.yimobile.igor.screens.container.settings.SettingsFragment;
@@ -501,9 +501,11 @@ public class ContainerActivity extends AppCompatActivity
                             if (aux != null) {
                                 Notifications notification = new Notifications(userID,
                                         adventure.getMestre(), adventure.getNome(), nomeSessao, dataAgenda,
-                                        dateToString(Calendar.getInstance(), "dd/MM/yyyy"), null);
+                                        dateToString(Calendar.getInstance(), "dd/MM/yyyy"),
+                                        null, false);
 
                                 if(userID.equals(uid)) {
+                                    notification.setConfirmado(true);
                                     user.addNotification(notification);
                                     arrayNotifications = user.getNotifications();
                                     updateNotificationCounter();
@@ -549,7 +551,151 @@ public class ContainerActivity extends AppCompatActivity
                     public void onCancelled(DatabaseError databaseError) {
                     }
                 });
+    }
 
+    public void setNotificationConfirmed(final Notifications notification, final int position){
+        Log.d(TAG, "Notification Confirmed");
+
+        mDatabase.child("users").child(uid)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Map<String, Object> postValues = new HashMap<>();
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            postValues.put(snapshot.getKey(), snapshot.getValue());
+                        }
+
+                        notification.setConfirmado(true);
+                        user.changeNotification(position, notification);
+                        arrayNotifications = user.getNotifications();
+                        updateNotificationCounter();
+
+                        postValues.put("notifications", user.getNotifications());
+
+                        mDatabase.child("users").child(uid).updateChildren(postValues);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+
+        mDatabase.child("adventure").child(notification.getAventuraNome())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Adventure adventure = dataSnapshot.getValue(Adventure.class);
+                        Map<String, Object> postValues = new HashMap<>();
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            postValues.put(snapshot.getKey(), snapshot.getValue());
+                        }
+                        if (adventure != null) {
+                            List<Session> sessionList = adventure.getSessoes();
+                            if (sessionList != null) {
+                                for (int i = 0; i < sessionList.size(); i++) {
+                                    if (sessionList.get(i).getTitulo().equals(notification.getSessaoNome())) {
+                                        List<String> jogadoresConfirmados = sessionList.get(i).getJogadoresConfirmados();
+                                        jogadoresConfirmados.add(uid);
+                                        sessionList.get(i).setJogadoresConfirmados(jogadoresConfirmados);
+                                        List<String> jogadoresConvidados = sessionList.get(i).getJogadoresConvidados();
+                                        for (int j = 0; j < jogadoresConvidados.size(); j++) {
+                                            if (jogadoresConvidados.get(j).equals(uid)) {
+                                                jogadoresConvidados.remove(j);
+                                                break;
+                                            }
+                                        }
+                                        sessionList.get(i).setJogadoresConvidados(jogadoresConvidados);
+                                        break;
+                                    }
+                                }
+
+                                adventure.setSessoes(sessionList);
+                                Fragment fragment = getVisibleFragment();
+                                if(fragment instanceof SessionsFragment){
+                                    ((SessionsFragment) fragment).setAdventure(adventure);
+                                }
+
+                                postValues.put("sessoes", sessionList);
+                                mDatabase.child("adventure").child(adventure.getNome()).updateChildren(postValues);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {}
+                });
+
+    }
+
+    public void setNotificationCanceled(final Notifications notification, final int position){
+        Log.d(TAG, "Notification Canceled");
+
+        mDatabase.child("users").child(uid)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Map<String, Object> postValues = new HashMap<>();
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            postValues.put(snapshot.getKey(), snapshot.getValue());
+                        }
+
+                        user.removeNotification(position);
+                        arrayNotifications = user.getNotifications();
+                        updateNotificationCounter();
+
+                        postValues.put("notifications", user.getNotifications());
+                        mDatabase.child("users").child(uid).updateChildren(postValues);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+
+        mDatabase.child("adventure").child(notification.getAventuraNome())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Adventure adventure = dataSnapshot.getValue(Adventure.class);
+                        Map<String, Object> postValues = new HashMap<>();
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            postValues.put(snapshot.getKey(), snapshot.getValue());
+                        }
+                        if (adventure != null) {
+                            List<Session> sessionList = adventure.getSessoes();
+                            if (sessionList != null) {
+                                for (int i = 0; i < sessionList.size(); i++) {
+                                    if (sessionList.get(i).getTitulo().equals(notification.getSessaoNome())) {
+                                        List<String> jogadoresCancelados = sessionList.get(i).getJogadoresCancelados();
+                                        jogadoresCancelados.add(uid);
+                                        sessionList.get(i).setJogadoresCancelados(jogadoresCancelados);
+                                        List<String> jogadoresConvidados = sessionList.get(i).getJogadoresConvidados();
+                                        for (int j = 0; j < jogadoresConvidados.size(); j++) {
+                                            if (jogadoresConvidados.get(j).equals(uid)) {
+                                                jogadoresConvidados.remove(j);
+                                                break;
+                                            }
+                                        }
+                                        sessionList.get(i).setJogadoresConvidados(jogadoresConvidados);
+                                        break;
+                                    }
+                                }
+
+                                adventure.setSessoes(sessionList);
+                                Fragment fragment = getVisibleFragment();
+                                if(fragment instanceof SessionsFragment){
+                                    ((SessionsFragment) fragment).setAdventure(adventure);
+                                }
+
+                                postValues.put("sessoes", sessionList);
+                                mDatabase.child("adventure").child(adventure.getNome()).updateChildren(postValues);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {}
+                });
     }
 
     @Override
@@ -565,7 +711,7 @@ public class ContainerActivity extends AppCompatActivity
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         SessionsFragment sf = new SessionsFragment();
         ft.replace(R.id.container, sf).commit();
-        sf.SetAdventure(adventure);
+        sf.setAdventure(adventure);
     }
 
     @Override
@@ -617,7 +763,7 @@ public class ContainerActivity extends AppCompatActivity
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         PlayersFragment pf = new PlayersFragment();
         ft.replace(R.id.container, pf).commit();
-        pf.SetAdventure(adventure);
+        pf.setAdventure(adventure);
     }
 
     @Override
@@ -641,7 +787,15 @@ public class ContainerActivity extends AppCompatActivity
     @Override
     public void onSessionCreated(final String name, final String data, final Adventure adventure) {
         Log.d(TAG, "Session Created");
-        Session session = new Session(name, data);
+        List<String> jogadoresConfirmados = new ArrayList<>(), jogadoresConvidados = new ArrayList<>();
+        for(int i = 0; i < adventure.getJogadores().size(); i++){
+            if(adventure.getJogadores().get(i).equals(adventure.getMestre())){
+                jogadoresConfirmados.add(adventure.getJogadores().get(i));
+            } else{
+                jogadoresConvidados.add(adventure.getJogadores().get(i));
+            }
+        }
+        Session session = new Session(name, data, jogadoresConfirmados, null, jogadoresConvidados);
         adventure.addSessao(session);
         mDatabase.child("adventure").child(adventure.getNome())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -709,7 +863,7 @@ public class ContainerActivity extends AppCompatActivity
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         SessionsFragment sf = new SessionsFragment();
         ft.replace(R.id.container, sf).commit();
-        sf.SetAdventure(adventure);
+        sf.setAdventure(adventure);
     }
 
 }

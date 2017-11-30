@@ -46,10 +46,10 @@ public class AdventuresFragment extends Fragment implements SwipeRefreshLayout.O
 
         swipeLayout = view.findViewById(R.id.swipe_container);
         swipeLayout.setOnRefreshListener(this);
-        swipeLayout.setColorSchemeColors(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
+        swipeLayout.setColorSchemeColors(getActivity().getResources().getColor(android.R.color.holo_blue_bright),
+                getActivity().getResources().getColor(android.R.color.holo_green_light),
+                getActivity().getResources().getColor(android.R.color.holo_orange_light),
+                getActivity().getResources().getColor(android.R.color.holo_red_light));
 
         return view;
     }

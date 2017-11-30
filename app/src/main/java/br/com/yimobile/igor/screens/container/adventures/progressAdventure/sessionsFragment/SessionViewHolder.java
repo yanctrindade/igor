@@ -1,4 +1,4 @@
-package br.com.yimobile.igor.screens.container.adventures.andamento.ItensList;
+package br.com.yimobile.igor.screens.container.adventures.progressAdventure.sessionsFragment;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import br.com.yimobile.igor.R;
-import br.com.yimobile.igor.screens.container.ContainerActivity;
 
 public class SessionViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 

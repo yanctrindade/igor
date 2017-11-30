@@ -1,4 +1,4 @@
-package br.com.yimobile.igor.screens.container.adventures.andamento;
+package br.com.yimobile.igor.screens.container.adventures.progressAdventure.editAdventure;
 
 import android.app.Activity;
 import android.content.Context;
