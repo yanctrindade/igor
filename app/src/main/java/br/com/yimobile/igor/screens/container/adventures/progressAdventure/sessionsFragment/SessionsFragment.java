@@ -15,7 +15,12 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import br.com.yimobile.igor.R;
@@ -30,10 +35,11 @@ public class SessionsFragment extends Fragment {
     SessionRecyclerViewAdapter sessionsRecyclerViewAdapter;
     RecyclerView recyclerView;
     ArrayList<Session> sessionsArrayList = new ArrayList<>();
+    ArrayList<Session> sessionsArrayListBackup = new ArrayList<>();
     FloatingActionButton newSessionButton;
     Adventure adventure;
+    boolean isOrdered = false;
     TextView nameAdventure;
-    ImageView background;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -83,6 +89,7 @@ public class SessionsFragment extends Fragment {
         recyclerView = view.findViewById(R.id.sessions_recyclerview);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
+
         sessionsRecyclerViewAdapter = new SessionRecyclerViewAdapter(sessionsArrayList, adventure, getActivity());
         recyclerView.setAdapter(sessionsRecyclerViewAdapter);
     }
@@ -96,6 +103,8 @@ public class SessionsFragment extends Fragment {
             for (int i = sessoes.size() - 1; i >= 0; i--) {
                 addNewSession(sessoes.get(i));
             }
+            sessionsArrayListBackup.clear();
+            sessionsArrayListBackup.addAll(sessionsArrayList);
         }
     }
 
@@ -119,6 +128,31 @@ public class SessionsFragment extends Fragment {
         }
     };
 
+    public void onOrderSessionsPressed(){
+        if(isOrdered == false) {
+
+            Collections.sort(sessionsArrayList, new Comparator<Session>() {
+                public int compare(Session s1, Session s2) {
+                    Date d1 = null, d2 = null;
+                    DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                    try {
+                        d1 = formatter.parse(s1.getData());
+                        d2 = formatter.parse(s2.getData());
+                    } catch (java.text.ParseException ie) {
+                        ie.printStackTrace();
+                    }
+                    return d1.compareTo(d2);
+                }
+            });
+            isOrdered = true;
+        }else{
+            sessionsArrayList.clear();
+            sessionsArrayList.addAll(sessionsArrayListBackup);
+            isOrdered = false;
+        }
+        sessionsRecyclerViewAdapter.notifyDataSetChanged();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -128,6 +162,7 @@ public class SessionsFragment extends Fragment {
                 }
                 return true;
             case R.id.action_ordenar:
+                onOrderSessionsPressed();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

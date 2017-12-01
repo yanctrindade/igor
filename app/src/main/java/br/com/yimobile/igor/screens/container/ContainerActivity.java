@@ -172,9 +172,9 @@ public class ContainerActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_ordenar:
+            /*case R.id.action_ordenar:
                 onOrderAdventure();
-                return true;
+                return true;*/
             case android.R.id.home:
                 navDrawer.openDrawer();
                 return true;
@@ -519,7 +519,7 @@ public class ContainerActivity extends AppCompatActivity
                 }
             }
         }
-        
+
         return userAdventures;
     }
 
