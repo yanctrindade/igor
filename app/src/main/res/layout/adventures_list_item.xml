@@ -4,6 +4,7 @@
     android:layout_height="126dp">
 
     <ImageView
+        android:id="@+id/background_img"
         android:background="@drawable/adv_bg_3"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

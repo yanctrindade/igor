@@ -49,6 +49,27 @@ public class PlayersFragment extends Fragment {
             }
         });
 
+        switch (adventure.getBackground()){
+            case 0:
+                view.setBackgroundResource(R.drawable.andamentobackground1_640);
+                break;
+            case 1:
+                view.setBackgroundResource(R.drawable.andamentobackground2_640);
+                break;
+            case 2:
+                view.setBackgroundResource(R.drawable.andamentobackground3_640);
+                break;
+            case 3:
+                view.setBackgroundResource(R.drawable.andamentobackground_640);
+                break;
+            case 4:
+                view.setBackgroundResource(R.drawable.andamentobackground5_640);
+                break;
+            default:
+                view.setBackgroundResource(R.drawable.andamentobackground_640);
+                break;
+        }
+
         return view;
     }
 

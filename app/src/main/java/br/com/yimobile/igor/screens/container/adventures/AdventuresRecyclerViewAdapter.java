@@ -40,6 +40,27 @@ public class AdventuresRecyclerViewAdapter extends RecyclerView.Adapter {
         adventureHolder.adventure = adventuresArrayList.get(position);
         adventureHolder.titleTextView.setText(title);
         adventureHolder.subtitleTextView.setText(descr);
+
+        switch (adventuresArrayList.get(position).getBackground()){
+            case 0:
+                adventureHolder.backgroundImageView.setImageResource(R.drawable.adv_bg_1);
+                break;
+            case 1:
+                adventureHolder.backgroundImageView.setImageResource(R.drawable.adv_bg_2);
+                break;
+            case 2:
+                adventureHolder.backgroundImageView.setImageResource(R.drawable.adv_bg_3);
+                break;
+            case 3:
+                adventureHolder.backgroundImageView.setImageResource(R.drawable.adv_bg_4);
+                break;
+            case 4:
+                adventureHolder.backgroundImageView.setImageResource(R.drawable.adv_bg_5);
+                break;
+            default:
+                adventureHolder.backgroundImageView.setImageResource(R.drawable.adv_bg_1);
+                break;
+        }
     }
 
     @Override

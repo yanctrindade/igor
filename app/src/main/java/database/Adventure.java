@@ -9,18 +9,24 @@ public class Adventure {
     private String mestre;
     private List<String> jogadores = new ArrayList<>();
     private List<Session> sessoes = new ArrayList<>();
+    private int background;
 
     public Adventure() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public Adventure(String nome, String descricao, String mestre,  List<String> jogadores, List<Session> sessoes) {
+    public Adventure(String nome, String descricao, String mestre,  List<String> jogadores, List<Session> sessoes, int background) {
         this.nome = nome;
         this.descricao = descricao;
         this.mestre = mestre;
         this.jogadores = jogadores;
         this.sessoes = sessoes;
+        this.background = background;
     }
+
+    public int getBackground() { return background; }
+
+    public void setBackground(int background) { this.background = background; }
 
     public String getNome() {
         return nome;

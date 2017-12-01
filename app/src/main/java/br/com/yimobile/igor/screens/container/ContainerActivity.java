@@ -42,6 +42,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import br.com.yimobile.igor.R;
 import br.com.yimobile.igor.screens.auth.LoginActivity;
@@ -960,7 +961,8 @@ public class ContainerActivity extends AppCompatActivity
             List<Session> ses = new ArrayList<>();
             jog.add(uid);
 
-            Adventure adv = new Adventure(name, "", uid,  jog, ses);
+            Random randomGenerator = new Random();
+            Adventure adv = new Adventure(name, "", uid,  jog, ses, randomGenerator.nextInt(5));
             mDatabase.child("adventure").child(name).setValue(adv);
 
             userAdventures.add(0, adv);

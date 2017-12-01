@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class SessionsFragment extends Fragment {
     FloatingActionButton newSessionButton;
     Adventure adventure;
     TextView nameAdventure;
+    ImageView background;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -48,6 +50,27 @@ public class SessionsFragment extends Fragment {
 
         ImageButton players_button = view.findViewById(R.id.button_jogadores);
         players_button.setOnClickListener(playersOnClickListener);
+
+        switch (adventure.getBackground()){
+            case 0:
+                view.setBackgroundResource(R.drawable.andamentobackground1_640);
+                break;
+            case 1:
+                view.setBackgroundResource(R.drawable.andamentobackground2_640);
+                break;
+            case 2:
+                view.setBackgroundResource(R.drawable.andamentobackground3_640);
+                break;
+            case 3:
+                view.setBackgroundResource(R.drawable.andamentobackground_640);
+                break;
+            case 4:
+                view.setBackgroundResource(R.drawable.andamentobackground5_640);
+                break;
+            default:
+                view.setBackgroundResource(R.drawable.andamentobackground_640);
+                break;
+        }
 
         return view;
     }
