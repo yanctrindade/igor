@@ -3,6 +3,7 @@ package br.com.yimobile.igor.screens.container.adventures;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,7 +82,7 @@ public class AdventuresRecyclerViewAdapter extends RecyclerView.Adapter {
 
             float porcentagem;
             if(diferencaInicioFim > 0 && diferencaHojeInicio < diferencaInicioFim) {
-                porcentagem = diferencaHojeInicio / diferencaInicioFim;
+                porcentagem = (((float)diferencaHojeInicio/(float)diferencaInicioFim));
             }else{
                 porcentagem = 1;
             }
