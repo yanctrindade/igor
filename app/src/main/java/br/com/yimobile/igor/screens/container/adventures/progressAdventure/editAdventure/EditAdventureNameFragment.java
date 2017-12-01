@@ -41,7 +41,9 @@ public class EditAdventureNameFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(InputMethodManager.HIDE_NOT_ALWAYS, 0);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+                }
                 getActivity().onBackPressed();
             }
         });
@@ -59,7 +61,9 @@ public class EditAdventureNameFragment extends Fragment {
                     adventureName.setError("Preencha o nome da aventura");
                 } else {
                     InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
-                    imm.toggleSoftInput(InputMethodManager.HIDE_NOT_ALWAYS, 0);
+                    if (imm != null) {
+                        imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+                    }
                     String name = adventureName.getText().toString();
                     ((ContainerActivity) getActivity()).onAdventureEdited(adventure, name);
                     getActivity().onBackPressed();

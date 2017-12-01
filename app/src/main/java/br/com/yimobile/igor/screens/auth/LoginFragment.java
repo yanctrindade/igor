@@ -1,5 +1,6 @@
 package br.com.yimobile.igor.screens.auth;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import br.com.yimobile.igor.R;
@@ -34,6 +36,11 @@ public class LoginFragment extends Fragment {
         view.findViewById(R.id.enterButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+                }
+
                 Animation wiggle = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.wiggle);
                 String email = emailText.getText().toString();
                 String senha = senhaText.getText().toString();

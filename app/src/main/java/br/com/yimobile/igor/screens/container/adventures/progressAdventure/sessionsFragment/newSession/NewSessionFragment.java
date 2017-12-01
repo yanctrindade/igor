@@ -71,7 +71,9 @@ public class NewSessionFragment extends Fragment {
         @Override
         public void onClick(View view) {
             InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
-            imm.toggleSoftInput(InputMethodManager.HIDE_NOT_ALWAYS, 0);
+            if (imm != null) {
+                imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+            }
             getActivity().onBackPressed();
         }
     };
@@ -88,7 +90,9 @@ public class NewSessionFragment extends Fragment {
                 sessionNameEditText.setError("Preencha o nome da sessão");
             } else {
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(InputMethodManager.HIDE_NOT_ALWAYS, 0);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+                }
                 ((ContainerActivity) getActivity()).onSessionCreated(
                         sessionNameEditText.getText().toString(), dateText.getText().toString(), adventure);
                 getActivity().onBackPressed();
@@ -101,7 +105,9 @@ public class NewSessionFragment extends Fragment {
         public void onClick(View view) {
             Log.d(TAG, "Date Clicked");
             InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
-            imm.toggleSoftInput(InputMethodManager.HIDE_NOT_ALWAYS, 0);
+            if (imm != null) {
+                imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+            }
             setDateTimeField();
         }
     };

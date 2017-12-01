@@ -7,108 +7,230 @@
     android:layout_height="match_parent"
     tools:context="br.com.yimobile.igor.screens.auth.RegisterFragment">
 
-    <android.support.constraint.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
 
         <ImageView
             android:id="@+id/caixa"
-            android:layout_width="297dp"
-            android:layout_height="280dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleY="2"
             android:src="@drawable/cadastrocaixa_280"
-            android:layout_marginTop="10dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="parent" />
-
-        <EditText
-            android:id="@+id/email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="12"
-            android:hint="@string/e_mail"
-            android:inputType="textEmailAddress"
-            android:textColor="#ffff"
-            android:backgroundTint="@android:color/white"
-            android:layout_marginTop="10dp"
-            android:maxLines="1"
-            android:imeOptions="actionNext"
-            app:layout_constraintTop_toTopOf="@id/caixa"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent" />
-
-        <EditText
-            android:id="@+id/senha"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="12"
-            android:backgroundTint="@android:color/white"
-            android:inputType="textPassword"
-            android:textColor="#ffff"
-            android:hint="@string/senha"
-            android:maxLines="1"
-            android:imeOptions="actionNext"
-            app:layout_constraintTop_toBottomOf="@+id/email"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent" />
-
-        <EditText
-            android:id="@+id/nome"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="12"
-            android:backgroundTint="@android:color/white"
-            android:inputType="textPersonName"
-            android:textColor="#ffff"
-            android:hint="@string/nome_de_usu_rio"
-            android:maxLines="1"
-            android:imeOptions="actionNext"
-            app:layout_constraintTop_toBottomOf="@+id/senha"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent" />
-
-        <EditText
-            android:id="@+id/data"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="12"
-            android:backgroundTint="@android:color/white"
-            android:inputType="text|datetime"
-            android:textColor="#ffff"
-            android:hint="@string/data_de_nascimento"
-            android:maxLines="1"
-            android:imeOptions="actionNext"
-            android:focusable="false"
-            app:layout_constraintTop_toBottomOf="@+id/nome"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent" />
-
-        <EditText
-            android:id="@+id/sexo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="12"
-            android:backgroundTint="@android:color/white"
-            android:inputType="textAutoComplete"
-            android:textColor="#ffff"
-            android:hint="@string/sexo"
-            android:maxLines="1"
-            android:imeOptions="actionDone"
-            app:layout_constraintTop_toBottomOf="@+id/data"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent" />
-
-        <ImageButton
-            android:id="@+id/cadastrobutton"
-            android:scaleType="fitCenter"
-            android:layout_width="82dp"
-            android:layout_height="30dp"
-            android:background="?android:attr/selectableItemBackground"
             android:layout_marginTop="5dp"
-            android:src="@drawable/cadastrobutton_60"
-            android:contentDescription="@string/entrar"
-            app:layout_constraintRight_toRightOf="@id/sexo"
-            app:layout_constraintTop_toBottomOf="@+id/sexo" />
+            android:contentDescription="@string/material_drawer_open"
+            android:layout_centerHorizontal="true">
+        </ImageView>
 
-    </android.support.constraint.ConstraintLayout>
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp">
+
+            <TextView
+                android:id="@+id/emailConfigView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="16"
+                android:textColor="@color/dark_gray"
+                android:text="@string/e_mail"
+                android:maxLines="1"
+                android:layout_marginTop="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
+
+            <EditText
+                android:id="@+id/email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="12"
+                android:hint="@string/e_mail"
+                android:textColorHint="@color/gray"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/dark_gray"
+                android:layout_marginTop="5dp"
+                android:maxLines="1"
+                android:imeOptions="actionNext"
+                app:layout_constraintTop_toBottomOf="@id/emailConfigView"
+                app:layout_constraintLeft_toLeftOf="@id/emailConfigView" />
+
+            <TextView
+                android:id="@+id/senhaConfigView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="16"
+                android:textColor="@color/dark_gray"
+                android:layout_marginTop="5dp"
+                android:text="@string/senha"
+                android:maxLines="1"
+                app:layout_constraintTop_toBottomOf="@id/email"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
+
+            <EditText
+                android:id="@+id/senha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="12"
+                android:inputType="textPassword"
+                android:textColor="@color/dark_gray"
+                android:hint="@string/senha"
+                android:textColorHint="@color/gray"
+                android:maxLines="1"
+                android:imeOptions="actionNext"
+                app:layout_constraintTop_toBottomOf="@+id/senhaConfigView"
+                app:layout_constraintLeft_toLeftOf="@id/senhaConfigView" />
+
+            <TextView
+                android:id="@+id/nomeConfigView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="16"
+                android:textColor="@color/dark_gray"
+                android:layout_marginTop="5dp"
+                android:text="@string/nome_de_usu_rio"
+                android:maxLines="1"
+                app:layout_constraintTop_toBottomOf="@id/senha"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
+
+            <EditText
+                android:id="@+id/nome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="12"
+                android:hint="@string/nome_de_usu_rio"
+                android:textColorHint="@color/gray"
+                android:inputType="textPersonName"
+                android:textColor="@color/dark_gray"
+                android:maxLines="1"
+                android:imeOptions="actionNext"
+                app:layout_constraintTop_toBottomOf="@id/nomeConfigView"
+                app:layout_constraintLeft_toLeftOf="@id/nomeConfigView" />
+
+            <LinearLayout
+                android:id="@+id/dataConfigView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                app:layout_constraintTop_toBottomOf="@+id/nome"
+                app:layout_constraintLeft_toLeftOf="@id/nomeConfigView">
+
+                <TextView
+                    android:id="@+id/dataConfigLabel"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:ems="16"
+                    android:maxLines="1"
+                    android:text="@string/data_de_nascimento"
+                    android:textColor="@color/dark_gray" />
+
+                <ImageButton
+                    android:id="@+id/dataSelect"
+                    android:scaleType="fitCenter"
+                    android:layout_width="30dp"
+                    android:layout_height="25dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:src="@drawable/ic_calendar"
+                    android:contentDescription="@string/data_de_nascimento"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/dataConfig"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                app:layout_constraintLeft_toLeftOf="@id/dataConfigView"
+                app:layout_constraintTop_toBottomOf="@+id/dataConfigView">
+
+                <Spinner
+                    android:id="@+id/diaSpinnerConfig"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/dark_gray"
+                    android:background="@android:drawable/btn_dropdown"
+                    android:ems="12" />
+
+                <Spinner
+                    android:id="@+id/mesSpinnerConfig"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:drawable/btn_dropdown"
+                    android:ems="12"
+                    android:textColor="@color/dark_gray" />
+
+                <EditText
+                    android:id="@+id/anoTextConfig"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:ems="12"
+                    android:inputType="number"
+                    android:textColor="@color/dark_gray"
+                    android:hint="@string/yyyy"
+                    android:textColorHint="@color/gray"
+                    android:maxLines="1"
+                    android:imeOptions="actionDone"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/sexoTextConfig"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sexo"
+                android:textColor="@color/dark_gray"
+                android:layout_marginTop="5dp"
+                app:layout_constraintTop_toBottomOf="@+id/dataConfig"
+                app:layout_constraintLeft_toLeftOf="@id/nomeConfigView"/>
+
+            <LinearLayout
+                android:id="@+id/sexoConfig"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                app:layout_constraintTop_toBottomOf="@+id/sexoTextConfig"
+                app:layout_constraintLeft_toLeftOf="@id/sexoTextConfig">
+
+                <RadioButton
+                    android:id="@+id/sexoMasculinoConfig"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/masculino"
+                    android:textColor="@color/dark_gray" />
+
+                <RadioButton
+                    android:id="@+id/sexoFemininoConfig"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/feminino"
+                    android:textColor="@color/dark_gray"/>
+
+                <RadioButton
+                    android:id="@+id/sexoOutroConfig"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/outro"
+                    android:textColor="@color/dark_gray"/>
+
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/cadastrobutton"
+                android:scaleType="fitCenter"
+                android:layout_width="82dp"
+                android:layout_height="30dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_marginTop="15dp"
+                android:src="@drawable/cadastrobutton_60"
+                app:layout_constraintRight_toRightOf="@id/sexoConfig"
+                app:layout_constraintTop_toBottomOf="@+id/sexoConfig"
+                android:contentDescription="@string/criar_conta" />
+
+        </android.support.constraint.ConstraintLayout>
+
+    </RelativeLayout>
+
 </ScrollView>
