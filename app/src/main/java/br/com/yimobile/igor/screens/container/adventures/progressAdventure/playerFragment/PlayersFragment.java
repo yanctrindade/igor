@@ -119,7 +119,7 @@ public class PlayersFragment extends Fragment {
     View.OnClickListener newPlayerOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            ((ContainerActivity) getActivity()).newPlayerPressed();
+            ((ContainerActivity) getActivity()).newPlayerPressed(adventure);
         }
     };
 

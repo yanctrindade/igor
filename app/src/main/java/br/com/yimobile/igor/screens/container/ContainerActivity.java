@@ -1108,10 +1108,12 @@ public class ContainerActivity extends AppCompatActivity
 
     }
 
-    public void newPlayerPressed() {
+    public void newPlayerPressed(Adventure adventure) {
         Log.d(TAG, "Create new player clicked");
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.container, new NewPlayerFragment()).addToBackStack(null).commit();
+        NewPlayerFragment newPlayerFragment = new NewPlayerFragment();
+        newPlayerFragment.setAdventure(adventure);
+        ft.replace(R.id.container, newPlayerFragment).addToBackStack(null).commit();
     }
 
     @Override

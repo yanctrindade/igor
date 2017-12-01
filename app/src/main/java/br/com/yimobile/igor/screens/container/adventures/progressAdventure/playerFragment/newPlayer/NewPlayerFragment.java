@@ -15,14 +15,25 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
+
 import br.com.yimobile.igor.R;
+import database.Adventure;
 
 public class NewPlayerFragment extends Fragment {
 
+    private Adventure adventure;
     private EditText playerNameEditText;
     private ImageButton saveButton;
     private ImageButton dateButton;
     private Button close;
+    private DatabaseReference mDatabase;
 
     private static final String TAG = NewPlayerFragment.class.getSimpleName();
 
@@ -36,11 +47,15 @@ public class NewPlayerFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
         playerNameEditText = (EditText) view.findViewById(R.id.edit_player);
         saveButton = (ImageButton) view.findViewById(R.id.create_player);
         saveButton.setOnClickListener(saveOnClickListener);
         close = (Button) view.findViewById(R.id.sair);
         close.setOnClickListener(closeOnClickListener);
+
+
     }
 
     @Override
@@ -66,7 +81,40 @@ public class NewPlayerFragment extends Fragment {
         @Override
         public void onClick(View view) {
             Log.d(TAG, "Save Clicked");
+
+            ValueEventListener postListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    for (DataSnapshot userSnapshop: dataSnapshot.getChildren()) {
+                        HashMap<String, String> userMap = (HashMap) userSnapshop.getValue();
+                        String userKey = userSnapshop.getKey().toString();
+                        String email = userMap.get("email").toString();
+
+                        String playerName = playerNameEditText.getText().toString();
+
+                        if (playerName.equalsIgnoreCase(email)) {
+                            //add User
+                            Log.d("TAG", email + " adicionado a aventura " + adventure.getNome());
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    // Getting Post failed, log a message
+                    Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                    // ...
+                }
+            };
+            mDatabase.child("users").addListenerForSingleValueEvent(postListener);
+
         }
     };
 
+    public void setAdventure(Adventure adventure) {
+        this.adventure = adventure;
+    }
+
 }
+
