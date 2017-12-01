@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 
 import com.google.firebase.database.DataSnapshot;
@@ -86,18 +87,23 @@ public class NewPlayerFragment extends Fragment {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
+                    String email = "";
                     for (DataSnapshot userSnapshop: dataSnapshot.getChildren()) {
                         HashMap<String, String> userMap = (HashMap) userSnapshop.getValue();
                         String userKey = userSnapshop.getKey().toString();
-                        String email = userMap.get("email").toString();
+                        email = userMap.get("email").toString();
 
                         String playerName = playerNameEditText.getText().toString();
 
                         if (playerName.equalsIgnoreCase(email)) {
                             //add User
-                            Log.d("TAG", email + " adicionado a aventura " + adventure.getNome());
+                            Log.d("NEWPLAYER", email + " adicionado a aventura " + adventure.getNome());
+                            return;
                         }
                     }
+
+                    //Log.d("NEWPLAYER", email + " não encontrado");
+                    Toast.makeText(getActivity().getApplicationContext(), email + "não encontrado", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
