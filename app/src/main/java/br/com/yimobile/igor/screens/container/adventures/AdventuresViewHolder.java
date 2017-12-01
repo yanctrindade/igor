@@ -3,6 +3,7 @@ package br.com.yimobile.igor.screens.container.adventures;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -29,6 +30,12 @@ public class AdventuresViewHolder extends RecyclerView.ViewHolder implements Vie
         subtitleTextView = itemView.findViewById(R.id.adventures_subtitle);
         backgroundImageView = itemView.findViewById(R.id.background_img);
         progresso = itemView.findViewById(R.id.adv_seekbar);
+        progresso.setOnTouchListener(new View.OnTouchListener(){
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
 
         itemView.setOnClickListener(this);
     }

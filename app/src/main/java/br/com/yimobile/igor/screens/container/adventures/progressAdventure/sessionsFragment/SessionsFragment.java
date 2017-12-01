@@ -14,22 +14,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import br.com.yimobile.igor.R;
 import br.com.yimobile.igor.screens.container.ContainerActivity;
 import database.Adventure;
 import database.Session;
+
+import static br.com.yimobile.igor.screens.auth.LoginActivity.stringToDate;
 
 public class SessionsFragment extends Fragment {
 
@@ -173,14 +171,8 @@ public class SessionsFragment extends Fragment {
         if(!isOrdered) {
             Collections.sort(sessionsArrayList, new Comparator<Session>() {
                 public int compare(Session s1, Session s2) {
-                    Date d1 = null, d2 = null;
-                    DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
-                    try {
-                        d1 = formatter.parse(s1.getData());
-                        d2 = formatter.parse(s2.getData());
-                    } catch (java.text.ParseException ie) {
-                        ie.printStackTrace();
-                    }
+                    Calendar d1 = stringToDate(s1.getData(), "dd/MM/yyyy");
+                    Calendar d2 = stringToDate(s2.getData(), "dd/MM/yyyy");
                     return d1.compareTo(d2);
                 }
             });

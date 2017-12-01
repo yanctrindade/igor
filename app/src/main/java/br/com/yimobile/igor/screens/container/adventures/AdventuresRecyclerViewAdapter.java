@@ -3,22 +3,20 @@ package br.com.yimobile.igor.screens.container.adventures;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 
 import br.com.yimobile.igor.R;
 import database.Adventure;
 import database.Session;
+
+import static br.com.yimobile.igor.screens.auth.LoginActivity.stringToDate;
 
 public class AdventuresRecyclerViewAdapter extends RecyclerView.Adapter {
 
@@ -53,32 +51,18 @@ public class AdventuresRecyclerViewAdapter extends RecyclerView.Adapter {
         if(sessoes != null && adventuresArrayList.get(position).getData() != null && sessoes.size() > 0) {
             Collections.sort(sessoes, new Comparator<Session>() {
                 public int compare(Session s1, Session s2) {
-                    Date d1 = null, d2 = null;
-                    DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-                    try {
-                        d1 = formatter.parse(s1.getData());
-                        d2 = formatter.parse(s2.getData());
-                    } catch (java.text.ParseException ie) {
-                        ie.printStackTrace();
-                    }
+                    Calendar d1 = stringToDate(s1.getData(), "dd/MM/yyyy");
+                    Calendar d2 = stringToDate(s2.getData(), "dd/MM/yyyy");
                     return d1.compareTo(d2);
                 }
             });
 
-            DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-            Date currentTime = Calendar.getInstance().getTime();
-            Date d1 = null, d2 = null;
+            Calendar currentTime = Calendar.getInstance();
+            Calendar d1 = stringToDate(adventuresArrayList.get(position).getData(), "dd/MM/yyyy");
+            Calendar d2 = stringToDate(sessoes.get(0).getData(), "dd/MM/yyyy");
 
-            try {
-                d1 = formatter.parse(adventuresArrayList.get(position).getData());
-                d2 = formatter.parse(sessoes.get(0).getData());
-
-            } catch (java.text.ParseException e) {
-                e.printStackTrace();
-            }
-
-            long diferencaInicioFim = d2.getTime() - d1.getTime();
-            long diferencaHojeInicio = currentTime.getTime() - d1.getTime();
+            long diferencaInicioFim = d2.getTimeInMillis() - d1.getTimeInMillis();
+            long diferencaHojeInicio = currentTime.getTimeInMillis() - d1.getTimeInMillis();
 
             float porcentagem;
             if(diferencaInicioFim > 0 && diferencaHojeInicio < diferencaInicioFim) {
