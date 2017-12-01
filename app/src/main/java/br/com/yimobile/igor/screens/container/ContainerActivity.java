@@ -37,10 +37,13 @@ import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -1017,7 +1020,12 @@ public class ContainerActivity extends AppCompatActivity
             jog.add(uid);
 
             Random randomGenerator = new Random();
-            Adventure adv = new Adventure(name, descr, uid,  jog, ses, randomGenerator.nextInt(5));
+            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+            Date currentTime = Calendar.getInstance().getTime();
+
+            Adventure adv = new Adventure(name, "", uid,  jog, ses, randomGenerator.nextInt(5),
+                    df.format(currentTime));
+
             mDatabase.child("adventure").child(name).setValue(adv);
 
             userAdventures.add(0, adv);
