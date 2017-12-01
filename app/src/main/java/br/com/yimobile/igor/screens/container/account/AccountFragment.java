@@ -9,6 +9,9 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -227,6 +230,17 @@ public class AccountFragment extends Fragment {
                 }
             }
         });
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        MenuItem editar = menu.findItem(R.id.action_editar);
+        editar.setVisible(false);
+
+        MenuItem ordenar = menu.findItem(R.id.action_ordenar);
+        ordenar.setVisible(false);
     }
 
     private String getData(){

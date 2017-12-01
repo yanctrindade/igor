@@ -5,6 +5,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -38,7 +41,17 @@ public class NewPlayerFragment extends Fragment {
         saveButton.setOnClickListener(saveOnClickListener);
         close = (Button) view.findViewById(R.id.sair);
         close.setOnClickListener(closeOnClickListener);
+    }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        MenuItem editar = menu.findItem(R.id.action_editar);
+        editar.setVisible(false);
+
+        MenuItem ordenar = menu.findItem(R.id.action_ordenar);
+        ordenar.setVisible(false);
     }
 
     /* On Click Listeners */

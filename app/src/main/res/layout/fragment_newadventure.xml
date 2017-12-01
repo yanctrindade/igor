@@ -57,22 +57,38 @@
         android:layout_marginStart="30dp"
         android:layout_marginEnd="50dp"
         android:maxLines="2"
-        android:imeOptions="actionDone"
+        android:imeOptions="actionNext"
         android:textSize="8pt"
         android:textColor="#000000">
         <requestFocus/>
     </EditText>
 
+    <EditText
+        android:id="@+id/descricao"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/edit_avent"
+        android:layout_alignStart="@id/edit_avent"
+        android:layout_below="@+id/edit_avent"
+        android:hint="@string/descr_aventura"
+        android:imeOptions="actionDone"
+        android:maxLines="2"
+        android:textColor="#000000"
+        android:textSize="8pt">
+
+        <requestFocus />
+    </EditText>
+
     <ImageButton
         android:id="@+id/create_adv"
-        android:scaleType="fitCenter"
-        android:background="?android:attr/selectableItemBackground"
         android:layout_width="82dp"
         android:layout_height="30dp"
-        android:layout_alignTop="@id/edit_avent"
-        android:layout_alignEnd="@id/edit_avent"
-        android:layout_marginTop="80dp"
-        android:src="@drawable/newadv_pronto_60"
-        android:contentDescription="@string/entrar"/>
+        android:layout_alignEnd="@+id/descricao"
+        android:layout_below="@+id/descricao"
+        android:layout_marginTop="10dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:contentDescription="@string/entrar"
+        android:scaleType="fitCenter"
+        android:src="@drawable/newadv_pronto_60" />
 
 </RelativeLayout>

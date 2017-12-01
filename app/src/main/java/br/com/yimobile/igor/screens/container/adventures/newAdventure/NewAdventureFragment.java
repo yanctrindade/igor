@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -46,6 +49,8 @@ public class NewAdventureFragment extends Fragment {
         });
 
         final EditText adventureName = view.findViewById(R.id.edit_avent);
+        final EditText adventureDescr = view.findViewById(R.id.descricao);
+
         ImageButton create_button = view.findViewById(R.id.create_adv);
         create_button.setOnClickListener(new ImageButton.OnClickListener() {
             @Override
@@ -62,14 +67,31 @@ public class NewAdventureFragment extends Fragment {
                         imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
                     }
                     String name = adventureName.getText().toString();
-                    ((ContainerActivity) getActivity()).onAdventureCreated(name);
+                    String descr = "";
+                    if(adventureDescr.getText() != null ||
+                            !adventureDescr.getText().toString().isEmpty() ||
+                            !adventureDescr.getText().toString().equals("")){
+                        descr = adventureDescr.getText().toString();
+                    }
+                    ((ContainerActivity) getActivity()).onAdventureCreated(name, descr);
                     //getActivity().onBackPressed();
                 }
             }
         });
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        MenuItem editar = menu.findItem(R.id.action_editar);
+        editar.setVisible(false);
+
+        MenuItem ordenar = menu.findItem(R.id.action_ordenar);
+        ordenar.setVisible(false);
+    }
+
     public interface CreateAdventureOnClickListener {
-        public void onAdventureCreated(String name);
+        public void onAdventureCreated(String name, String descr);
     }
 }
