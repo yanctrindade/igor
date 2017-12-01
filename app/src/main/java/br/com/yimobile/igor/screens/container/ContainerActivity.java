@@ -1124,8 +1124,8 @@ public class ContainerActivity extends AppCompatActivity
         final String oldName = adventure.getNome();
         adventure.setNome(name);
         adventure.setDescricao(descr);
-        mDatabase.child("adventure").child(name).setValue(adventure);
         mDatabase.child("adventure").child(oldName).removeValue();
+        mDatabase.child("adventure").child(name).setValue(adventure);
 
         mDatabase.child("users").child(uid)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
