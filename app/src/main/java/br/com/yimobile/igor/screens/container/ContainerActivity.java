@@ -666,6 +666,7 @@ public class ContainerActivity extends AppCompatActivity
                                 }
 
                                 adventure.setSessoes(sessionList);
+                                getUserAdventuresDatabase();
                                 Fragment fragment = getVisibleFragment();
                                 if(fragment instanceof SessionsFragment){
                                     ((SessionsFragment) fragment).setAdventure(adventure);
@@ -738,6 +739,7 @@ public class ContainerActivity extends AppCompatActivity
                                 }
 
                                 adventure.setSessoes(sessionList);
+                                getUserAdventuresDatabase();
                                 Fragment fragment = getVisibleFragment();
                                 if(fragment instanceof SessionsFragment){
                                     ((SessionsFragment) fragment).setAdventure(adventure);
