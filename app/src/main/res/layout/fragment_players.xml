@@ -109,11 +109,12 @@
             app:layout_constraintTop_toTopOf="@+id/mestre_circle"
             android:layout_marginLeft="0dp"
             android:layout_marginTop="0dp" />
+
         <TextView
             android:id="@+id/mestre_descr"
             android:layout_width="171dp"
             android:layout_height="47dp"
-            android:text="Mestre impiedoso que mata personagens por diversão"
+            android:text=""
             android:textSize="13sp"
 
             app:layout_constraintTop_toBottomOf="@+id/mestre_text"

@@ -17,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import br.com.yimobile.igor.R;
 import br.com.yimobile.igor.screens.container.ContainerActivity;
@@ -28,10 +29,10 @@ public class PlayersFragment extends Fragment {
 
     PlayerRecyclerViewAdapter playerRecyclerViewAdapter;
     RecyclerView recyclerView;
-    ArrayList<String> playerArrayList = new ArrayList<>();
+    List<String> playerArrayList = new ArrayList<>();
     FloatingActionButton newPlayerButton;
     Adventure adventure;
-    TextView nameAdventure;
+    TextView nameAdventure, mestre;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -39,6 +40,8 @@ public class PlayersFragment extends Fragment {
 
         nameAdventure = view.findViewById(R.id.titulo);
         if(adventure != null) nameAdventure.setText(adventure.getNome());
+
+        mestre = view.findViewById(R.id.mestre_nickname);
 
         newPlayerButton = view.findViewById(R.id.new_player_button);
         newPlayerButton.setOnClickListener(newPlayerOnClickListener);
@@ -83,8 +86,6 @@ public class PlayersFragment extends Fragment {
         recyclerView = view.findViewById(R.id.sessions_recyclerview);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        playerArrayList.add("17/05 Sessão 5");
-        playerArrayList.add("16/05 Sessão 4");
         playerRecyclerViewAdapter = new PlayerRecyclerViewAdapter(playerArrayList, getActivity());
         recyclerView.setAdapter(playerRecyclerViewAdapter);
     }
@@ -96,8 +97,8 @@ public class PlayersFragment extends Fragment {
         MenuItem editar = menu.findItem(R.id.action_editar);
         editar.setVisible(false);
 
-        //MenuItem ordenar = menu.findItem(R.id.action_ordenar);
-
+        MenuItem ordenar = menu.findItem(R.id.action_ordenar);
+        ordenar.setVisible(false);
     }
 
     @Override
@@ -113,13 +114,18 @@ public class PlayersFragment extends Fragment {
     public void setAdventure(Adventure adventure){
         this.adventure = adventure;
         if(nameAdventure != null) nameAdventure.setText(adventure.getNome());
+        if(mestre != null) mestre.setText(adventure.getMestre());
+        if(playerRecyclerViewAdapter != null && playerArrayList != null){
+            playerArrayList = adventure.getJogadores();
+            playerRecyclerViewAdapter.swap();
+        }
     }
 
 
     View.OnClickListener newPlayerOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            ((ContainerActivity) getActivity()).newPlayerPressed();
+            ((ContainerActivity) getActivity()).newPlayerPressed(adventure);
         }
     };
 

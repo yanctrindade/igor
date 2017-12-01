@@ -35,7 +35,7 @@
         android:id="@+id/player_nickname"
         android:layout_width="113dp"
         android:layout_height="18dp"
-        android:text="Jogador"
+        android:text=""
         android:textStyle="italic"
         android:textSize="13sp"
         android:layout_below="@+id/player_text"

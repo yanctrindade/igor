@@ -966,6 +966,62 @@ public class ContainerActivity extends AppCompatActivity
                 });
     }
 
+    public void addPlayer(final Adventure adventure, final String idPlayer){
+        Log.d(TAG, "Add Player");
+
+        mDatabase.child("users").child(idPlayer)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        User user = dataSnapshot.getValue(User.class);
+                        Map<String, Object> postValues = new HashMap<>();
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            postValues.put(snapshot.getKey(), snapshot.getValue());
+                        }
+
+                        List<String> adv;
+                        if(user != null) {
+                            adv = user.getAventuras();
+                        } else{
+                            adv = new ArrayList<>();
+                        }
+                        adv.add(adventure.getNome());
+
+                        postValues.put("aventuras", adv);
+                        mDatabase.child("users").child(uid).updateChildren(postValues);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+
+        mDatabase.child("adventure").child(adventure.getNome())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Adventure adv = dataSnapshot.getValue(Adventure.class);
+                        Map<String, Object> postValues = new HashMap<>();
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            postValues.put(snapshot.getKey(), snapshot.getValue());
+                        }
+
+                        List<String> jog;
+                        if(adv != null) {
+                            jog = adv.getJogadores();
+                        } else{
+                            jog = new ArrayList<>();
+                        }
+                        jog.add(idPlayer);
+                        postValues.put("jogadores", jog);
+                        mDatabase.child("adventure").child(adventure.getNome()).updateChildren(postValues);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {}
+                });
+    }
+
     @Override
     public void onNewAdventureClicked() {
         Log.d(TAG, "New Adventure Button Clicked");
@@ -1117,10 +1173,12 @@ public class ContainerActivity extends AppCompatActivity
 
     }
 
-    public void newPlayerPressed() {
+    public void newPlayerPressed(Adventure adventure) {
         Log.d(TAG, "Create new player clicked");
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.container, new NewPlayerFragment()).addToBackStack(null).commit();
+        NewPlayerFragment newPlayerFragment = new NewPlayerFragment();
+        newPlayerFragment.setAdventure(adventure);
+        ft.replace(R.id.container, newPlayerFragment).addToBackStack(null).commit();
     }
 
     @Override
