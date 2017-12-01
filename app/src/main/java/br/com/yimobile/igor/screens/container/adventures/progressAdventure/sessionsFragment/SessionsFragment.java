@@ -152,6 +152,23 @@ public class SessionsFragment extends Fragment {
         if(descrAdventure != null) descrAdventure.setText(adventure.getDescricao());
     }
 
+    public void setSession(Session session){
+        if(sessionsArrayList != null && sessionsArrayListBackup != null &&
+                session != null && sessionsRecyclerViewAdapter != null){
+            for(int i = 0; i < sessionsArrayList.size(); i++){
+                if(sessionsArrayList.get(i).getTitulo().equals(session.getTitulo())){
+                    sessionsArrayList.set(i, session);
+                }
+            }
+            for(int i = 0; i < sessionsArrayListBackup.size(); i++){
+                if(sessionsArrayListBackup.get(i).getTitulo().equals(session.getTitulo())){
+                    sessionsArrayListBackup.set(i, session);
+                }
+            }
+            sessionsRecyclerViewAdapter.swap();
+        }
+    }
+
     /* On Clicks */
     View.OnClickListener newSessionOnClickListener = new View.OnClickListener() {
         @Override
@@ -177,7 +194,7 @@ public class SessionsFragment extends Fragment {
                 }
             });
             isOrdered = true;
-        }else{
+        } else{
             sessionsArrayList.clear();
             sessionsArrayList.addAll(sessionsArrayListBackup);
             isOrdered = false;

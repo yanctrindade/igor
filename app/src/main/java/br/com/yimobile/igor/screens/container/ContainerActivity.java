@@ -648,6 +648,7 @@ public class ContainerActivity extends AppCompatActivity
                         if (adventure != null) {
                             List<Session> sessionList = adventure.getSessoes();
                             if (sessionList != null) {
+                                int pos = -1;
                                 for (int i = 0; i < sessionList.size(); i++) {
                                     if (sessionList.get(i).getTitulo().equals(notification.getSessaoNome())) {
                                         List<String> jogadoresConfirmados = sessionList.get(i).getJogadoresConfirmados();
@@ -661,6 +662,7 @@ public class ContainerActivity extends AppCompatActivity
                                             }
                                         }
                                         sessionList.get(i).setJogadoresConvidados(jogadoresConvidados);
+                                        pos = i;
                                         break;
                                     }
                                 }
@@ -670,6 +672,7 @@ public class ContainerActivity extends AppCompatActivity
                                 Fragment fragment = getVisibleFragment();
                                 if(fragment instanceof SessionsFragment){
                                     ((SessionsFragment) fragment).setAdventure(adventure);
+                                    if(pos >= 0) ((SessionsFragment) fragment).setSession(sessionList.get(pos));
                                 }
 
                                 postValues.put("sessoes", sessionList);
@@ -720,6 +723,7 @@ public class ContainerActivity extends AppCompatActivity
                         }
                         if (adventure != null) {
                             List<Session> sessionList = adventure.getSessoes();
+                            int pos = -1;
                             if (sessionList != null) {
                                 for (int i = 0; i < sessionList.size(); i++) {
                                     if (sessionList.get(i).getTitulo().equals(notification.getSessaoNome())) {
@@ -734,6 +738,7 @@ public class ContainerActivity extends AppCompatActivity
                                             }
                                         }
                                         sessionList.get(i).setJogadoresConvidados(jogadoresConvidados);
+                                        pos = i;
                                         break;
                                     }
                                 }
@@ -743,6 +748,7 @@ public class ContainerActivity extends AppCompatActivity
                                 Fragment fragment = getVisibleFragment();
                                 if(fragment instanceof SessionsFragment){
                                     ((SessionsFragment) fragment).setAdventure(adventure);
+                                    if(pos >= 0) ((SessionsFragment) fragment).setSession(sessionList.get(pos));
                                 }
 
                                 postValues.put("sessoes", sessionList);
@@ -849,7 +855,8 @@ public class ContainerActivity extends AppCompatActivity
                         adventure.setSessoes(sessionList);
                         Fragment fragment = getVisibleFragment();
                         if(fragment instanceof SessionsFragment){
-                            ((SessionsFragment) fragment).setAdventure(adventure);
+                            //((SessionsFragment) fragment).setAdventure(adventure);
+                            ((SessionsFragment) fragment).setSession(session);
                         }
 
                         postValues.put("sessoes", sessionList);
@@ -943,9 +950,11 @@ public class ContainerActivity extends AppCompatActivity
                         }
 
                         adventure.setSessoes(sessionList);
+                        getUserAdventuresDatabase();
                         Fragment fragment = getVisibleFragment();
-                        if(fragment instanceof SessionsFragment){
-                            ((SessionsFragment) fragment).setAdventure(adventure);
+                        if(fragment instanceof SessionsFragment) {
+                            //((SessionsFragment) fragment).setAdventure(adventure);
+                            ((SessionsFragment) fragment).setSession(session);
                         }
 
                         postValues.put("sessoes", sessionList);
