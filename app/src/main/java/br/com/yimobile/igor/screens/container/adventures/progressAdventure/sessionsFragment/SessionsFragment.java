@@ -8,6 +8,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import br.com.yimobile.igor.R;
 import br.com.yimobile.igor.screens.container.ContainerActivity;
@@ -129,12 +132,11 @@ public class SessionsFragment extends Fragment {
     };
 
     public void onOrderSessionsPressed(){
-        if(isOrdered == false) {
-
+        if(!isOrdered) {
             Collections.sort(sessionsArrayList, new Comparator<Session>() {
                 public int compare(Session s1, Session s2) {
                     Date d1 = null, d2 = null;
-                    DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                    DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
                     try {
                         d1 = formatter.parse(s1.getData());
                         d2 = formatter.parse(s2.getData());
@@ -154,6 +156,18 @@ public class SessionsFragment extends Fragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        MenuItem ordenar = menu.findItem(R.id.action_ordenar);
+        if(isOrdered){
+            ordenar.setTitle("Ordem primária");
+        } else{
+            ordenar.setTitle("Ordenar");
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_editar:
@@ -163,6 +177,11 @@ public class SessionsFragment extends Fragment {
                 return true;
             case R.id.action_ordenar:
                 onOrderSessionsPressed();
+                if(isOrdered){
+                    item.setTitle("Ordem primária");
+                } else{
+                    item.setTitle("Ordenar");
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -9,6 +9,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,10 +67,32 @@ public class AdventuresFragment extends Fragment implements SwipeRefreshLayout.O
             fillFragment(adventureList);
         }
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        MenuItem editar = menu.findItem(R.id.action_editar);
+        editar.setVisible(false);
+
+        MenuItem ordenar = menu.findItem(R.id.action_ordenar);
+        if(((ContainerActivity) getActivity()).isOrdered()){
+            ordenar.setTitle("Ordem primária");
+        } else{
+            ordenar.setTitle("Ordenar");
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_ordenar:
                 ((ContainerActivity) getActivity()).onOrderAdventure();
+                if(((ContainerActivity) getActivity()).isOrdered()){
+                    item.setTitle("Ordem primária");
+                } else{
+                    item.setTitle("Ordenar");
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

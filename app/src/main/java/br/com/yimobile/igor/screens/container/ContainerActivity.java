@@ -464,9 +464,7 @@ public class ContainerActivity extends AppCompatActivity
         if(isOrdered) {
             Collections.sort(userAdventures, new Comparator<Adventure>() {
                 public int compare(Adventure a1, Adventure a2) {
-                    Adventure aux1 = a1;
-                    Adventure aux2 = a2;
-                    return aux1.getNome().compareToIgnoreCase(aux2.getNome());
+                    return a1.getNome().compareToIgnoreCase(a2.getNome());
                 }
             });
         }
@@ -500,9 +498,7 @@ public class ContainerActivity extends AppCompatActivity
                                                 if(isOrdered) {
                                                     Collections.sort(userAdventures, new Comparator<Adventure>() {
                                                         public int compare(Adventure a1, Adventure a2) {
-                                                            Adventure aux1 = a1;
-                                                            Adventure aux2 = a2;
-                                                            return aux1.getNome().compareToIgnoreCase(aux2.getNome());
+                                                            return a1.getNome().compareToIgnoreCase(a2.getNome());
                                                         }
                                                     });
                                                 }
@@ -969,23 +965,30 @@ public class ContainerActivity extends AppCompatActivity
     public void onOrderAdventure(){
         Log.d(TAG, "Order Pressed");
 
-        if(isOrdered == false) {
+        if(!isOrdered) {
             Collections.sort(userAdventures, new Comparator<Adventure>() {
                 public int compare(Adventure a1, Adventure a2) {
-                    Adventure aux1 = a1;
-                    Adventure aux2 = a2;
-                    return aux1.getNome().compareToIgnoreCase(aux2.getNome());
+                    return a1.getNome().compareToIgnoreCase(a2.getNome());
                 }
             });
             isOrdered = true;
-        }else{
+        } else{
             userAdventures.clear();
             userAdventures.addAll(userAdventuresBackup);
             isOrdered = false;
         }
 
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.container, new AdventuresFragment()).addToBackStack(null).commit();
+        Fragment fragment = getVisibleFragment();
+        if(fragment instanceof AdventuresFragment){
+            ((AdventuresFragment) fragment).fillFragment(userAdventures);
+        }
+
+        //FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        //ft.replace(R.id.container, new AdventuresFragment()).addToBackStack(null).commit();
+    }
+
+    public boolean isOrdered(){
+        return isOrdered;
     }
 
     @Override
