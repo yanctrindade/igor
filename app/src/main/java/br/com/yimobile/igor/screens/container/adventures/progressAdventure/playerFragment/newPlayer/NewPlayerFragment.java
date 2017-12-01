@@ -1,5 +1,6 @@
 package br.com.yimobile.igor.screens.container.adventures.progressAdventure.playerFragment.newPlayer;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -23,10 +26,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import br.com.yimobile.igor.R;
 import br.com.yimobile.igor.screens.container.ContainerActivity;
 import database.Adventure;
+import database.User;
 
 public class NewPlayerFragment extends Fragment {
 
@@ -42,6 +47,9 @@ public class NewPlayerFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
         return inflater.inflate(R.layout.fragment_new_player, container, false);
     }
 
@@ -84,7 +92,26 @@ public class NewPlayerFragment extends Fragment {
         public void onClick(View view) {
             Log.d(TAG, "Save Clicked");
 
-            ValueEventListener postListener = new ValueEventListener() {
+            String playerName = playerNameEditText.getText().toString();
+            String keyFound = "";
+
+            HashMap<String, User> userList = ((ContainerActivity) getActivity()).getUserList();
+            for (Map.Entry<String, User> entry : userList.entrySet()) {
+                String key = entry.getKey();
+                User value = entry.getValue();
+                if(value.getUsername().equals(playerName) || value.getEmail().equals(playerName)){
+                    keyFound = key;
+                }
+            }
+
+            if(keyFound.equals("")){
+                Toast.makeText(getActivity().getApplicationContext(), playerName + " não encontrado", Toast.LENGTH_SHORT).show();
+            } else{
+                ((ContainerActivity) getActivity()).addPlayer(adventure, keyFound);
+                Toast.makeText(getActivity().getApplicationContext(), playerName + " adicionado", Toast.LENGTH_SHORT).show();
+            }
+
+            /*ValueEventListener postListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -115,7 +142,7 @@ public class NewPlayerFragment extends Fragment {
                     // ...
                 }
             };
-            mDatabase.child("users").addListenerForSingleValueEvent(postListener);
+            mDatabase.child("users").addListenerForSingleValueEvent(postListener);*/
 
         }
     };
