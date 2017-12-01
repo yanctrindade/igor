@@ -24,7 +24,7 @@ import br.com.yimobile.igor.screens.container.ContainerActivity;
 import database.Adventure;
 
 public class EditAdventureNameFragment extends Fragment {
-
+    private EditText adventureName, adventureDescr;
     Adventure adventure;
 
     @Override
@@ -51,7 +51,15 @@ public class EditAdventureNameFragment extends Fragment {
             }
         });
 
-        final EditText adventureName = view.findViewById(R.id.edit_avent);
+        adventureName = view.findViewById(R.id.edit_avent);
+        if(adventure != null) adventureName.setText(adventure.getNome());
+
+        adventureDescr = view.findViewById(R.id.descricao);
+        if(adventure != null && adventure.getDescricao() != null &&
+                !adventure.getDescricao().isEmpty() && !adventure.getDescricao().equals("")){
+            adventureDescr.setText(adventure.getDescricao());
+        }
+
         ImageButton create_button = view.findViewById(R.id.create_adv);
         create_button.setOnClickListener(new ImageButton.OnClickListener() {
             @Override
@@ -68,7 +76,13 @@ public class EditAdventureNameFragment extends Fragment {
                         imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
                     }
                     String name = adventureName.getText().toString();
-                    ((ContainerActivity) getActivity()).onAdventureEdited(adventure, name);
+                    String descr = "";
+                    if(adventureDescr.getText() != null ||
+                            !adventureDescr.getText().toString().isEmpty() ||
+                            !adventureDescr.getText().toString().equals("")){
+                        descr = adventureDescr.getText().toString();
+                    }
+                    ((ContainerActivity) getActivity()).onAdventureEdited(adventure, name, descr);
                     getActivity().onBackPressed();
                 }
             }
@@ -88,9 +102,11 @@ public class EditAdventureNameFragment extends Fragment {
 
     public void SetAdventure(Adventure adventure){
         this.adventure = adventure;
+        if(adventureName != null) adventureName.setText(adventure.getNome());
+        if(adventureDescr != null) adventureDescr.setText(adventure.getDescricao());
     }
 
     public interface EditAdventureOnClickListener {
-        public void onAdventureEdited(Adventure adventure, String name);
+        public void onAdventureEdited(Adventure adventure, String name, String descr);
     }
 }

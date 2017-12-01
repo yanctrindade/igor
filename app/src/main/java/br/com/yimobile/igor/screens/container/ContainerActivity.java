@@ -1001,7 +1001,7 @@ public class ContainerActivity extends AppCompatActivity
     }
 
     @Override
-    public void onAdventureCreated(final String name) {
+    public void onAdventureCreated(final String name, final String descr) {
         Log.d(TAG, "Adventure Created");
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -1017,7 +1017,7 @@ public class ContainerActivity extends AppCompatActivity
             jog.add(uid);
 
             Random randomGenerator = new Random();
-            Adventure adv = new Adventure(name, "", uid,  jog, ses, randomGenerator.nextInt(5));
+            Adventure adv = new Adventure(name, descr, uid,  jog, ses, randomGenerator.nextInt(5));
             mDatabase.child("adventure").child(name).setValue(adv);
 
             userAdventures.add(0, adv);
@@ -1111,10 +1111,11 @@ public class ContainerActivity extends AppCompatActivity
     }
 
     @Override
-    public void onAdventureEdited(final Adventure adventure, final String name) {
+    public void onAdventureEdited(final Adventure adventure, final String name, final String descr) {
         Log.d(TAG, "Adventure Edited");
         final String oldName = adventure.getNome();
         adventure.setNome(name);
+        adventure.setDescricao(descr);
         mDatabase.child("adventure").child(name).setValue(adventure);
         mDatabase.child("adventure").child(oldName).removeValue();
 

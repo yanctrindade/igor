@@ -33,8 +33,6 @@ import database.Session;
 
 public class SessionsFragment extends Fragment {
 
-    private static final String TAG = SessionsFragment.class.getSimpleName();
-
     SessionRecyclerViewAdapter sessionsRecyclerViewAdapter;
     RecyclerView recyclerView;
     ArrayList<Session> sessionsArrayList = new ArrayList<>();
@@ -42,7 +40,7 @@ public class SessionsFragment extends Fragment {
     FloatingActionButton newSessionButton;
     Adventure adventure;
     boolean isOrdered = false;
-    TextView nameAdventure;
+    TextView nameAdventure, descrAdventure;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -50,6 +48,12 @@ public class SessionsFragment extends Fragment {
 
         nameAdventure = view.findViewById(R.id.titulo);
         if(adventure != null) nameAdventure.setText(adventure.getNome());
+
+        descrAdventure = view.findViewById(R.id.descricao);
+        if(adventure != null && adventure.getDescricao() != null &&
+                !adventure.getDescricao().isEmpty() && !adventure.getDescricao().equals("")){
+            descrAdventure.setText(adventure.getDescricao());
+        }
 
         newSessionButton = view.findViewById(R.id.new_session_button);
         newSessionButton.setOnClickListener(newSessionOnClickListener);
@@ -111,9 +115,43 @@ public class SessionsFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        MenuItem ordenar = menu.findItem(R.id.action_ordenar);
+        if(isOrdered){
+            ordenar.setTitle("Ordem primária");
+        } else{
+            ordenar.setTitle("Ordenar");
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_editar:
+                if(((ContainerActivity) getActivity()).getUid().equals(adventure.getMestre())){
+                    ((ContainerActivity) getActivity()).onEditAdventurePressed(adventure);
+                }
+                return true;
+            case R.id.action_ordenar:
+                onOrderSessionsPressed();
+                if(isOrdered){
+                    item.setTitle("Ordem primária");
+                } else{
+                    item.setTitle("Ordenar");
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     public void setAdventure(Adventure adventure){
         this.adventure = adventure;
         if(nameAdventure != null) nameAdventure.setText(adventure.getNome());
+        if(descrAdventure != null) descrAdventure.setText(adventure.getDescricao());
     }
 
     /* On Clicks */
@@ -153,39 +191,6 @@ public class SessionsFragment extends Fragment {
             isOrdered = false;
         }
         sessionsRecyclerViewAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-
-        MenuItem ordenar = menu.findItem(R.id.action_ordenar);
-        if(isOrdered){
-            ordenar.setTitle("Ordem primária");
-        } else{
-            ordenar.setTitle("Ordenar");
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_editar:
-                if(((ContainerActivity) getActivity()).getUid().equals(adventure.getMestre())){
-                    ((ContainerActivity) getActivity()).onEditAdventurePressed(adventure);
-                }
-                return true;
-            case R.id.action_ordenar:
-                onOrderSessionsPressed();
-                if(isOrdered){
-                    item.setTitle("Ordem primária");
-                } else{
-                    item.setTitle("Ordenar");
-                }
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     /* Public Interface for Listener */

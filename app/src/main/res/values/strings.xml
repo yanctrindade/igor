@@ -47,7 +47,8 @@
     //Nova aventura
     <string name="criar_aventura">Criar Aventura</string>
     <string name="d_um_nome_para_a_sua_aventura">Dê um nome à sua aventura</string>
-    <string name="edit_nome_aventura">Nome da aventura, se tiver duas linhas ele ocupa esse espaço</string>
+    <string name="edit_nome_aventura">Nome da aventura</string>
+    <string name="descr_aventura">Descrição da aventura, se tiver mais de uma linha ele ocupa esse espaço</string>
 
     //Edicao da aventura
     <string name="editar_sua_aventura">Editar sua aventura</string>
@@ -56,6 +57,7 @@
     <string name="new_session_subtitle">Dê um nome a próxima sessão</string>
     <string name="new_session_title">Criar Sessão</string>
     <string name="new_session_placeholder">Nome da sessão, se tiver duas linhas ele ocupa esse espaço</string>
+    <string name="nenhuma_descri_o">Nenhuma descrição</string>
 
     //Novo jogador
     <string name="new_player_title">Adicionar Jogador</string>
