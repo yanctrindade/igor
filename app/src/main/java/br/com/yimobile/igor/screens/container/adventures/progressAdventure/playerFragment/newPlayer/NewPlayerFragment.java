@@ -1,5 +1,6 @@
 package br.com.yimobile.igor.screens.container.adventures.progressAdventure.playerFragment.newPlayer;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -101,7 +102,13 @@ public class NewPlayerFragment extends Fragment {
                 User value = entry.getValue();
                 if(value.getUsername().equals(playerName) || value.getEmail().equals(playerName)){
                     keyFound = key;
+                    break;
                 }
+            }
+
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+            if (imm != null) {
+                imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
             }
 
             if(keyFound.equals("")){
@@ -109,6 +116,7 @@ public class NewPlayerFragment extends Fragment {
             } else{
                 ((ContainerActivity) getActivity()).addPlayer(adventure, keyFound);
                 Toast.makeText(getActivity().getApplicationContext(), playerName + " adicionado", Toast.LENGTH_SHORT).show();
+                getActivity().onBackPressed();
             }
 
             /*ValueEventListener postListener = new ValueEventListener() {

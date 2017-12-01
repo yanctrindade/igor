@@ -17,12 +17,15 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import br.com.yimobile.igor.R;
 import br.com.yimobile.igor.screens.container.ContainerActivity;
 import br.com.yimobile.igor.screens.container.adventures.progressAdventure.playerFragment.PlayerRecyclerViewAdapter;
 import database.Adventure;
+import database.User;
 
 
 public class PlayersFragment extends Fragment {
@@ -39,12 +42,14 @@ public class PlayersFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_players, container, false);
 
         nameAdventure = view.findViewById(R.id.titulo);
-        if(adventure != null) nameAdventure.setText(adventure.getNome());
 
         mestre = view.findViewById(R.id.mestre_nickname);
 
         newPlayerButton = view.findViewById(R.id.new_player_button);
         newPlayerButton.setOnClickListener(newPlayerOnClickListener);
+        if(!((ContainerActivity) getActivity()).getUid().equals(adventure.getMestre())){
+            newPlayerButton.hide();
+        }
 
         ImageButton andamento_button = view.findViewById(R.id.button_andamento);
         andamento_button.setOnClickListener(new Button.OnClickListener() {
@@ -83,11 +88,30 @@ public class PlayersFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         setHasOptionsMenu(true);
 
+        if(adventure != null) {
+            nameAdventure.setText(adventure.getNome());
+            if(mestre != null) {
+                String keyO = ((ContainerActivity) getActivity()).getUid();
+                HashMap<String, User> userList = ((ContainerActivity) getActivity()).getUserList();
+                for (Map.Entry<String, User> entry : userList.entrySet()) {
+                    String key = entry.getKey();
+                    User value = entry.getValue();
+                    if(key.equals(keyO)){
+                        mestre.setText(value.getUsername());
+                        break;
+                    }
+                }
+            }
+
+            playerArrayList = adventure.getJogadores();
+        }
+
         recyclerView = view.findViewById(R.id.sessions_recyclerview);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         playerRecyclerViewAdapter = new PlayerRecyclerViewAdapter(playerArrayList, getActivity());
         recyclerView.setAdapter(playerRecyclerViewAdapter);
+
     }
 
     @Override
@@ -97,8 +121,8 @@ public class PlayersFragment extends Fragment {
         MenuItem editar = menu.findItem(R.id.action_editar);
         editar.setVisible(false);
 
-        MenuItem ordenar = menu.findItem(R.id.action_ordenar);
-        ordenar.setVisible(false);
+        //MenuItem ordenar = menu.findItem(R.id.action_ordenar);
+        //ordenar.setVisible(false);
     }
 
     @Override
@@ -114,7 +138,18 @@ public class PlayersFragment extends Fragment {
     public void setAdventure(Adventure adventure){
         this.adventure = adventure;
         if(nameAdventure != null) nameAdventure.setText(adventure.getNome());
-        if(mestre != null) mestre.setText(adventure.getMestre());
+        if(mestre != null) {
+            String keyO = ((ContainerActivity) getActivity()).getUid();
+            HashMap<String, User> userList = ((ContainerActivity) getActivity()).getUserList();
+            for (Map.Entry<String, User> entry : userList.entrySet()) {
+                String key = entry.getKey();
+                User value = entry.getValue();
+                if(key.equals(keyO)){
+                    mestre.setText(value.getUsername());
+                    break;
+                }
+            }
+        }
         if(playerRecyclerViewAdapter != null && playerArrayList != null){
             playerArrayList = adventure.getJogadores();
             playerRecyclerViewAdapter.swap();

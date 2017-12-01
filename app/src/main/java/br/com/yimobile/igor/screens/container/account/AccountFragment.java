@@ -223,7 +223,12 @@ public class AccountFragment extends Fragment {
                     sexoOutro.setError("Especifique seu sexo");
                 }
                 else {
-                    ((ContainerActivity) getActivity()).setUser(new User(email, nome, data, sexo));
+                    User user = ((ContainerActivity) getActivity()).getUser();
+                    user.setEmail(email);
+                    user.setUsername(nome);
+                    user.setNascimento(data);
+                    user.setSexo(sexo);
+                    ((ContainerActivity) getActivity()).setUser(user);
                     mDatabase.child("users").child(
                             ((ContainerActivity) getActivity()).getUid()).setValue(
                             ((ContainerActivity) getActivity()).getUser());

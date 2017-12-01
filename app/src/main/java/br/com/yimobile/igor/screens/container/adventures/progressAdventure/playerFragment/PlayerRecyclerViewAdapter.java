@@ -8,9 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import br.com.yimobile.igor.R;
+import br.com.yimobile.igor.screens.container.ContainerActivity;
+import database.User;
 
 public class PlayerRecyclerViewAdapter extends RecyclerView.Adapter {
 
@@ -38,8 +42,16 @@ public class PlayerRecyclerViewAdapter extends RecyclerView.Adapter {
 
         PlayerViewHolder playerHolder = (PlayerViewHolder) holder;
 
-        String title  = playerArrayList.get(position);
-        playerHolder.titleTextView.setText(title);
+        String keyO = playerArrayList.get(position);
+        HashMap<String, User> userList = ((ContainerActivity) context).getUserList();
+        for (Map.Entry<String, User> entry : userList.entrySet()) {
+            String key = entry.getKey();
+            User value = entry.getValue();
+            if(key.equals(keyO)){
+                playerHolder.titleTextView.setText(value.getUsername());
+                break;
+            }
+        }
 
        // playerHolder.titleTextView.setText(title);
     }

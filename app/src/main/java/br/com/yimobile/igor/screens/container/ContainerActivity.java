@@ -988,7 +988,7 @@ public class ContainerActivity extends AppCompatActivity
                         adv.add(adventure.getNome());
 
                         postValues.put("aventuras", adv);
-                        mDatabase.child("users").child(uid).updateChildren(postValues);
+                        mDatabase.child("users").child(idPlayer).updateChildren(postValues);
                     }
 
                     @Override
@@ -1015,6 +1015,7 @@ public class ContainerActivity extends AppCompatActivity
                         jog.add(idPlayer);
                         postValues.put("jogadores", jog);
                         mDatabase.child("adventure").child(adventure.getNome()).updateChildren(postValues);
+                        getUserAdventuresDatabase();
                     }
 
                     @Override
