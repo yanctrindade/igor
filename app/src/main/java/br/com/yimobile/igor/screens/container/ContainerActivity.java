@@ -39,6 +39,8 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,6 +82,9 @@ public class ContainerActivity extends AppCompatActivity
     private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     private User user;
     private List<Adventure> userAdventures;
+    private List<Adventure> userAdventuresBackup;
+    private boolean isOrdered = false;
+
     private HashMap<String, User> userList = new HashMap<>();
     private String uid;
 
@@ -167,6 +172,9 @@ public class ContainerActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_ordenar:
+                onOrderAdventure();
+                return true;
             case android.R.id.home:
                 navDrawer.openDrawer();
                 return true;
@@ -450,7 +458,17 @@ public class ContainerActivity extends AppCompatActivity
     public List<Adventure> getUserAdventures(){
         if(userAdventures == null) {
             userAdventures = new ArrayList<>();
+            userAdventuresBackup = new ArrayList<>();
             return getUserAdventuresDatabase();
+        }
+        if(isOrdered) {
+            Collections.sort(userAdventures, new Comparator<Adventure>() {
+                public int compare(Adventure a1, Adventure a2) {
+                    Adventure aux1 = a1;
+                    Adventure aux2 = a2;
+                    return aux1.getNome().compareToIgnoreCase(aux2.getNome());
+                }
+            });
         }
         return userAdventures;
     }
@@ -464,6 +482,7 @@ public class ContainerActivity extends AppCompatActivity
             List<String> aventuras = user.getAventuras();
             if (aventuras != null && !aventuras.isEmpty()) {
                 userAdventures.clear();
+                userAdventuresBackup.clear();
                 Log.d("ADVLIST", aventuras.size() + " TAMANHO");
                 for (int i = aventuras.size() - 1; i >= 0; i--) {
                     final int finalI = i;
@@ -474,9 +493,19 @@ public class ContainerActivity extends AppCompatActivity
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         Adventure adventure = dataSnapshot.getValue(Adventure.class);
                                         userAdventures.add(adventure);
+                                        userAdventuresBackup.add(adventure);
                                         if (finalI == 0) {
                                             Fragment fragment = getVisibleFragment();
                                             if (fragment instanceof AdventuresFragment) {
+                                                if(isOrdered) {
+                                                    Collections.sort(userAdventures, new Comparator<Adventure>() {
+                                                        public int compare(Adventure a1, Adventure a2) {
+                                                            Adventure aux1 = a1;
+                                                            Adventure aux2 = a2;
+                                                            return aux1.getNome().compareToIgnoreCase(aux2.getNome());
+                                                        }
+                                                    });
+                                                }
                                                 ((AdventuresFragment) fragment).fillFragment(userAdventures);
                                             }
                                         }
@@ -490,6 +519,7 @@ public class ContainerActivity extends AppCompatActivity
                 }
             }
         }
+        
         return userAdventures;
     }
 
@@ -934,6 +964,28 @@ public class ContainerActivity extends AppCompatActivity
         Log.d(TAG, "New Adventure Button Clicked");
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.container, new NewAdventureFragment()).addToBackStack(null).commit();
+    }
+
+    public void onOrderAdventure(){
+        Log.d(TAG, "Order Pressed");
+
+        if(isOrdered == false) {
+            Collections.sort(userAdventures, new Comparator<Adventure>() {
+                public int compare(Adventure a1, Adventure a2) {
+                    Adventure aux1 = a1;
+                    Adventure aux2 = a2;
+                    return aux1.getNome().compareToIgnoreCase(aux2.getNome());
+                }
+            });
+            isOrdered = true;
+        }else{
+            userAdventures.clear();
+            userAdventures.addAll(userAdventuresBackup);
+            isOrdered = false;
+        }
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.container, new AdventuresFragment()).addToBackStack(null).commit();
     }
 
     @Override
