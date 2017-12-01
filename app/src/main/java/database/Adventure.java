@@ -7,6 +7,7 @@ public class Adventure {
     private String nome;
     private String descricao;
     private String mestre;
+    private String data;
     private List<String> jogadores = new ArrayList<>();
     private List<Session> sessoes = new ArrayList<>();
     private int background;
@@ -15,14 +16,19 @@ public class Adventure {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public Adventure(String nome, String descricao, String mestre,  List<String> jogadores, List<Session> sessoes, int background) {
+    public Adventure(String nome, String descricao, String mestre,  List<String> jogadores, List<Session> sessoes, int background, String data) {
         this.nome = nome;
         this.descricao = descricao;
         this.mestre = mestre;
         this.jogadores = jogadores;
         this.sessoes = sessoes;
         this.background = background;
+        this.data = data;
     }
+
+    public String getData(){ return  data; };
+
+    public void setData(String data){ this.data = data; }
 
     public int getBackground() { return background; }
 
